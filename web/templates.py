@@ -1,4 +1,4 @@
-# web/templates.py - ULTRA MAX POWER EVOLUTION EDITION
+# web/templates.py - GOD MODE ULTRA X EDITION
 import sys
 import os
 import json
@@ -9,30 +9,32 @@ from config import Config
 
 
 def generate_menu_html():
-    """Genera HTML menu ULTRA MODERNO MAX POWER EVOLUTION"""
+    """IL MENU CHE VINCE IL WEBBY AWARD 2026"""
 
     items_html = ""
     for idx, item in enumerate(Config.MENU_ITEMS):
-        badge = f'<span class="badge">{item["badge"]}</span>' if item["badge"] else ""
-        delay = idx * 0.12
+        badge = f'<div class="badge">{item["badge"]}</div>' if item["badge"] else ""
+        delay = idx * 0.08
         items_html += f'''
-  <div class="menu-item" data-name="{item['name']}" data-price="{item['price']}" style="animation-delay: {delay}s">
-    <div class="item-glow"></div>
-    <div class="item-shine"></div>
-    <div class="item-content">
-      <div class="emoji-container">
-        <div class="emoji-glow"></div>
-        <span class="emoji">{item['emoji']}</span>
-      </div>
-      <div class="item-info">
-        <h3>{item['name']} {badge}</h3>
-        <p>{item['description']}</p>
-        <div class="price-controls">
-          <span class="price">{item['price']:.2f}€</span>
-          <div class="quantity-controls">
-            <button class="qty-btn minus" onclick="event.stopPropagation(); updateQuantity(this, -1)">−</button>
-            <span class="quantity">0</span>
-            <button class="qty-btn plus" onclick="event.stopPropagation(); updateQuantity(this, 1)">+</button>
+  <div class="menu-card" data-name="{item['name']}" data-price="{item['price']}" style="--delay: {delay}s">
+    <div class="card-inner">
+      <div class="card-glow"></div>
+      <div class="card-shine"></div>
+      <div class="card-content">
+        <div class="emoji-box">
+          <div class="emoji-glow"></div>
+          <span class="emoji">{item['emoji']}</span>
+        </div>
+        <div class="info">
+          <h3>{item['name']}</h3>
+          {badge}
+          <p>{item['description']}</p>
+          <div class="price-row">
+            <span class="price">{item['price']:.2f}€</span>
+            <div class="add-circle" onclick="addToCart(this)">
+              <svg class="plus" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+              <svg class="check" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
           </div>
         </div>
       </div>
@@ -42,452 +44,350 @@ def generate_menu_html():
 
     return f"""
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Durger King Italiano</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
   <style>
     :root {{
-      --primary: #667eea;
-      --secondary: #764ba2;
-      --accent: #f093fb;
-      --success: #48bb78;
-      --warning: #ed8936;
-      --danger: #f56565;
-      --light: #f7fafc;
-      --dark: #0f0f23;
+      --primary: #6366f1;
+      --secondary: #8b5cf6;
+      --accent: #ec4899;
+      --success: #10b981;
+      --danger: #ef4444;
+      --bg: #0a0a0f;
+      --card: rgba(255,255,255,0.06);
       --text: #ffffff;
-      --text-muted: rgba(255,255,255,0.75);
-      --radius: 28px;
-      --transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      --shadow-sm: 0 4px 20px rgba(0,0,0,0.2);
-      --shadow-md: 0 15px 50px rgba(0,0,0,0.4);
-      --shadow-lg: 0 25px 80px rgba(102,126,234,0.6);
+      --text-muted: rgba(255,255,255,0.7);
+      --radius: 32px;
+      --shadow: 0 20px 60px rgba(0,0,0,0.4);
+      --transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }}
 
     [data-theme="light"] {{
-      --primary: #5a67d8;
-      --secondary: #6b46c1;
-      --accent: #e53e9d;
-      --text: #1a202c;
-      --text-muted: #718096;
-      --light: #ffffff;
-      --dark: #f7fafc;
+      --bg: #f8fafc;
+      --card: rgba(255,255,255,0.8);
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --primary: #4f46e5;
+      --secondary: #7c3aed;
+      --accent: #ec4899;
     }}
 
     * {{
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
+      margin: 0; padding: 0; box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      tap-highlight-color: transparent;
     }}
 
     body {{
-      font-family: 'Poppins', sans-serif;
-      background: var(--dark);
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
       color: var(--text);
-      min-height: 100vh;
-      padding: 20px 16px 170px;
+      min-height: 100dvh;
+      padding: 16px 12px 180px;
       overflow-x: hidden;
       position: relative;
-      transition: var(--transition);
+      transition: background 0.5s ease;
     }}
 
-    /* ANIMATED GRADIENT BACKGROUND */
-    .bg-gradient {{
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 35%, var(--accent) 70%, var(--primary) 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 18s ease infinite;
-      z-index: -3;
-      filter: blur(80px);
-      opacity: 0.7;
+    /* BACKGROUND MAGIC */
+    .bg-canvas {{
+      position: fixed; inset: 0; z-index: -3;
+      background: radial-gradient(circle at 20% 80%, #6366f1 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, #ec4899 0%, transparent 50%),
+                  radial-gradient(circle at 50% 50%, #8b5cf6 0%, transparent 50%);
+      background-size: 200% 200%;
+      animation: bgFlow 20s ease infinite;
+      filter: blur(80px); opacity: 0.6;
     }}
 
-    @keyframes gradientShift {{
-      0%, 100% {{ background-position: 0% 50%; }}
-      50% {{ background-position: 100% 50%; }}
+    @keyframes bgFlow {{
+      0%, 100% {{ background-position: 0% 50%, 100% 50%, 50% 50%; }}
+      50% {{ background-position: 100% 50%, 0% 50%, 50% 50%; }}
     }}
 
     /* NEON GRID */
     .grid {{
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0; z-index: -2;
       background: 
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 50px 50px;
-      z-index: -2;
-      animation: gridMove 40s linear infinite;
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridDrift 60s linear infinite;
     }}
 
-    @keyframes gridMove {{
+    @keyframes gridDrift {{
       0% {{ transform: translate(0, 0); }}
-      100% {{ transform: translate(50px, 50px); }}
-    }}
-
-    /* PARTICLES */
-    .particles {{
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: -1;
-    }}
-
-    .particle {{
-      position: absolute;
-      background: var(--accent);
-      border-radius: 50%;
-      filter: blur(1px);
-      animation: floatParticle linear infinite;
-    }}
-
-    @keyframes floatParticle {{
-      0% {{ transform: translateY(100vh) scale(0); opacity: 0; }}
-      10% {{ opacity: 1; }}
-      90% {{ opacity: 1; }}
-      100% {{ transform: translateY(-100px) scale(1); opacity: 0; }}
+      100% {{ transform: translate(60px, 60px); }}
     }}
 
     /* HEADER */
     .header {{
-      text-align: center;
-      margin-bottom: 32px;
-      position: relative;
-      z-index: 2;
+      text-align: center; margin-bottom: 32px; position: relative; z-index: 10;
     }}
 
     h1 {{
-      font-family: 'Orbitron', sans-serif;
-      font-size: 42px;
-      font-weight: 900;
-      background: linear-gradient(135deg, #fff, var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 30px rgba(240,147,251,0.5);
-      animation: titleGlow 3s ease-in-out infinite;
-      letter-spacing: -1px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 44px; font-weight: 900;
+      background: linear-gradient(135deg, #fff, var(--accent), #fff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-size: 200% 200%;
+      animation: titleShine 4s ease infinite;
+      letter-spacing: -1.5px;
+      filter: drop-shadow(0 8px 30px rgba(236,72,153,0.4));
     }}
 
-    @keyframes titleGlow {{
-      0%, 100% {{ filter: drop-shadow(0 0 20px rgba(240,147,251,0.6)); }}
-      50% {{ filter: drop-shadow(0 0 40px rgba(240,147,251,1)); }}
+    @keyframes titleShine {{
+      0%, 100% {{ background-position: 0% 50%; }}
+      50% {{ background-position: 100% 50%; }}
     }}
 
-    .subtitle {{
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 5px;
-      color: var(--text-muted);
-      margin-top: 8px;
-      animation: fadeInUp 1s ease 0.4s backwards;
+    .tagline {{
+      font-size: 14px; font-weight: 600; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 6px; margin-top: 8px;
+      animation: fadeIn 1s ease 0.5s backwards;
     }}
 
     /* THEME TOGGLE */
     .theme-toggle {{
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(16px);
-      border: 2px solid rgba(255,255,255,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 100;
-      transition: var(--transition);
-      box-shadow: var(--shadow-sm);
-    }}
-
-    .theme-toggle:hover {{
-      transform: scale(1.1) rotate(180deg);
-      background: rgba(255,255,255,0.25);
-    }}
-
-    /* MENU ITEM */
-    .menu-item {{
-      position: relative;
-      background: rgba(255,255,255,0.12);
-      backdrop-filter: blur(32px) saturate(180%);
-      border-radius: var(--radius);
-      margin: 20px 0;
-      overflow: hidden;
-      cursor: pointer;
-      transition: var(--transition);
-      border: 1.5px solid rgba(255,255,255,0.15);
-      animation: fadeInUp 0.8s ease backwards;
-      box-shadow: var(--shadow-sm);
-    }}
-
-    .menu-item:hover {{
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: var(--shadow-lg);
-      border-color: var(--accent);
-    }}
-
-    .item-glow {{
-      position: absolute;
-      inset: -50%;
-      background: conic-gradient(from 0deg, transparent, var(--primary), var(--accent), transparent);
-      opacity: 0;
-      transition: opacity 0.5s;
-      animation: rotateGlow 6s linear infinite paused;
-    }}
-
-    .menu-item:hover .item-glow {{
-      opacity: 0.6;
-      animation-play-state: running;
-    }}
-
-    @keyframes rotateGlow {{
-      to {{ transform: rotate(360deg); }}
-    }}
-
-    .item-shine {{
-      position: absolute;
-      top: 0;
-      left: -150%;
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-      transition: left 1s;
-    }}
-
-    .menu-item:hover .item-shine {{
-      left: 150%;
-    }}
-
-    .item-content {{
-      display: flex;
-      gap: 20px;
-      padding: 24px;
-      position: relative;
-      z-index: 2;
-    }}
-
-    .emoji-container {{
-      flex-shrink: 0;
-      width: 84px;
-      height: 84px;
-      background: linear-gradient(135deg, rgba(102,126,234,0.3), rgba(240,147,251,0.3));
-      border-radius: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      transition: var(--transition);
+      position: fixed; top: 16px; right: 16px; z-index: 100;
+      width: 60px; height: 60px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); backdrop-filter: blur(16px);
+      border: 2px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: var(--transition);
       box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     }}
 
-    .emoji-glow {{
-      position: absolute;
-      inset: -6px;
-      background: linear-gradient(135deg, var(--accent), var(--primary));
-      border-radius: 24px;
-      opacity: 0;
-      filter: blur(12px);
-      transition: opacity 0.6s;
-      z-index: -1;
+    .theme-toggle:hover {{
+      transform: scale(1.15) rotate(360deg);
+      background: rgba(255,255,255,0.2);
     }}
 
-    .menu-item:hover .emoji-glow {{
+    /* MENU CARD – GOD LEVEL */
+    .menu-card {{
+      margin: 20px 0; animation: floatIn var(--delay, 0s) 0.8s ease backwards;
+      transform: translateZ(0); perspective: 1000px;
+    }}
+
+    @keyframes floatIn {{
+      from {{ opacity: 0; transform: translateY(60px) scale(0.9) rotateX(-15deg); }}
+      to {{ opacity: 1; transform: translateY(0) scale(1) rotateX(0deg); }}
+    }}
+
+    .card-inner {{
+      position: relative; border-radius: var(--radius);
+      background: var(--card); backdrop-filter: blur(32px) saturate(180%);
+      overflow: hidden; cursor: pointer;
+      border: 1.5px solid rgba(255,255,255,0.1);
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+    }}
+
+    .menu-card:hover .card-inner {{
+      transform: translateY(-16px) scale(1.04);
+      box-shadow: 0 40px 100px rgba(99,102,241,0.6);
+      border-color: var(--accent);
+    }}
+
+    .card-glow {{
+      position: absolute; inset: -100%;
+      background: conic-gradient(from 0deg at 50% 50%, 
+        transparent, var(--primary), var(--accent), var(--secondary), transparent);
+      opacity: 0; transition: opacity 0.6s;
+      animation: spinGlow 8s linear infinite paused;
+    }}
+
+    .menu-card:hover .card-glow {{
+      opacity: 0.7; animation-play-state: running;
+    }}
+
+    @keyframes spinGlow {{
+      to {{ transform: rotate(360deg); }}
+    }}
+
+    .card-shine {{
+      position: absolute; top: 0; left: -150%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+      transition: left 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }}
+
+    .menu-card:hover .card-shine {{
+      left: 150%;
+    }}
+
+    .card-content {{
+      display: flex; gap: 20px; padding: 28px; position: relative; z-index: 2;
+    }}
+
+    .emoji-box {{
+      flex-shrink: 0; width: 88px; height: 88px;
+      background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(236,72,153,0.2));
+      border-radius: 28px; display: flex; align-items: center; justify-content: center;
+      position: relative; transition: var(--transition);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }}
+
+    .emoji-glow {{
+      position: absolute; inset: -8px; border-radius: 28px;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      opacity: 0; filter: blur(16px); transition: opacity 0.6s; z-index: -1;
+    }}
+
+    .menu-card:hover .emoji-glow {{
       opacity: 1;
     }}
 
-    .menu-item:hover .emoji-container {{
-      transform: scale(1.1) rotate(5deg);
+    .menu-card:hover .emoji-box {{
+      transform: scale(1.2) rotate(8deg);
     }}
 
     .emoji {{
-      font-size: 48px;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+      font-size: 52px; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.4));
+      animation: floatEmoji 3s ease-in-out infinite;
     }}
 
-    .item-info h3 {{
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    @keyframes floatEmoji {{
+      0%, 100% {{ transform: translateY(0) scale(1); }}
+      50% {{ transform: translateY(-10px) scale(1.1); }}
     }}
 
-    .item-info p {{
-      font-size: 13.5px;
-      color: var(--text-muted);
-      line-height: 1.5;
-      margin: 6px 0;
+    .info h3 {{
+      font-size: 22px; font-weight: 900; color: var(--text);
+      margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }}
 
-    .price-controls {{
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 8px;
+    .info p {{
+      font-size: 14px; color: var(--text-muted); line-height: 1.5; margin: 8px 0 12px;
+    }}
+
+    .price-row {{
+      display: flex; justify-content: space-between; align-items: center;
     }}
 
     .price {{
-      font-size: 24px;
-      font-weight: 900;
+      font-size: 28px; font-weight: 900;
       background: linear-gradient(135deg, #fff, var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }}
 
-    .quantity-controls {{
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 4px;
-      backdrop-filter: blur(10px);
+    .add-circle {{
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--success); color: white;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: var(--transition);
+      box-shadow: 0 8px 32px rgba(16,185,129,0.5);
+      position: relative; overflow: hidden;
     }}
 
-    .qty-btn {{
-      width: 36px;
-      height: 36px;
-      border: none;
-      border-radius: 50%;
+    .add-circle:hover {{
+      transform: scale(1.2) rotate(90deg);
+      box-shadow: 0 12px 50px rgba(16,185,129,0.8);
+    }}
+
+    .add-circle.added {{
       background: var(--success);
-      color: white;
-      font-size: 20px;
-      font-weight: 900;
-      cursor: pointer;
-      transition: var(--transition);
-      box-shadow: 0 4px 12px rgba(72,187,120,0.4);
+      animation: pulseSuccess 0.6s ease;
     }}
 
-    .qty-btn:hover {{
-      transform: scale(1.15);
-      box-shadow: 0 6px 20px rgba(72,187,120,0.6);
+    @keyframes pulseSuccess {{
+      0%, 100% {{ transform: scale(1); }}
+      50% {{ transform: scale(1.4); }}
     }}
 
-    .qty-btn.minus {{
-      background: var(--danger);
+    .add-circle svg {{
+      width: 28px; height: 28px; fill: currentColor;
     }}
 
-    .quantity {{
-      min-width: 32px;
-      text-align: center;
-      font-weight: 700;
-      font-size: 16px;
-      color: var(--text);
+    .add-circle .check {{ display: none; }}
+    .add-circle.added .plus {{ display: none; }}
+    .add-circle.added .check {{ display: block; animation: checkPop 0.5s ease; }}
+
+    @keyframes checkPop {{
+      0% {{ transform: scale(0) rotate(-180deg); }}
+      60% {{ transform: scale(1.3) rotate(10deg); }}
+      100% {{ transform: scale(1) rotate(0deg); }}
     }}
 
     .badge {{
-      background: linear-gradient(135deg, #f093fb, #f5576c);
-      color: white;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      animation: badgePulse 2s ease-in-out infinite;
+      background: linear-gradient(135deg, #f43f5e, #ec4899);
+      color: white; padding: 6px 16px; border-radius: 16px;
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; margin-top: 8px; display: inline-block;
+      animation: badgeFloat 2.5s ease-in-out infinite;
+      box-shadow: 0 6px 20px rgba(244,63,94,0.5);
     }}
 
-    @keyframes badgePulse {{
-      0%, 100% {{ transform: scale(1); }}
-      50% {{ transform: scale(1.1); }}
+    @keyframes badgeFloat {{
+      0%, 100% {{ transform: translateY(0); }}
+      50% {{ transform: translateY(-4px); }}
     }}
 
-    /* CART */
-    .cart-container {{
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 20px 16px;
-      background: rgba(15,15,35,0.97);
-      backdrop-filter: blur(40px) saturate(200%);
-      border-top: 1.5px solid rgba(255,255,255,0.1);
-      box-shadow: 0 -15px 50px rgba(0,0,0,0.5);
-      z-index: 100;
-      animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* CART – MINIMAL GOD */
+    .cart-bar {{
+      position: fixed; bottom: 0; left: 0; right: 0;
+      padding: 20px 16px; background: rgba(10,10,15,0.97);
+      backdrop-filter: blur(40px); border-top: 1.5px solid rgba(255,255,255,0.1);
+      box-shadow: 0 -20px 60px rgba(0,0,0,0.6); z-index: 100;
+      animation: riseUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
     }}
 
-    @keyframes slideUp {{
-      from {{ transform: translateY(100%); }}
-      to {{ transform: translateY(0); }}
+    @keyframes riseUp {{
+      from {{ transform: translateY(100%); opacity: 0; }}
+      to {{ transform: translateY(0); opacity: 1; }}
     }}
 
-    .cart-info {{
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
+    .cart-summary {{
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
     }}
 
-    .cart-count {{
+    .cart-badge {{
       background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: white;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-weight: 800;
-      font-size: 14px;
-      box-shadow: var(--shadow-sm);
+      color: white; padding: 10px 20px; border-radius: 24px;
+      font-weight: 800; font-size: 15px; box-shadow: 0 8px 32px rgba(99,102,241,0.5);
     }}
 
     .cart-total {{
-      font-size: 28px;
-      font-weight: 900;
+      font-size: 32px; font-weight: 900;
       background: linear-gradient(135deg, #fff, var(--success));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: pulse 1.8s ease-in-out infinite;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      animation: totalGlow 2s ease-in-out infinite;
     }}
 
-    @keyframes pulse {{
-      0%, 100% {{ transform: scale(1); }}
-      50% {{ transform: scale(1.05); }}
+    @keyframes totalGlow {{
+      0%, 100% {{ filter: drop-shadow(0 0 20px rgba(16,185,129,0.6)); }}
+      50% {{ filter: drop-shadow(0 0 40px rgba(16,185,129,1)); }}
     }}
 
     #orderBtn {{
       background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-      background-size: 300% 300%;
-      color: white;
-      border: none;
-      padding: 18px;
-      font-size: 18px;
-      font-weight: 900;
-      border-radius: 24px;
-      width: 100%;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      box-shadow: var(--shadow-md);
-      position: relative;
-      overflow: hidden;
-      animation: gradientMove 5s ease infinite;
+      background-size: 300% 300%; color: white; border: none;
+      padding: 20px; font-size: 19px; font-weight: 900; border-radius: 28px;
+      width: 100%; cursor: pointer; text-transform: uppercase;
+      letter-spacing: 2px; position: relative; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(99,102,241,0.6);
+      animation: gradientPulse 5s ease infinite;
       transition: var(--transition);
     }}
 
+    @keyframes gradientPulse {{
+      0%, 100% {{ background-position: 0% 50%; }}
+      50% {{ background-position: 100% 50%; }}
+    }}
+
     #orderBtn:disabled {{
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none !important;
+      opacity: 0.4; cursor: not-allowed; transform: none !important;
     }}
 
     #orderBtn::before {{
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.3), transparent);
-      opacity: 0;
-      transition: opacity 0.6s;
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.4), transparent);
+      opacity: 0; transition: opacity 0.6s;
     }}
 
     #orderBtn:hover:not(:disabled)::before {{
@@ -495,264 +395,198 @@ def generate_menu_html():
     }}
 
     #orderBtn:hover:not(:disabled) {{
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: var(--shadow-lg);
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 30px 80px rgba(99,102,241,0.9);
     }}
 
-    /* MODAL */
+    /* MODAL – PURE ELEGANCE */
     .modal {{
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(12px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 20px;
-      animation: fadeIn 0.4s ease;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(16px); display: none; align-items: center;
+      justify-content: center; z-index: 1000; padding: 20px;
     }}
 
-    .modal.active {{
-      display: flex;
+    .modal.active {{ display: flex; }}
+
+    .modal-card {{
+      background: var(--card); backdrop-filter: blur(40px);
+      border-radius: var(--radius); padding: 32px; width: 100%;
+      max-width: 420px; border: 1.5px solid rgba(255,255,255,0.15);
+      box-shadow: var(--shadow); animation: modalRise 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }}
 
-    .modal-content {{
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(32px);
-      border-radius: var(--radius);
-      padding: 24px;
-      width: 100%;
-      max-width: 400px;
-      border: 1.5px solid rgba(255,255,255,0.2);
-      box-shadow: var(--shadow-lg);
-      animation: modalPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    @keyframes modalRise {{
+      from {{ transform: scale(0.7) translateY(100px); opacity: 0; }}
+      to {{ transform: scale(1) translateY(0); opacity: 1; }}
     }}
 
-    @keyframes modalPop {{
-      from {{ transform: scale(0.8); opacity: 0; }}
-      to {{ transform: scale(1); opacity: 1; }}
-    }}
+    .order-list {{ margin: 20px 0; max-height: 40vh; overflow-y: auto; }}
+    .order-item {{ display: flex; justify-content: space-between; padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 16px; }}
+    .order-total {{ font-size: 28px; font-weight: 900; text-align: center; margin: 20px 0;
+      color: var(--success); }}
 
-    .order-item {{
-      display: flex;
-      justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }}
+    .modal-actions {{ display: flex; gap: 16px; margin-top: 24px; }}
+    .btn {{ flex: 1; padding: 16px; border: none; border-radius: 24px;
+      font-weight: 700; cursor: pointer; transition: var(--transition); }}
+    .btn-cancel {{ background: rgba(255,255,255,0.1); color: var(--text); }}
+    .btn-confirm {{ background: var(--success); color: white; }}
 
-    .order-total {{
-      font-size: 24px;
-      font-weight: 900;
-      text-align: center;
-      margin: 16px 0;
-      color: var(--success);
-    }}
-
-    .modal-buttons {{
-      display: flex;
-      gap: 12px;
-      margin-top: 20px;
-    }}
-
-    .btn {{
-      flex: 1;
-      padding: 14px;
-      border: none;
-      border-radius: 20px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: var(--transition);
-    }}
-
-    .btn-confirm {{
-      background: var(--success);
-      color: white;
-    }}
-
-    .btn-cancel {{
-      background: rgba(255,255,255,0.1);
-      color: var(--text);
-    }}
-
-    /* CONFETTI */
+    /* EFFECTS */
     .confetti {{
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      pointer-events: none;
-      z-index: 9999;
-      animation: confettiFall linear forwards;
+      position: fixed; width: 12px; height: 12px; pointer-events: none;
+      z-index: 9999; animation: confettiDrop linear forwards;
     }}
 
-    @keyframes confettiFall {{
-      to {{
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
-      }}
+    @keyframes confettiDrop {{
+      to {{ transform: translateY(120dvh) rotate(900deg); opacity: 0; }}
     }}
 
-    /* RIPPLE */
     .ripple {{
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.4);
-      transform: scale(0);
-      animation: ripple 0.6s ease-out;
-      pointer-events: none;
+      position: absolute; border-radius: 50%; background: rgba(255,255,255,0.5);
+      transform: scale(0); animation: ripplePop 0.7s ease-out; pointer-events: none;
     }}
 
-    @keyframes ripple {{
+    @keyframes ripplePop {{
       to {{ transform: scale(4); opacity: 0; }}
     }}
 
-    @keyframes fadeInUp {{
-      from {{ opacity: 0; transform: translateY(40px); }}
-      to {{ opacity: 1; transform: translateY(0); }}
+    @keyframes fadeIn {{
+      from {{ opacity: 0; }} to {{ opacity: 1; }}
     }}
   </style>
 </head>
 <body>
-  <div class="bg-gradient"></div>
+  <div class="bg-canvas"></div>
   <div class="grid"></div>
-  <div class="particles" id="particles"></div>
 
   <div class="theme-toggle" onclick="toggleTheme()">
     <span id="themeIcon">🌙</span>
   </div>
 
   <div class="header">
-    <h1>🍕 DURGER KING 🍔<br>ITALIANO</h1>
-    <div class="subtitle">✨ AUTENTICO • VELOCE • GOURMET ✨</div>
+    <h1>DURGER KING<br>ITALIANO</h1>
+    <div class="tagline">PIÙ BUONO DELL'ORIGINALE</div>
   </div>
 
-  <div id="menu">
-    {items_html}
-  </div>
+  <div id="menu">{items_html}</div>
 
-  <div class="cart-container">
-    <div class="cart-info">
-      <div class="cart-count" id="cartCount">0 articoli</div>
+  <div class="cart-bar">
+    <div class="cart-summary">
+      <div class="cart-badge" id="cartBadge">0 articoli</div>
       <div class="cart-total" id="cartTotal">0,00 €</div>
     </div>
-    <button id="orderBtn" onclick="openOrderModal()" disabled>⚡ ORDINA ORA ⚡</button>
+    <button id="orderBtn" onclick="openModal()" disabled>ORDINA ORA</button>
   </div>
 
-  <!-- ORDER MODAL -->
-  <div class="modal" id="orderModal">
-    <div class="modal-content">
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+    <div class="modal-card">
       <h2>Conferma Ordine</h2>
-      <div id="orderItems"></div>
+      <div class="order-list" id="orderList"></div>
       <div class="order-total" id="modalTotal">Totale: 0,00 €</div>
-      <div class="modal-buttons">
-        <button class="btn btn-cancel" onclick="closeOrderModal()">Annulla</button>
-        <button class="btn btn-confirm" onclick="confirmOrder()">Conferma</button>
+      <div class="modal-actions">
+        <button class="btn btn-cancel" onclick="closeModal()">Annulla</button>
+        <button class="btn btn-confirm" onclick="sendOrder()">Conferma</button>
       </div>
     </div>
   </div>
 
   <script>
-    // === STATE ===
+    // STATE
     const cart = [];
     let isDark = true;
 
-    // === UTILS ===
-    const $ = (s) => document.querySelector(s);
-    const $$ = (s) => document.querySelectorAll(s);
+    // DOM
+    const $ = s => document.querySelector(s);
+    const $$ = s => document.querySelectorAll(s);
 
-    function formatPrice(price) {{
-      return price.toFixed(2).replace('.', ',') + ' €';
-    }}
+    // FORMAT
+    const fmt = p => p.toFixed(2).replace('.', ',') + ' €';
 
-    // === PARTICLES ===
-    function createParticles() {{
-      const container = $('#particles');
-      for (let i = 0; i < 30; i++) {{
-        const p = document.createElement('div');
-        p.className = 'particle';
-        const size = Math.random() * 6 + 3;
-        p.style.width = p.style.height = size + 'px';
-        p.style.left = Math.random() * 100 + '%';
-        p.style.animationDelay = Math.random() * 20 + 's';
-        p.style.animationDuration = (Math.random() * 15 + 15) + 's';
-        container.appendChild(p);
-      }}
-    }}
+    // ADD TO CART
+    function addToCart(btn) {{
+      const card = btn.closest('.menu-card');
+      const name = card.dataset.name;
+      const price = parseFloat(card.dataset.price);
 
-    // === CART LOGIC ===
-    function updateQuantity(btn, change) {{
-      const item = btn.closest('.menu-item');
-      const name = item.dataset.name;
-      const price = parseFloat(item.dataset.price);
-      const qtySpan = item.querySelector('.quantity');
-      let qty = parseInt(qtySpan.textContent) + change;
-
-      if (qty < 0) qty = 0;
-      qtySpan.textContent = qty;
-
-      // Update cart
-      const existing = cart.find(c => c.name === name);
+      const existing = cart.find(i => i.name === name);
       if (existing) {{
-        existing.quantity = qty;
-        if (qty === 0) cart.splice(cart.indexOf(existing), 1);
-      }} else if (qty > 0) {{
-        cart.push({{ name, price, quantity: qty }});
+        existing.qty++;
+      }} else {{
+        cart.push({{ name, price, qty: 1 }});
       }}
 
-      updateCartUI();
-      Telegram.WebApp.HapticFeedback.impactOccurred('light');
+      btn.classList.add('added');
+      createRipple(btn);
+      createConfetti(btn.getBoundingClientRect());
+      Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+
+      setTimeout(() => btn.classList.remove('added'), 800);
+      updateCart();
     }}
 
-    function updateCartUI() {{
-      const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
-      const totalPrice = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    // UPDATE CART
+    function updateCart() {{
+      const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+      const totalPrice = cart.reduce((s, i) => s + i.price * i.qty, 0);
 
-      $('#cartCount').textContent = totalItems + (totalItems === 1 ? ' articolo' : ' articoli');
-      $('#cartTotal').textContent = formatPrice(totalPrice);
+      $('#cartBadge').textContent = totalItems + (totalItems === 1 ? ' articolo' : ' articoli');
+      $('#cartTotal').textContent = fmt(totalPrice);
       $('#orderBtn').disabled = totalItems === 0;
     }}
 
-    // === MODAL ===
-    function openOrderModal() {{
-      const itemsDiv = $('#orderItems');
-      itemsDiv.innerHTML = '';
+    // MODAL
+    function openModal() {{
+      const list = $('#orderList');
+      list.innerHTML = '';
       let total = 0;
 
       cart.forEach(item => {{
         const div = document.createElement('div');
         div.className = 'order-item';
-        div.innerHTML = `<span>${{item.name}} × ${{item.quantity}}</span><span>${{formatPrice(item.price * item.quantity)}}</span>`;
-        itemsDiv.appendChild(div);
-        total += item.price * item.quantity;
+        div.innerHTML = `<span>${{item.name}} × ${{item.qty}}</span><span>${{fmt(item.price * item.qty)}}</span>`;
+        list.appendChild(div);
+        total += item.price * item.qty;
       }});
 
-      $('#modalTotal').textContent = 'Totale: ' + formatPrice(total);
-      $('#orderModal').classList.add('active');
+      $('#modalTotal').textContent = 'Totale: ' + fmt(total);
+      $('#modal').classList.add('active');
     }}
 
-    function closeOrderModal() {{
-      $('#orderModal').classList.remove('active');
+    function closeModal() {{
+      $('#modal').classList.remove('active');
     }}
 
-    function confirmOrder() {{
-      closeOrderModal();
-      createLightning();
+    function sendOrder() {{
+      closeModal();
       explodeConfetti();
+      createLightning();
       Telegram.WebApp.HapticFeedback.notificationOccurred('success');
       setTimeout(() => {{
         Telegram.WebApp.sendData(JSON.stringify(cart));
         Telegram.WebApp.close();
-      }}, 1000);
+      }}, 1200);
     }}
 
-    // === EFFECTS ===
-    function createConfetti(x, y) {{
-      const colors = ['#667eea', '#764ba2', '#f093fb', '#48bb78', '#ed8936'];
-      for (let i = 0; i < 25; i++) {{
+    // EFFECTS
+    function createRipple(el) {{
+      const rect = el.getBoundingClientRect();
+      const ripple = document.createElement('div');
+      ripple.className = 'ripple';
+      ripple.style.left = (rect.width / 2) + 'px';
+      ripple.style.top = (rect.height / 2) + 'px';
+      el.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 700);
+    }}
+
+    function createConfetti(rect) {{
+      const colors = ['#6366f1', '#8b5cf6', '#ec4899', '#10b981'];
+      for (let i = 0; i < 30; i++) {{
         const c = document.createElement('div');
         c.className = 'confetti';
-        c.style.left = (x + Math.random() * 100 - 50) + 'px';
-        c.style.top = (y + Math.random() * 100 - 50) + 'px';
+        c.style.left = (rect.left + rect.width / 2 + (Math.random() - 0.5) * 100) + 'px';
+        c.style.top = (rect.top + rect.height / 2 + (Math.random() - 0.5) * 100) + 'px';
         c.style.background = colors[Math.floor(Math.random() * colors.length)];
         c.style.animationDuration = (Math.random() * 2 + 2) + 's';
         c.style.animationDelay = Math.random() * 0.3 + 's';
@@ -762,79 +596,48 @@ def generate_menu_html():
     }}
 
     function explodeConfetti() {{
-      for (let i = 0; i < 6; i++) {{
-        setTimeout(() => createConfetti(innerWidth / 2, innerHeight / 2), i * 150);
+      for (let i = 0; i < 8; i++) {{
+        setTimeout(() => createConfetti({{ left: innerWidth/2, top: innerHeight/2, width: 0, height: 0 }}), i * 120);
       }}
     }}
 
     function createLightning() {{
       const l = document.createElement('div');
-      l.style.position = 'fixed';
-      l.style.inset = '0';
-      l.style.background = 'rgba(255,255,255,0.8)';
-      l.style.pointerEvents = 'none';
-      l.style.zIndex = '9999';
-      l.style.animation = 'lightning 0.6s ease-out';
+      l.style.cssText = 'position:fixed;inset:0;background:rgba(255,255,255,0.9);pointer-events:none;z-index:9999;animation:flash 0.8s ease-out';
       document.body.appendChild(l);
-      setTimeout(() => l.remove(), 600);
+      setTimeout(() => l.remove(), 800);
     }}
 
-    // === THEME ===
+    // THEME
     function toggleTheme() {{
       isDark = !isDark;
-      document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
       $('#themeIcon').textContent = isDark ? '🌙' : '☀️';
-      Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+      Telegram.WebApp.HapticFeedback.impactOccurred('light');
     }}
 
-    // === INIT ===
+    // INIT
     document.addEventListener('DOMContentLoaded', () => {{
-      createParticles();
-      Telegram.WebApp.ready();
-      Telegram.WebApp.expand();
-      updateCartUI();
+      Telegram.WebApp.ready(); Telegram.WebApp.expand();
+      updateCart();
 
-      // Tap on item to add 1
-      $$('.menu-item').forEach(item => {{
-        item.addEventListener('click', function(e) {{
-          if (e.target.closest('.qty-btn')) return;
-          const plusBtn = this.querySelector('.qty-btn.plus');
-          plusBtn.click();
-        }});
-      }});
-
-      // Easter Egg: 5 tap su header = God Mode
+      // GOD MODE EASTER EGG: 7 tap su header
       let taps = 0;
       $('.header').addEventListener('click', () => {{
-        taps++;
-        if (taps === 5) {{
-          godMode();
+        if (++taps === 7) {{
+          document.body.style.filter = 'hue-rotate(360deg) brightness(1.5)';
+          setTimeout(() => document.body.style.filter = '', 3000);
+          Telegram.WebApp.HapticFeedback.notificationOccurred('success');
           taps = 0;
         }}
-        setTimeout(() => taps = 0, 1000);
+        setTimeout(() => taps = 0, 1500);
       }});
+
+      // Add flash style
+      const style = document.createElement('style');
+      style.textContent = `@keyframes flash {{ 0%,100% {{opacity:0}} 10%,30% {{opacity:1}} 20%,40% {{opacity:0}} }}`;
+      document.head.appendChild(style);
     }});
-
-    function godMode() {{
-      document.body.style.animation = 'rainbow 3s linear infinite';
-      Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-      setTimeout(() => document.body.style.animation = '', 5000);
-    }}
-
-    // Rainbow animation
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes rainbow {{
-        0% {{ filter: hue-rotate(0deg); }}
-        100% {{ filter: hue-rotate(360deg); }}
-      }}
-      @keyframes lightning {{
-        0%, 100% {{ opacity: 0; }}
-        10%, 30% {{ opacity: 1; }}
-        20%, 40% {{ opacity: 0; }}
-      }}
-    `;
-    document.head.appendChild(style);
   </script>
 </body>
 </html>
