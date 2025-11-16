@@ -1,6 +1,7 @@
-# web/templates.py - Template HTML ULTRA MODERNO MAX POWER
+# web/templates.py - ULTRA MAX POWER EVOLUTION EDITION
 import sys
 import os
+import json
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -8,15 +9,14 @@ from config import Config
 
 
 def generate_menu_html():
-    """Genera HTML menu dinamico SUPER MODERNO MAX EDITION"""
+    """Genera HTML menu ULTRA MODERNO MAX POWER EVOLUTION"""
 
-    # Genera items HTML
     items_html = ""
     for idx, item in enumerate(Config.MENU_ITEMS):
         badge = f'<span class="badge">{item["badge"]}</span>' if item["badge"] else ""
-        delay = idx * 0.15
+        delay = idx * 0.12
         items_html += f'''
-  <div class="item" data-name="{item['name']}" data-price="{item['price']}" style="animation-delay: {delay}s">
+  <div class="menu-item" data-name="{item['name']}" data-price="{item['price']}" style="animation-delay: {delay}s">
     <div class="item-glow"></div>
     <div class="item-shine"></div>
     <div class="item-content">
@@ -27,16 +27,13 @@ def generate_menu_html():
       <div class="item-info">
         <h3>{item['name']} {badge}</h3>
         <p>{item['description']}</p>
-        <div class="price-container">
+        <div class="price-controls">
           <span class="price">{item['price']:.2f}€</span>
-          <button class="add-btn" onclick="event.stopPropagation(); addToCart('{item['name']}', {item['price']}, this)">
-            <svg class="plus-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-            </svg>
-            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" style="display:none;">
-              <path d="M4 10L8 14L16 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
+          <div class="quantity-controls">
+            <button class="qty-btn minus" onclick="event.stopPropagation(); updateQuantity(this, -1)">−</button>
+            <span class="quantity">0</span>
+            <button class="qty-btn plus" onclick="event.stopPropagation(); updateQuantity(this, 1)">+</button>
+          </div>
         </div>
       </div>
     </div>
@@ -45,50 +42,72 @@ def generate_menu_html():
 
     return f"""
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Durger King Italiano</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
-
-    * {{ 
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box; 
-    }}
-
     :root {{
       --primary: #667eea;
       --secondary: #764ba2;
       --accent: #f093fb;
       --success: #48bb78;
       --warning: #ed8936;
+      --danger: #f56565;
+      --light: #f7fafc;
+      --dark: #0f0f23;
+      --text: #ffffff;
+      --text-muted: rgba(255,255,255,0.75);
+      --radius: 28px;
+      --transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      --shadow-sm: 0 4px 20px rgba(0,0,0,0.2);
+      --shadow-md: 0 15px 50px rgba(0,0,0,0.4);
+      --shadow-lg: 0 25px 80px rgba(102,126,234,0.6);
+    }}
+
+    [data-theme="light"] {{
+      --primary: #5a67d8;
+      --secondary: #6b46c1;
+      --accent: #e53e9d;
+      --text: #1a202c;
+      --text-muted: #718096;
+      --light: #ffffff;
+      --dark: #f7fafc;
+    }}
+
+    * {{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }}
 
     body {{
       font-family: 'Poppins', sans-serif;
-      background: #0f0f23;
+      background: var(--dark);
+      color: var(--text);
       min-height: 100vh;
-      padding: 24px 16px 160px;
+      padding: 20px 16px 170px;
       overflow-x: hidden;
       position: relative;
+      transition: var(--transition);
     }}
 
     /* ANIMATED GRADIENT BACKGROUND */
-    body::before {{
-      content: '';
+    .bg-gradient {{
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #667eea 75%, #764ba2 100%);
+      inset: 0;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 35%, var(--accent) 70%, var(--primary) 100%);
       background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
-      z-index: 0;
+      animation: gradientShift 18s ease infinite;
+      z-index: -3;
+      filter: blur(80px);
+      opacity: 0.7;
     }}
 
     @keyframes gradientShift {{
@@ -96,217 +115,157 @@ def generate_menu_html():
       50% {{ background-position: 100% 50%; }}
     }}
 
-    /* GEOMETRIC SHAPES FLOATING */
-    .shapes {{
+    /* NEON GRID */
+    .grid {{
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-      overflow: hidden;
+      inset: 0;
+      background: 
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -2;
+      animation: gridMove 40s linear infinite;
     }}
 
-    .shape {{
-      position: absolute;
-      opacity: 0.1;
-      animation: floatShape 20s infinite ease-in-out;
-    }}
-
-    @keyframes floatShape {{
-      0%, 100% {{ transform: translate(0, 0) rotate(0deg); }}
-      25% {{ transform: translate(50vw, 30vh) rotate(90deg); }}
-      50% {{ transform: translate(-20vw, 60vh) rotate(180deg); }}
-      75% {{ transform: translate(30vw, -20vh) rotate(270deg); }}
+    @keyframes gridMove {{
+      0% {{ transform: translate(0, 0); }}
+      100% {{ transform: translate(50px, 50px); }}
     }}
 
     /* PARTICLES */
     .particles {{
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       pointer-events: none;
-      z-index: 1;
+      z-index: -1;
     }}
 
     .particle {{
       position: absolute;
-      background: rgba(255, 255, 255, 0.4);
+      background: var(--accent);
       border-radius: 50%;
-      animation: floatParticle 15s infinite ease-in-out;
+      filter: blur(1px);
+      animation: floatParticle linear infinite;
     }}
 
     @keyframes floatParticle {{
-      0% {{ transform: translate(0, 100vh) scale(0); opacity: 0; }}
+      0% {{ transform: translateY(100vh) scale(0); opacity: 0; }}
       10% {{ opacity: 1; }}
       90% {{ opacity: 1; }}
-      100% {{ transform: translate(100vw, -100vh) scale(1); opacity: 0; }}
+      100% {{ transform: translateY(-100px) scale(1); opacity: 0; }}
     }}
 
-    /* HEADER MEGA ANIMATIONS */
-    .header-container {{
+    /* HEADER */
+    .header {{
+      text-align: center;
+      margin-bottom: 32px;
       position: relative;
       z-index: 2;
-      text-align: center;
-      margin-bottom: 40px;
-      perspective: 1000px;
-    }}
-
-    @keyframes float3D {{
-      0%, 100% {{ transform: translateY(0) rotateX(0deg) rotateY(0deg); }}
-      25% {{ transform: translateY(-20px) rotateX(5deg) rotateY(-5deg); }}
-      50% {{ transform: translateY(0) rotateX(0deg) rotateY(5deg); }}
-      75% {{ transform: translateY(-10px) rotateX(-5deg) rotateY(0deg); }}
-    }}
-
-    @keyframes textGlow {{
-      0%, 100% {{ 
-        text-shadow: 
-          0 0 10px rgba(255,255,255,0.8),
-          0 0 20px rgba(255,255,255,0.6),
-          0 0 30px rgba(102,126,234,0.4);
-      }}
-      50% {{ 
-        text-shadow: 
-          0 0 20px rgba(255,255,255,1),
-          0 0 40px rgba(255,255,255,0.8),
-          0 0 60px rgba(102,126,234,0.6),
-          0 0 80px rgba(118,75,162,0.4);
-      }}
     }}
 
     h1 {{
-      color: white;
-      font-size: 38px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 42px;
       font-weight: 900;
-      animation: float3D 6s ease-in-out infinite, textGlow 3s ease-in-out infinite;
+      background: linear-gradient(135deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(240,147,251,0.5);
+      animation: titleGlow 3s ease-in-out infinite;
       letter-spacing: -1px;
-      line-height: 1.2;
-      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+    }}
+
+    @keyframes titleGlow {{
+      0%, 100% {{ filter: drop-shadow(0 0 20px rgba(240,147,251,0.6)); }}
+      50% {{ filter: drop-shadow(0 0 40px rgba(240,147,251,1)); }}
     }}
 
     .subtitle {{
-      color: rgba(255,255,255,0.95);
       font-size: 13px;
       font-weight: 700;
-      margin-top: 12px;
       text-transform: uppercase;
-      letter-spacing: 4px;
-      animation: fadeInUp 1.2s ease 0.3s backwards;
+      letter-spacing: 5px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      animation: fadeInUp 1s ease 0.4s backwards;
     }}
 
     /* THEME TOGGLE */
     .theme-toggle {{
       position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 50px;
-      height: 50px;
+      top: 16px;
+      right: 16px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      backdrop-filter: blur(10px);
-      border: 2px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(16px);
+      border: 2px solid rgba(255,255,255,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       z-index: 100;
-      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
     }}
 
     .theme-toggle:hover {{
-      transform: rotate(180deg) scale(1.1);
-      background: rgba(255,255,255,0.3);
+      transform: scale(1.1) rotate(180deg);
+      background: rgba(255,255,255,0.25);
     }}
 
-    /* ITEMS ULTRA PREMIUM */
-    @keyframes fadeInUp {{
-      from {{ opacity: 0; transform: translateY(60px) scale(0.9); }}
-      to {{ opacity: 1; transform: translateY(0) scale(1); }}
-    }}
-
-    .item {{
+    /* MENU ITEM */
+    .menu-item {{
       position: relative;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(30px) saturate(180%);
-      border-radius: 32px;
-      margin: 24px 0;
-      box-shadow: 
-        0 20px 60px rgba(0,0,0,0.3),
-        inset 0 1px 0 rgba(255,255,255,0.2);
-      cursor: pointer;
-      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-      border: 2px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(32px) saturate(180%);
+      border-radius: var(--radius);
+      margin: 20px 0;
       overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1.5px solid rgba(255,255,255,0.15);
       animation: fadeInUp 0.8s ease backwards;
-      z-index: 2;
+      box-shadow: var(--shadow-sm);
     }}
 
-    /* ROTATING GLOW */
+    .menu-item:hover {{
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent);
+    }}
+
     .item-glow {{
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: conic-gradient(
-        from 0deg,
-        transparent 0deg,
-        rgba(102,126,234,0.4) 90deg,
-        rgba(118,75,162,0.4) 180deg,
-        rgba(240,147,251,0.4) 270deg,
-        transparent 360deg
-      );
+      inset: -50%;
+      background: conic-gradient(from 0deg, transparent, var(--primary), var(--accent), transparent);
       opacity: 0;
       transition: opacity 0.5s;
-      pointer-events: none;
+      animation: rotateGlow 6s linear infinite paused;
     }}
 
-    .item:hover .item-glow {{
-      opacity: 1;
-      animation: rotateGlow 4s linear infinite;
+    .menu-item:hover .item-glow {{
+      opacity: 0.6;
+      animation-play-state: running;
     }}
 
     @keyframes rotateGlow {{
-      from {{ transform: rotate(0deg); }}
       to {{ transform: rotate(360deg); }}
     }}
 
-    /* SHIMMER EFFECT */
     .item-shine {{
       position: absolute;
       top: 0;
-      left: -100%;
+      left: -150%;
       width: 50%;
       height: 100%;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,0.6),
-        transparent
-      );
-      transition: left 0.8s;
-      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+      transition: left 1s;
     }}
 
-    .item:hover .item-shine {{
+    .menu-item:hover .item-shine {{
       left: 150%;
-    }}
-
-    .item:hover {{
-      transform: translateY(-12px) scale(1.03);
-      box-shadow: 
-        0 30px 80px rgba(102,126,234,0.5),
-        inset 0 1px 0 rgba(255,255,255,0.3);
-      border-color: rgba(255,255,255,0.4);
-    }}
-
-    .item:active {{
-      transform: scale(0.97);
     }}
 
     .item-content {{
@@ -317,198 +276,152 @@ def generate_menu_html():
       z-index: 2;
     }}
 
-    /* EMOJI 3D DELUXE */
     .emoji-container {{
       flex-shrink: 0;
-      width: 90px;
-      height: 90px;
+      width: 84px;
+      height: 84px;
+      background: linear-gradient(135deg, rgba(102,126,234,0.3), rgba(240,147,251,0.3));
+      border-radius: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, rgba(102,126,234,0.3), rgba(118,75,162,0.3));
-      border-radius: 24px;
-      transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
       position: relative;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      transition: var(--transition);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     }}
 
     .emoji-glow {{
       position: absolute;
-      inset: -4px;
+      inset: -6px;
       background: linear-gradient(135deg, var(--accent), var(--primary));
       border-radius: 24px;
       opacity: 0;
-      filter: blur(10px);
+      filter: blur(12px);
       transition: opacity 0.6s;
       z-index: -1;
     }}
 
-    .item:hover .emoji-container {{
-      transform: rotateY(360deg) scale(1.15);
-      box-shadow: 0 15px 60px rgba(102,126,234,0.6);
+    .menu-item:hover .emoji-glow {{
+      opacity: 1;
     }}
 
-    .item:hover .emoji-glow {{
-      opacity: 1;
+    .menu-item:hover .emoji-container {{
+      transform: scale(1.1) rotate(5deg);
     }}
 
     .emoji {{
-      font-size: 52px;
-      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3));
-      animation: bounceEmoji 3s ease-in-out infinite;
+      font-size: 48px;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
     }}
 
-    @keyframes bounceEmoji {{
-      0%, 100% {{ transform: translateY(0) scale(1) rotate(0deg); }}
-      50% {{ transform: translateY(-8px) scale(1.1) rotate(5deg); }}
-    }}
-
-    .item-info {{
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 10px;
-    }}
-
-    .item h3 {{
-      color: white;
-      font-size: 21px;
+    .item-info h3 {{
+      font-size: 20px;
       font-weight: 800;
+      color: var(--text);
       display: flex;
       align-items: center;
-      gap: 10px;
-      line-height: 1.3;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      gap: 8px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }}
 
-    .item p {{
-      color: rgba(255,255,255,0.85);
-      font-size: 13px;
-      line-height: 1.6;
-      font-weight: 500;
+    .item-info p {{
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin: 6px 0;
     }}
 
-    .price-container {{
+    .price-controls {{
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      margin-top: 6px;
+      align-items: center;
+      margin-top: 8px;
     }}
 
     .price {{
+      font-size: 24px;
       font-weight: 900;
-      font-size: 26px;
-      color: white;
-      text-shadow: 0 4px 20px rgba(102,126,234,0.8);
-      animation: priceGlow 2s ease-in-out infinite;
+      background: linear-gradient(135deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }}
 
-    @keyframes priceGlow {{
-      0%, 100% {{ 
-        text-shadow: 0 4px 20px rgba(102,126,234,0.8);
-      }}
-      50% {{ 
-        text-shadow: 0 4px 30px rgba(240,147,251,1);
-      }}
-    }}
-
-    /* ADD BUTTON DELUXE */
-    .add-btn {{
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: none;
-      background: linear-gradient(135deg, var(--success), #38a169);
-      color: white;
+    .quantity-controls {{
       display: flex;
       align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 8px 24px rgba(72,187,120,0.5);
-      position: relative;
+      gap: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 4px;
+      backdrop-filter: blur(10px);
     }}
 
-    .add-btn::before {{
-      content: '';
-      position: absolute;
-      inset: -2px;
-      background: linear-gradient(135deg, var(--success), #38a169);
+    .qty-btn {{
+      width: 36px;
+      height: 36px;
+      border: none;
       border-radius: 50%;
-      opacity: 0;
-      filter: blur(8px);
-      transition: opacity 0.4s;
-      z-index: -1;
-    }}
-
-    .add-btn:hover {{
-      transform: rotate(90deg) scale(1.2);
-      box-shadow: 0 12px 40px rgba(72,187,120,0.8);
-    }}
-
-    .add-btn:hover::before {{
-      opacity: 1;
-    }}
-
-    .add-btn.added {{
-      background: linear-gradient(135deg, var(--success), #2f855a);
-      animation: successPulse 0.6s ease;
-    }}
-
-    @keyframes successPulse {{
-      0%, 100% {{ transform: scale(1); }}
-      50% {{ transform: scale(1.3); }}
-    }}
-
-    .add-btn .check-icon {{
-      animation: checkBounce 0.5s ease;
-    }}
-
-    @keyframes checkBounce {{
-      0% {{ transform: scale(0) rotate(-180deg); }}
-      50% {{ transform: scale(1.2) rotate(10deg); }}
-      100% {{ transform: scale(1) rotate(0deg); }}
-    }}
-
-    /* BADGES */
-    .badge {{
-      display: inline-block;
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      background: var(--success);
       color: white;
-      padding: 5px 14px;
-      border-radius: 14px;
-      font-size: 11px;
+      font-size: 20px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 12px rgba(72,187,120,0.4);
+    }}
+
+    .qty-btn:hover {{
+      transform: scale(1.15);
+      box-shadow: 0 6px 20px rgba(72,187,120,0.6);
+    }}
+
+    .qty-btn.minus {{
+      background: var(--danger);
+    }}
+
+    .quantity {{
+      min-width: 32px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text);
+    }}
+
+    .badge {{
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 10px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      box-shadow: 0 4px 16px rgba(245,87,108,0.5);
-      animation: badgePulse 2.5s ease-in-out infinite;
+      animation: badgePulse 2s ease-in-out infinite;
     }}
 
     @keyframes badgePulse {{
-      0%, 100% {{ transform: scale(1); box-shadow: 0 4px 16px rgba(245,87,108,0.5); }}
-      50% {{ transform: scale(1.08); box-shadow: 0 6px 24px rgba(245,87,108,0.8); }}
+      0%, 100% {{ transform: scale(1); }}
+      50% {{ transform: scale(1.1); }}
     }}
 
-    /* CART MEGA PREMIUM */
+    /* CART */
     .cart-container {{
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 24px 16px;
-      background: rgba(15,15,35,0.95);
+      padding: 20px 16px;
+      background: rgba(15,15,35,0.97);
       backdrop-filter: blur(40px) saturate(200%);
-      box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+      border-top: 1.5px solid rgba(255,255,255,0.1);
+      box-shadow: 0 -15px 50px rgba(0,0,0,0.5);
       z-index: 100;
-      border-top: 2px solid rgba(255,255,255,0.1);
-      animation: slideUpCart 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }}
 
-    @keyframes slideUpCart {{
-      from {{ transform: translateY(100%); opacity: 0; }}
-      to {{ transform: translateY(0); opacity: 1; }}
+    @keyframes slideUp {{
+      from {{ transform: translateY(100%); }}
+      to {{ transform: translateY(0); }}
     }}
 
     .cart-info {{
@@ -516,91 +429,150 @@ def generate_menu_html():
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
-      color: white;
-      font-weight: 700;
     }}
 
     .cart-count {{
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       color: white;
-      padding: 8px 18px;
-      border-radius: 24px;
-      font-size: 14px;
+      padding: 8px 16px;
+      border-radius: 20px;
       font-weight: 800;
-      animation: fadeInUp 0.4s ease;
-      box-shadow: 0 6px 20px rgba(102,126,234,0.5);
+      font-size: 14px;
+      box-shadow: var(--shadow-sm);
     }}
 
     .cart-total {{
       font-size: 28px;
       font-weight: 900;
-      color: white;
-      text-shadow: 0 4px 20px rgba(240,147,251,0.8);
-      animation: totalPulse 1.5s ease-in-out infinite;
+      background: linear-gradient(135deg, #fff, var(--success));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: pulse 1.8s ease-in-out infinite;
     }}
 
-    @keyframes totalPulse {{
+    @keyframes pulse {{
       0%, 100% {{ transform: scale(1); }}
       50% {{ transform: scale(1.05); }}
     }}
 
-    /* BUTTON ULTIMATE */
-    button#orderBtn {{
+    #orderBtn {{
       background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
       background-size: 300% 300%;
       color: white;
       border: none;
-      padding: 20px;
-      font-size: 19px;
+      padding: 18px;
+      font-size: 18px;
+      font-weight: 900;
       border-radius: 24px;
       width: 100%;
-      font-weight: 900;
       cursor: pointer;
-      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 15px 50px rgba(102,126,234,0.6);
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
+      box-shadow: var(--shadow-md);
       position: relative;
       overflow: hidden;
-      animation: gradientMove 4s ease infinite;
+      animation: gradientMove 5s ease infinite;
+      transition: var(--transition);
     }}
 
-    @keyframes gradientMove {{
-      0%, 100% {{ background-position: 0% 50%; }}
-      50% {{ background-position: 100% 50%; }}
+    #orderBtn:disabled {{
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
     }}
 
-    button#orderBtn::before {{
+    #orderBtn::before {{
       content: '';
       position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.4);
-      transform: translate(-50%, -50%);
-      transition: width 0.8s, height 0.8s;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.3), transparent);
+      opacity: 0;
+      transition: opacity 0.6s;
     }}
 
-    button#orderBtn:hover {{
-      transform: translateY(-6px) scale(1.03);
-      box-shadow: 0 20px 60px rgba(102,126,234,0.9);
+    #orderBtn:hover:not(:disabled)::before {{
+      opacity: 1;
     }}
 
-    button#orderBtn:hover::before {{
-      width: 400px;
-      height: 400px;
+    #orderBtn:hover:not(:disabled) {{
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: var(--shadow-lg);
     }}
 
-    button#orderBtn:active {{
-      transform: scale(0.96);
+    /* MODAL */
+    .modal {{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(12px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      animation: fadeIn 0.4s ease;
     }}
 
-    button#orderBtn:disabled {{
-      opacity: 0.4;
-      cursor: not-allowed;
-      transform: none;
+    .modal.active {{
+      display: flex;
+    }}
+
+    .modal-content {{
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(32px);
+      border-radius: var(--radius);
+      padding: 24px;
+      width: 100%;
+      max-width: 400px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      box-shadow: var(--shadow-lg);
+      animation: modalPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }}
+
+    @keyframes modalPop {{
+      from {{ transform: scale(0.8); opacity: 0; }}
+      to {{ transform: scale(1); opacity: 1; }}
+    }}
+
+    .order-item {{
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }}
+
+    .order-total {{
+      font-size: 24px;
+      font-weight: 900;
+      text-align: center;
+      margin: 16px 0;
+      color: var(--success);
+    }}
+
+    .modal-buttons {{
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }}
+
+    .btn {{
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }}
+
+    .btn-confirm {{
+      background: var(--success);
+      color: white;
+    }}
+
+    .btn-cancel {{
+      background: rgba(255,255,255,0.1);
+      color: var(--text);
     }}
 
     /* CONFETTI */
@@ -608,10 +580,9 @@ def generate_menu_html():
       position: fixed;
       width: 10px;
       height: 10px;
-      background: var(--accent);
       pointer-events: none;
-      z-index: 1000;
-      animation: confettiFall 3s ease-out forwards;
+      z-index: 9999;
+      animation: confettiFall linear forwards;
     }}
 
     @keyframes confettiFall {{
@@ -621,312 +592,249 @@ def generate_menu_html():
       }}
     }}
 
-    /* RIPPLE EFFECT */
+    /* RIPPLE */
     .ripple {{
       position: absolute;
       border-radius: 50%;
-      background: rgba(72,187,120,0.6);
-      animation: rippleExpand 0.8s ease-out;
+      background: rgba(255,255,255,0.4);
+      transform: scale(0);
+      animation: ripple 0.6s ease-out;
       pointer-events: none;
     }}
 
-    @keyframes rippleExpand {{
-      0% {{ width: 0; height: 0; opacity: 1; }}
-      100% {{ width: 200px; height: 200px; opacity: 0; }}
+    @keyframes ripple {{
+      to {{ transform: scale(4); opacity: 0; }}
     }}
 
-    /* LIGHTNING EFFECT */
-    @keyframes lightning {{
-      0%, 100% {{ opacity: 0; }}
-      10%, 30%, 50% {{ opacity: 1; }}
-      20%, 40% {{ opacity: 0; }}
-    }}
-
-    .lightning {{
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(255,255,255,0.3);
-      pointer-events: none;
-      z-index: 9999;
-      animation: lightning 0.5s ease-out;
+    @keyframes fadeInUp {{
+      from {{ opacity: 0; transform: translateY(40px); }}
+      to {{ opacity: 1; transform: translateY(0); }}
     }}
   </style>
 </head>
 <body>
-  <!-- SHAPES -->
-  <div class="shapes" id="shapes"></div>
-
-  <!-- PARTICLES -->
+  <div class="bg-gradient"></div>
+  <div class="grid"></div>
   <div class="particles" id="particles"></div>
 
-  <!-- THEME TOGGLE -->
   <div class="theme-toggle" onclick="toggleTheme()">
-    <span style="font-size: 24px;">🌙</span>
+    <span id="themeIcon">🌙</span>
   </div>
 
-  <div class="header-container">
+  <div class="header">
     <h1>🍕 DURGER KING 🍔<br>ITALIANO</h1>
-    <div class="subtitle">✨ AUTENTICO • DELIZIOSO • ITALIANO ✨</div>
+    <div class="subtitle">✨ AUTENTICO • VELOCE • GOURMET ✨</div>
   </div>
 
-  {items_html}
+  <div id="menu">
+    {items_html}
+  </div>
 
   <div class="cart-container">
     <div class="cart-info">
-      <span>🛒 <span class="cart-count" id="cartCount">0 articoli</span></span>
-      <span class="cart-total" id="cartTotal">0,00 €</span>
+      <div class="cart-count" id="cartCount">0 articoli</div>
+      <div class="cart-total" id="cartTotal">0,00 €</div>
     </div>
-    <button id="orderBtn" onclick="sendOrder()">⚡ ORDINA ORA ⚡</button>
+    <button id="orderBtn" onclick="openOrderModal()" disabled>⚡ ORDINA ORA ⚡</button>
+  </div>
+
+  <!-- ORDER MODAL -->
+  <div class="modal" id="orderModal">
+    <div class="modal-content">
+      <h2>Conferma Ordine</h2>
+      <div id="orderItems"></div>
+      <div class="order-total" id="modalTotal">Totale: 0,00 €</div>
+      <div class="modal-buttons">
+        <button class="btn btn-cancel" onclick="closeOrderModal()">Annulla</button>
+        <button class="btn btn-confirm" onclick="confirmOrder()">Conferma</button>
+      </div>
+    </div>
   </div>
 
   <script>
-    // PARTICLES SYSTEM ADVANCED
-    function createParticles() {{
-      const container = document.getElementById('particles');
-      for (let i = 0; i < 25; i++) {{
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        const size = Math.random() * 8 + 4;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 15 + 's';
-        particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-        container.appendChild(particle);
-      }}
-    }}
-
-    // GEOMETRIC SHAPES
-    function createShapes() {{
-      const container = document.getElementById('shapes');
-      const shapes = ['◆', '●', '■', '▲', '★'];
-      for (let i = 0; i < 10; i++) {{
-        const shape = document.createElement('div');
-        shape.className = 'shape';
-        shape.textContent = shapes[Math.floor(Math.random() * shapes.length)];
-        shape.style.fontSize = (Math.random() * 60 + 40) + 'px';
-        shape.style.left = Math.random() * 100 + '%';
-        shape.style.top = Math.random() * 100 + '%';
-        shape.style.animationDelay = Math.random() * 20 + 's';
-        shape.style.animationDuration = (Math.random() * 15 + 15) + 's';
-        container.appendChild(shape);
-      }}
-    }}
-
-    let cart = [];
-
-    function updateCart() {{
-      const count = cart.length;
-      const total = cart.reduce((sum, item) => sum + item.price, 0);
-      document.getElementById('cartCount').textContent = count + (count === 1 ? ' articolo' : ' articoli');
-      document.getElementById('cartTotal').textContent = total.toFixed(2).replace('.', ',') + ' €';
-      document.getElementById('orderBtn').disabled = count === 0;
-    }}
-
-    // CONFETTI EXPLOSION
-    function createConfetti(x, y) {{
-      const colors = ['#667eea', '#764ba2', '#f093fb', '#48bb78', '#ed8936'];
-      for (let i = 0; i < 20; i++) {{
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = x + 'px';
-        confetti.style.top = y + 'px';
-        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.transform = `rotate(${{Math.random() * 360}}deg)`;
-        confetti.style.animationDelay = (Math.random() * 0.2) + 's';
-        document.body.appendChild(confetti);
-        setTimeout(() => confetti.remove(), 3000);
-      }}
-    }}
-
-    // RIPPLE EFFECT
-    function createRipple(x, y) {{
-      const ripple = document.createElement('div');
-      ripple.className = 'ripple';
-      ripple.style.left = (x - 100) + 'px';
-      ripple.style.top = (y - 100) + 'px';
-      document.body.appendChild(ripple);
-      setTimeout(() => ripple.remove(), 800);
-    }}
-
-    // LIGHTNING EFFECT
-    function createLightning() {{
-      const lightning = document.createElement('div');
-      lightning.className = 'lightning';
-      document.body.appendChild(lightning);
-      setTimeout(() => lightning.remove(), 500);
-    }}
-
-    // ADD TO CART WITH EFFECTS
-    function addToCart(name, price, button) {{
-      cart.push({{name, price}});
-
-      // Haptic feedback
-      Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
-
-      // Button animation
-      const plusIcon = button.querySelector('.plus-icon');
-      const checkIcon = button.querySelector('.check-icon');
-      plusIcon.style.display = 'none';
-      checkIcon.style.display = 'block';
-      button.classList.add('added');
-
-      setTimeout(() => {{
-        plusIcon.style.display = 'block';
-        checkIcon.style.display = 'none';
-        button.classList.remove('added');
-      }}, 1000);
-
-      // Visual effects
-      const rect = button.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2;
-
-      createConfetti(x, y);
-      createRipple(x, y);
-
-      updateCart();
-    }}
-
-    // THEME TOGGLE
+    // === STATE ===
+    const cart = [];
     let isDark = true;
-    function toggleTheme() {{
-      isDark = !isDark;
-      const toggle = document.querySelector('.theme-toggle span');
-      toggle.textContent = isDark ? '🌙' : '☀️';
 
-      if (!isDark) {{
-        document.body.style.filter = 'none';
-      }}
-      Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+    // === UTILS ===
+    const $ = (s) => document.querySelector(s);
+    const $$ = (s) => document.querySelectorAll(s);
+
+    function formatPrice(price) {{
+      return price.toFixed(2).replace('.', ',') + ' €';
     }}
 
-    // SEND ORDER WITH LIGHTNING
-    function sendOrder() {{
-      if (cart.length === 0) {{
-        Telegram.WebApp.showAlert('🍕 Carrello vuoto! Aggiungi almeno un prodotto.');
-        return;
+    // === PARTICLES ===
+    function createParticles() {{
+      const container = $('#particles');
+      for (let i = 0; i < 30; i++) {{
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.random() * 6 + 3;
+        p.style.width = p.style.height = size + 'px';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDelay = Math.random() * 20 + 's';
+        p.style.animationDuration = (Math.random() * 15 + 15) + 's';
+        container.appendChild(p);
+      }}
+    }}
+
+    // === CART LOGIC ===
+    function updateQuantity(btn, change) {{
+      const item = btn.closest('.menu-item');
+      const name = item.dataset.name;
+      const price = parseFloat(item.dataset.price);
+      const qtySpan = item.querySelector('.quantity');
+      let qty = parseInt(qtySpan.textContent) + change;
+
+      if (qty < 0) qty = 0;
+      qtySpan.textContent = qty;
+
+      // Update cart
+      const existing = cart.find(c => c.name === name);
+      if (existing) {{
+        existing.quantity = qty;
+        if (qty === 0) cart.splice(cart.indexOf(existing), 1);
+      }} else if (qty > 0) {{
+        cart.push({{ name, price, quantity: qty }});
       }}
 
-      // Lightning effect
+      updateCartUI();
+      Telegram.WebApp.HapticFeedback.impactOccurred('light');
+    }}
+
+    function updateCartUI() {{
+      const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
+      const totalPrice = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+      $('#cartCount').textContent = totalItems + (totalItems === 1 ? ' articolo' : ' articoli');
+      $('#cartTotal').textContent = formatPrice(totalPrice);
+      $('#orderBtn').disabled = totalItems === 0;
+    }}
+
+    // === MODAL ===
+    function openOrderModal() {{
+      const itemsDiv = $('#orderItems');
+      itemsDiv.innerHTML = '';
+      let total = 0;
+
+      cart.forEach(item => {{
+        const div = document.createElement('div');
+        div.className = 'order-item';
+        div.innerHTML = `<span>${{item.name}} × ${{item.quantity}}</span><span>${{formatPrice(item.price * item.quantity)}}</span>`;
+        itemsDiv.appendChild(div);
+        total += item.price * item.quantity;
+      }});
+
+      $('#modalTotal').textContent = 'Totale: ' + formatPrice(total);
+      $('#orderModal').classList.add('active');
+    }}
+
+    function closeOrderModal() {{
+      $('#orderModal').classList.remove('active');
+    }}
+
+    function confirmOrder() {{
+      closeOrderModal();
       createLightning();
-
-      // Massive confetti
-      for (let i = 0; i < 5; i++) {{
-        setTimeout(() => {{
-          createConfetti(window.innerWidth / 2, window.innerHeight / 2);
-        }}, i * 100);
-      }}
-
-      // Haptic success
+      explodeConfetti();
       Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-
-      // Send data
       setTimeout(() => {{
         Telegram.WebApp.sendData(JSON.stringify(cart));
         Telegram.WebApp.close();
-      }}, 800);
+      }}, 1000);
     }}
 
-    // INIT
-    createParticles();
-    createShapes();
-    Telegram.WebApp.ready();
-    Telegram.WebApp.expand();
-    updateCart();
-
-    // PARALLAX SCROLL EFFECT
-    let lastScroll = 0;
-    window.addEventListener('scroll', () => {{
-      const currentScroll = window.pageYOffset;
-      const items = document.querySelectorAll('.item');
-
-      items.forEach((item, index) => {{
-        const speed = (index % 2 === 0) ? 0.3 : -0.3;
-        const yPos = -(currentScroll * speed);
-        item.style.transform = `translateY(${{yPos}}px)`;
-      }});
-
-      lastScroll = currentScroll;
-    }});
-
-    // ITEM CLICK ANIMATIONS
-    document.querySelectorAll('.item').forEach(item => {{
-      item.addEventListener('click', function(e) {{
-        if (e.target.closest('.add-btn')) return;
-
-        const name = this.dataset.name;
-        const price = parseFloat(this.dataset.price);
-        const btn = this.querySelector('.add-btn');
-
-        addToCart(name, price, btn);
-
-        // Item explosion effect
-        this.style.animation = 'none';
-        setTimeout(() => {{
-          this.style.animation = '';
-        }}, 10);
-      }});
-    }});
-
-    // EASTER EGG: Triple tap header for disco mode
-    let tapCount = 0;
-    let tapTimer;
-    document.querySelector('.header-container').addEventListener('click', () => {{
-      tapCount++;
-      clearTimeout(tapTimer);
-
-      if (tapCount === 3) {{
-        discoMode();
-        tapCount = 0;
+    // === EFFECTS ===
+    function createConfetti(x, y) {{
+      const colors = ['#667eea', '#764ba2', '#f093fb', '#48bb78', '#ed8936'];
+      for (let i = 0; i < 25; i++) {{
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = (x + Math.random() * 100 - 50) + 'px';
+        c.style.top = (y + Math.random() * 100 - 50) + 'px';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        c.style.animationDelay = Math.random() * 0.3 + 's';
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 4000);
       }}
-
-      tapTimer = setTimeout(() => {{
-        tapCount = 0;
-      }}, 500);
-    }});
-
-    function discoMode() {{
-      let colors = ['#667eea', '#764ba2', '#f093fb', '#48bb78', '#ed8936', '#f56565'];
-      let colorIndex = 0;
-
-      const interval = setInterval(() => {{
-        document.body.style.setProperty('--primary', colors[colorIndex % colors.length]);
-        document.body.style.setProperty('--secondary', colors[(colorIndex + 1) % colors.length]);
-        document.body.style.setProperty('--accent', colors[(colorIndex + 2) % colors.length]);
-        colorIndex++;
-      }}, 200);
-
-      Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
-
-      setTimeout(() => {{
-        clearInterval(interval);
-        document.body.style.setProperty('--primary', '#667eea');
-        document.body.style.setProperty('--secondary', '#764ba2');
-        document.body.style.setProperty('--accent', '#f093fb');
-      }}, 3000);
     }}
 
-    // AUTO-ANIMATE ITEMS ON SCROLL INTO VIEW
-    const observerOptions = {{
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    }};
+    function explodeConfetti() {{
+      for (let i = 0; i < 6; i++) {{
+        setTimeout(() => createConfetti(innerWidth / 2, innerHeight / 2), i * 150);
+      }}
+    }}
 
-    const observer = new IntersectionObserver((entries) => {{
-      entries.forEach(entry => {{
-        if (entry.isIntersecting) {{
-          entry.target.style.animation = 'fadeInUp 0.8s ease backwards';
-        }}
+    function createLightning() {{
+      const l = document.createElement('div');
+      l.style.position = 'fixed';
+      l.style.inset = '0';
+      l.style.background = 'rgba(255,255,255,0.8)';
+      l.style.pointerEvents = 'none';
+      l.style.zIndex = '9999';
+      l.style.animation = 'lightning 0.6s ease-out';
+      document.body.appendChild(l);
+      setTimeout(() => l.remove(), 600);
+    }}
+
+    // === THEME ===
+    function toggleTheme() {{
+      isDark = !isDark;
+      document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      $('#themeIcon').textContent = isDark ? '🌙' : '☀️';
+      Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+    }}
+
+    // === INIT ===
+    document.addEventListener('DOMContentLoaded', () => {{
+      createParticles();
+      Telegram.WebApp.ready();
+      Telegram.WebApp.expand();
+      updateCartUI();
+
+      // Tap on item to add 1
+      $$('.menu-item').forEach(item => {{
+        item.addEventListener('click', function(e) {{
+          if (e.target.closest('.qty-btn')) return;
+          const plusBtn = this.querySelector('.qty-btn.plus');
+          plusBtn.click();
+        }});
       }});
-    }}, observerOptions);
 
-    document.querySelectorAll('.item').forEach(item => {{
-      observer.observe(item);
+      // Easter Egg: 5 tap su header = God Mode
+      let taps = 0;
+      $('.header').addEventListener('click', () => {{
+        taps++;
+        if (taps === 5) {{
+          godMode();
+          taps = 0;
+        }}
+        setTimeout(() => taps = 0, 1000);
+      }});
     }});
+
+    function godMode() {{
+      document.body.style.animation = 'rainbow 3s linear infinite';
+      Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+      setTimeout(() => document.body.style.animation = '', 5000);
+    }}
+
+    // Rainbow animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes rainbow {{
+        0% {{ filter: hue-rotate(0deg); }}
+        100% {{ filter: hue-rotate(360deg); }}
+      }}
+      @keyframes lightning {{
+        0%, 100% {{ opacity: 0; }}
+        10%, 30% {{ opacity: 1; }}
+        20%, 40% {{ opacity: 0; }}
+      }}
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html>
