@@ -127,16 +127,18 @@ async def webapp_data(message: types.Message):
 import os  # ← AGGIUNGI QUESTA RIGA IN ALTO (se non c'è già)
 
 async def main():
-    # Avvia Flask in background con PORTA DINAMICA (Railway)
+    # Avvia Flask in background con PORTA DINAMICA per Railway
+    import os  # (se non in alto)
     port = int(os.environ.get("PORT", 5000))
+    from threading import Thread
     Thread(target=lambda: app.run(
-        host="0.0.0.0",
+        host="0.0.0.0",  # Obbligatorio per Railway
         port=port,
-        use_reloader=False
+        use_reloader=False,
+        debug=False  # Evita crash in prod
     )).start()
-    # Avvia polling del bot
+    # Avvia polling bot
     await dp.start_polling(bot)
-
 
 if __name__ == "__main__":
     asyncio.run(main())
