@@ -5,8 +5,8 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from aiohttp import web
-from .templates.base import get_base_template
-from .templates.agent import generate_agent_page
+from web.templates.base import get_base_template
+from web.templates.agent import generate_agent_page
 
 
 def generate_home_page():
