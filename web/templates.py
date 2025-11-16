@@ -1,3 +1,13 @@
+# web/templates.py - GOD MODE ULTRA X EDITION (Minimal + Absurd + Extreme UX)
+import sys
+import os
+import json
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from config import Config
+
+
 def generate_menu_html():
     """
     Genera HTML per il menu: minimal, assurdo, estremamente user friendly.
