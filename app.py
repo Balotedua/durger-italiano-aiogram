@@ -15,6 +15,9 @@ import os
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
+if not BOT_TOKEN:
+    raise ValueError("BOT_TOKEN mancante! Aggiungilo su Railway → Settings → Variables")
+
 # Inizializza bot e Flask
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
