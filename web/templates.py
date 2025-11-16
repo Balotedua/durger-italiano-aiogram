@@ -1,4 +1,3 @@
-# web/templates.py - GOD MODE ULTRA X EDITION (Minimal + Absurd + Extreme UX)
 import sys
 import os
 import json
@@ -9,311 +8,636 @@ from config import Config
 
 
 def generate_menu_html():
+    """IL MENU CHE VINCE IL WEBBY AWARD 2026"""
 
     items_html = ""
     for idx, item in enumerate(Config.MENU_ITEMS):
-        badge = f'<span class="badge">{item["badge"]}</span>' if item.get("badge") else ""
-        img = item.get("image") or ""
-        img_html = (
-            f'<div class="product-obj" data-img="{img}"><span class="emoji">{item["emoji"]}</span></div>'
-            if not img else
-            f'<div class="product-obj" data-img="{img}"><img src="{img}" alt="{item["name"]}"/></div>'
-        )
-
+        badge = f'<div class="badge">{item["badge"]}</div>' if item["badge"] else ""
+        delay = idx * 0.08
         items_html += f'''
-  <article class="menu-card" tabindex="0" role="button" data-name="{item['name']}" data-price="{item['price']}">
-    {img_html}
-
-    <div class="info">
-      <div class="top">
-        <h3 class="title">{item['name']}</h3>
-        {badge}
-      </div>
-      <p class="desc">{item['description']}</p>
-      <div class="meta">
-        <div class="price">{item['price']:.2f} €</div>
-        <div class="controls">
-          <button class="btn preview" aria-label="Anteprima {item['name']}">Anteprima</button>
-          <button class="btn add" aria-label="Aggiungi {item['name']} al carrello">Aggiungi</button>
+  <div class="menu-card" data-name="{item['name']}" data-price="{item['price']}" style="--delay: {delay}s">
+    <div class="card-inner">
+      <div class="card-glow"></div>
+      <div class="card-shine"></div>
+      <div class="card-content">
+        <div class="emoji-box">
+          <div class="emoji-glow"></div>
+          <span class="emoji">{item['emoji']}</span>
+        </div>
+        <div class="info">
+          <h3>{item['name']}</h3>
+          {badge}
+          <p>{item['description']}</p>
+          <div class="price-row">
+            <span class="price">{item['price']:.2f}€</span>
+            <div class="add-circle" onclick="addToCart(this)">
+              <svg class="plus" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+              <svg class="check" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </article>
+  </div>
 '''
 
-    # TEMPLATE con placeholder semplice @@ITEMS@@ (Nessun f-string su tutto il blocco)
-    html_template = """<!doctype html>
-<html lang="it" data-theme="light">
+    return f"""
+<!DOCTYPE html>
+<html lang="it" data-theme="dark">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Menu — Minimal & Absurd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Durger King Italiano</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
   <style>
-    /* —— ROOT & THEME —— */
-    :root{
-      --bg: #f7f7fc;
-      --card: #ffffff;
-      --muted: #7b7f89;
-      --accent: #111827;
-      --accent-2: #7c3aed;
+    :root {{
+      --primary: #6366f1;
+      --secondary: #8b5cf6;
+      --accent: #ec4899;
       --success: #10b981;
-      --radius: 20px;
-      --glass: rgba(255,255,255,0.6);
-      --shadow: 0 6px 30px rgba(16,24,40,0.08);
-      --transition: 240ms cubic-bezier(.2,.9,.3,1);
-    }
+      --danger: #ef4444;
+      --bg: #0a0a0f;
+      --card: rgba(255,255,255,0.06);
+      --text: #ffffff;
+      --text-muted: rgba(255,255,255,0.7);
+      --radius: 32px;
+      --shadow: 0 20px 60px rgba(0,0,0,0.4);
+      --transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }}
 
-    [data-theme="dark"]{
-      --bg: #07070b;
-      --card: rgba(255,255,255,0.03);
-      --muted: rgba(255,255,255,0.6);
-      --accent: #eef2ff;
-      --glass: rgba(255,255,255,0.04);
-    }
+    [data-theme="light"] {{
+      --bg: #f8fafc;
+      --card: rgba(255,255,255,0.8);
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --primary: #4f46e5;
+      --secondary: #7c3aed;
+      --accent: #ec4899;
+    }}
 
-    *{box-sizing:border-box;margin:0;padding:0;font-synthesis:none}
-    html,body{height:100%}
-    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--accent); padding:28px; -webkit-font-smoothing:antialiased}
+    * {{
+      margin: 0; padding: 0; box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      tap-highlight-color: transparent;
+    }}
 
-    /* —— LAYOUT —— */
-    .wrap{max-width:980px;margin:0 auto}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
-    .brand{display:flex;flex-direction:column;gap:2px}
-    .brand h1{font-weight:900;font-size:20px;letter-spacing:-0.6px}
-    .brand p{font-size:12px;color:var(--muted);font-weight:600}
+    body {{
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      padding: 16px 12px 180px;
+      overflow-x: hidden;
+      position: relative;
+      transition: background 0.5s ease;
+    }}
 
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+    /* BACKGROUND MAGIC */
+    .bg-canvas {{
+      position: fixed; inset: 0; z-index: -3;
+      background: radial-gradient(circle at 20% 80%, #6366f1 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, #ec4899 0%, transparent 50%),
+                  radial-gradient(circle at 50% 50%, #8b5cf6 0%, transparent 50%);
+      background-size: 200% 200%;
+      animation: bgFlow 20s ease infinite;
+      filter: blur(80px); opacity: 0.6;
+    }}
 
-    /* —— CARD (VERY MINIMAL) —— */
-    .menu-card{display:flex;gap:16px;align-items:center;background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);transition:transform var(--transition),box-shadow var(--transition);cursor:pointer;outline:none}
-    .menu-card:focus,.menu-card:hover{transform:translateY(-6px);box-shadow:0 18px 44px rgba(15,23,42,0.08)}
+    @keyframes bgFlow {{
+      0%, 100% {{ background-position: 0% 50%, 100% 50%, 50% 50%; }}
+      50% {{ background-position: 100% 50%, 0% 50%, 50% 50%; }}
+    }}
 
-    .product-obj{width:104px;height:104px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:46px;flex-shrink:0;background:linear-gradient(135deg,transparent,transparent);position:relative;cursor:grab;user-select:none;transition:transform var(--transition)}
-    .product-obj img{width:100%;height:100%;object-fit:cover;border-radius:12px}
+    /* NEON GRID */
+    .grid {{
+      position: fixed; inset: 0; z-index: -2;
+      background: 
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridDrift 60s linear infinite;
+    }}
 
-    .info{flex:1;display:flex;flex-direction:column;gap:8px}
-    .title{font-size:16px;font-weight:800;color:var(--accent)}
-    .desc{font-size:13px;color:var(--muted);line-height:1.3}
+    @keyframes gridDrift {{
+      0% {{ transform: translate(0, 0); }}
+      100% {{ transform: translate(60px, 60px); }}
+    }}
 
-    .meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
-    .price{font-weight:900;font-size:18px;color:var(--accent)}
-    .controls{display:flex;gap:8px}
-    .btn{border:none;background:transparent;padding:8px 12px;border-radius:12px;font-weight:700;cursor:pointer;transition:all var(--transition);font-size:13px}
-    .btn.preview{background:transparent;color:var(--muted);border:1px solid rgba(0,0,0,0.04)}
-    .btn.add{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;box-shadow:0 10px 30px rgba(124,58,237,0.14)}
+    /* HEADER */
+    .header {{
+      text-align: center; margin-bottom: 32px; position: relative; z-index: 10;
+    }}
 
-    /* —— CART BAR —— */
-    .cart-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;background:var(--card);padding:14px;border-radius:14px;display:flex;gap:14px;align-items:center;box-shadow:var(--shadow);z-index:60;min-width:360px}
-    .cart-summary{display:flex;flex-direction:column}
-    .cart-total{font-weight:900;font-size:18px}
-    .order-btn{background:var(--accent-2);color:white;padding:10px 18px;border-radius:12px;border:none;font-weight:800;cursor:pointer}
-    .order-btn:disabled{opacity:0.45;cursor:not-allowed}
+    h1 {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 44px; font-weight: 900;
+      background: linear-gradient(135deg, #fff, var(--accent), #fff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-size: 200% 200%;
+      animation: titleShine 4s ease infinite;
+      letter-spacing: -1.5px;
+      filter: drop-shadow(0 8px 30px rgba(236,72,153,0.4));
+    }}
 
-    /* —— MODALS —— */
-    .overlay{position:fixed;inset:0;background:linear-gradient(180deg,rgba(2,6,23,0.55),transparent);display:none;align-items:center;justify-content:center;z-index:999}
-    .overlay.active{display:flex}
-    .panel{background:var(--card);padding:20px;border-radius:20px;min-width:320px;max-width:720px;box-shadow:0 30px 80px rgba(2,6,23,0.3);}
+    @keyframes titleShine {{
+      0%, 100% {{ background-position: 0% 50%; }}
+      50% {{ background-position: 100% 50%; }}
+    }}
 
-    .panel h2{margin-bottom:10px;font-size:18px}
+    .tagline {{
+      font-size: 14px; font-weight: 600; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 6px; margin-top: 8px;
+      animation: fadeIn 1s ease 0.5s backwards;
+    }}
 
-    /* —— ORDER LIST —— */
-    .order-list{max-height:50vh;overflow:auto;padding-right:6px}
-    .order-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.04)}
+    /* THEME TOGGLE */
+    .theme-toggle {{
+      position: fixed; top: 16px; right: 16px; z-index: 100;
+      width: 60px; height: 60px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); backdrop-filter: blur(16px);
+      border: 2px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: var(--transition);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }}
 
-    /* —— 3D PRODUCT PREVIEW —— */
-    .preview-3d{width:320px;height:320px;margin:0 auto;display:flex;align-items:center;justify-content:center;touch-action:pan-y}
-    .stage{width:260px;height:260px;border-radius:18px;background:var(--glass);display:flex;align-items:center;justify-content:center;transform-style:preserve-3d;transition:transform 300ms cubic-bezier(.2,.9,.3,1);box-shadow:0 8px 40px rgba(2,6,23,0.15)}
-    .stage img,.stage .emoji{width:92%;height:92%;object-fit:contain;border-radius:14px}
+    .theme-toggle:hover {{
+      transform: scale(1.15) rotate(360deg);
+      background: rgba(255,255,255,0.2);
+    }}
 
-    /* subtle instruction */
-    .hint{font-size:12px;color:var(--muted);text-align:center;margin-top:8px}
+    /* MENU CARD – GOD LEVEL */
+    .menu-card {{
+      margin: 20px 0; animation: floatIn var(--delay, 0s) 0.8s ease backwards;
+      transform: translateZ(0); perspective: 1000px;
+    }}
 
-    /* Accessibility focus */
-    .menu-card:focus-visible{box-shadow:0 0 0 4px rgba(124,58,237,0.12)}
+    @keyframes floatIn {{
+      from {{ opacity: 0; transform: translateY(60px) scale(0.9) rotateX(-15deg); }}
+      to {{ opacity: 1; transform: translateY(0) scale(1) rotateX(0deg); }}
+    }}
 
-    @media (max-width:640px){
-      .grid{grid-template-columns:1fr}
-      .cart-bar{min-width:unset;left:16px;transform:none}
-    }
+    .card-inner {{
+      position: relative; border-radius: var(--radius);
+      background: var(--card); backdrop-filter: blur(32px) saturate(180%);
+      overflow: hidden; cursor: pointer;
+      border: 1.5px solid rgba(255,255,255,0.1);
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+    }}
+
+    .menu-card:hover .card-inner {{
+      transform: translateY(-16px) scale(1.04);
+      box-shadow: 0 40px 100px rgba(99,102,241,0.6);
+      border-color: var(--accent);
+    }}
+
+    .card-glow {{
+      position: absolute; inset: -100%;
+      background: conic-gradient(from 0deg at 50% 50%, 
+        transparent, var(--primary), var(--accent), var(--secondary), transparent);
+      opacity: 0; transition: opacity 0.6s;
+      animation: spinGlow 8s linear infinite paused;
+    }}
+
+    .menu-card:hover .card-glow {{
+      opacity: 0.7; animation-play-state: running;
+    }}
+
+    @keyframes spinGlow {{
+      to {{ transform: rotate(360deg); }}
+    }}
+
+    .card-shine {{
+      position: absolute; top: 0; left: -150%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+      transition: left 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }}
+
+    .menu-card:hover .card-shine {{
+      left: 150%;
+    }}
+
+    .card-content {{
+      display: flex; gap: 20px; padding: 28px; position: relative; z-index: 2;
+    }}
+
+    .emoji-box {{
+      flex-shrink: 0; width: 88px; height: 88px;
+      background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(236,72,153,0.2));
+      border-radius: 28px; display: flex; align-items: center; justify-content: center;
+      position: relative; transition: var(--transition);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }}
+
+    .emoji-glow {{
+      position: absolute; inset: -8px; border-radius: 28px;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      opacity: 0; filter: blur(16px); transition: opacity 0.6s; z-index: -1;
+    }}
+
+    .menu-card:hover .emoji-glow {{
+      opacity: 1;
+    }}
+
+    .menu-card:hover .emoji-box {{
+      transform: scale(1.2) rotate(8deg);
+    }}
+
+    .emoji {{
+      font-size: 52px; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.4));
+      animation: floatEmoji 3s ease-in-out infinite;
+    }}
+
+    @keyframes floatEmoji {{
+      0%, 100% {{ transform: translateY(0) scale(1); }}
+      50% {{ transform: translateY(-10px) scale(1.1); }}
+    }}
+
+    .info h3 {{
+      font-size: 22px; font-weight: 900; color: var(--text);
+      margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }}
+
+    .info p {{
+      font-size: 14px; color: var(--text-muted); line-height: 1.5; margin: 8px 0 12px;
+    }}
+
+    .price-row {{
+      display: flex; justify-content: space-between; align-items: center;
+    }}
+
+    .price {{
+      font-size: 28px; font-weight: 900;
+      background: linear-gradient(135deg, #fff, var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }}
+
+    .add-circle {{
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--success); color: white;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: var(--transition);
+      box-shadow: 0 8px 32px rgba(16,185,129,0.5);
+      position: relative; overflow: hidden;
+    }}
+
+    .add-circle:hover {{
+      transform: scale(1.2) rotate(90deg);
+      box-shadow: 0 12px 50px rgba(16,185,129,0.8);
+    }}
+
+    .add-circle.added {{
+      background: var(--success);
+      animation: pulseSuccess 0.6s ease;
+    }}
+
+    @keyframes pulseSuccess {{
+      0%, 100% {{ transform: scale(1); }}
+      50% {{ transform: scale(1.4); }}
+    }}
+
+    .add-circle svg {{
+      width: 28px; height: 28px; fill: currentColor;
+    }}
+
+    .add-circle .check {{ display: none; }}
+    .add-circle.added .plus {{ display: none; }}
+    .add-circle.added .check {{ display: block; animation: checkPop 0.5s ease; }}
+
+    @keyframes checkPop {{
+      0% {{ transform: scale(0) rotate(-180deg); }}
+      60% {{ transform: scale(1.3) rotate(10deg); }}
+      100% {{ transform: scale(1) rotate(0deg); }}
+    }}
+
+    .badge {{
+      background: linear-gradient(135deg, #f43f5e, #ec4899);
+      color: white; padding: 6px 16px; border-radius: 16px;
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; margin-top: 8px; display: inline-block;
+      animation: badgeFloat 2.5s ease-in-out infinite;
+      box-shadow: 0 6px 20px rgba(244,63,94,0.5);
+    }}
+
+    @keyframes badgeFloat {{
+      0%, 100% {{ transform: translateY(0); }}
+      50% {{ transform: translateY(-4px); }}
+    }}
+
+    /* CART – MINIMAL GOD */
+    .cart-bar {{
+      position: fixed; bottom: 0; left: 0; right: 0;
+      padding: 20px 16px; background: rgba(10,10,15,0.97);
+      backdrop-filter: blur(40px); border-top: 1.5px solid rgba(255,255,255,0.1);
+      box-shadow: 0 -20px 60px rgba(0,0,0,0.6); z-index: 100;
+      animation: riseUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }}
+
+    @keyframes riseUp {{
+      from {{ transform: translateY(100%); opacity: 0; }}
+      to {{ transform: translateY(0); opacity: 1; }}
+    }}
+
+    .cart-summary {{
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
+    }}
+
+    .cart-badge {{
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white; padding: 10px 20px; border-radius: 24px;
+      font-weight: 800; font-size: 15px; box-shadow: 0 8px 32px rgba(99,102,241,0.5);
+    }}
+
+    .cart-total {{
+      font-size: 32px; font-weight: 900;
+      background: linear-gradient(135deg, #fff, var(--success));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      animation: totalGlow 2s ease-in-out infinite;
+    }}
+
+    @keyframes totalGlow {{
+      0%, 100% {{ filter: drop-shadow(0 0 20px rgba(16,185,129,0.6)); }}
+      50% {{ filter: drop-shadow(0 0 40px rgba(16,185,129,1)); }}
+    }}
+
+    #orderBtn {{
+      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+      background-size: 300% 300%; color: white; border: none;
+      padding: 20px; font-size: 19px; font-weight: 900; border-radius: 28px;
+      width: 100%; cursor: pointer; text-transform: uppercase;
+      letter-spacing: 2px; position: relative; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(99,102,241,0.6);
+      animation: gradientPulse 5s ease infinite;
+      transition: var(--transition);
+    }}
+
+    @keyframes gradientPulse {{
+      0%, 100% {{ background-position: 0% 50%; }}
+      50% {{ background-position: 100% 50%; }}
+    }}
+
+    #orderBtn:disabled {{
+      opacity: 0.4; cursor: not-allowed; transform: none !important;
+    }}
+
+    #orderBtn::before {{
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.4), transparent);
+      opacity: 0; transition: opacity 0.6s;
+    }}
+
+    #orderBtn:hover:not(:disabled)::before {{
+      opacity: 1;
+    }}
+
+    #orderBtn:hover:not(:disabled) {{
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 30px 80px rgba(99,102,241,0.9);
+    }}
+
+    /* MODAL – PURE ELEGANCE */
+    .modal {{
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(16px); display: none; align-items: center;
+      justify-content: center; z-index: 1000; padding: 20px;
+    }}
+
+    .modal.active {{ display: flex; }}
+
+    .modal-card {{
+      background: var(--card); backdrop-filter: blur(40px);
+      border-radius: var(--radius); padding: 32px; width: 100%;
+      max-width: 420px; border: 1.5px solid rgba(255,255,255,0.15);
+      box-shadow: var(--shadow); animation: modalRise 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }}
+
+    @keyframes modalRise {{
+      from {{ transform: scale(0.7) translateY(100px); opacity: 0; }}
+      to {{ transform: scale(1) translateY(0); opacity: 1; }}
+    }}
+
+    .order-list {{ margin: 20px 0; max-height: 40vh; overflow-y: auto; }}
+    .order-item {{ display: flex; justify-content: space-between; padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 16px; }}
+    .order-total {{ font-size: 28px; font-weight: 900; text-align: center; margin: 20px 0;
+      color: var(--success); }}
+
+    .modal-actions {{ display: flex; gap: 16px; margin-top: 24px; }}
+    .btn {{ flex: 1; padding: 16px; border: none; border-radius: 24px;
+      font-weight: 700; cursor: pointer; transition: var(--transition); }}
+    .btn-cancel {{ background: rgba(255,255,255,0.1); color: var(--text); }}
+    .btn-confirm {{ background: var(--success); color: white; }}
+
+    /* EFFECTS */
+    .confetti {{
+      position: fixed; width: 12px; height: 12px; pointer-events: none;
+      z-index: 9999; animation: confettiDrop linear forwards;
+    }}
+
+    @keyframes confettiDrop {{
+      to {{ transform: translateY(120dvh) rotate(900deg); opacity: 0; }}
+    }}
+
+    .ripple {{
+      position: absolute; border-radius: 50%; background: rgba(255,255,255,0.5);
+      transform: scale(0); animation: ripplePop 0.7s ease-out; pointer-events: none;
+    }}
+
+    @keyframes ripplePop {{
+      to {{ transform: scale(4); opacity: 0; }}
+    }}
+
+    @keyframes fadeIn {{
+      from {{ opacity: 0; }} to {{ opacity: 1; }}
+    }}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <h1>Durger — Menu</h1>
-        <p>Minimal & absurd experience · Anteprima 3D · Checkout step-by-step</p>
-      </div>
-      <div class="actions">
-        <button id="themeToggle" aria-label="Toggle theme">Tema</button>
-      </div>
-    </header>
+  <div class="bg-canvas"></div>
+  <div class="grid"></div>
 
-    <main class="grid" id="menu">
-      @@ITEMS@@
-    </main>
+  <div class="theme-toggle" onclick="toggleTheme()">
+    <span id="themeIcon">🌙</span>
   </div>
 
-  <div class="cart-bar" role="region" aria-label="Carrello">
+  <div class="header">
+    <h1>DURGER KING<br>ITALIANO</h1>
+    <div class="tagline">PIÙ BUONO DELL'ORIGINALE</div>
+  </div>
+
+  <div id="menu">{items_html}</div>
+
+  <div class="cart-bar">
     <div class="cart-summary">
-      <div id="cartBadge">0 articoli</div>
+      <div class="cart-badge" id="cartBadge">0 articoli</div>
       <div class="cart-total" id="cartTotal">0,00 €</div>
     </div>
-    <button class="order-btn" id="orderBtn" disabled>Anteprima ordine</button>
+    <button id="orderBtn" onclick="openModal()" disabled>ORDINA ORA</button>
   </div>
 
-  <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="panel" role="dialog" aria-modal="true" id="panel"></div>
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+    <div class="modal-card">
+      <h2>Conferma Ordine</h2>
+      <div class="order-list" id="orderList"></div>
+      <div class="order-total" id="modalTotal">Totale: 0,00 €</div>
+      <div class="modal-actions">
+        <button class="btn btn-cancel" onclick="closeModal()">Annulla</button>
+        <button class="btn btn-confirm" onclick="sendOrder()">Conferma</button>
+      </div>
+    </div>
   </div>
 
   <script>
+    // STATE
     const cart = [];
-    const menu = Array.from(document.querySelectorAll('.menu-card'));
+    let isDark = true;
+
+    // DOM
+    const $ = s => document.querySelector(s);
+    const $$ = s => document.querySelectorAll(s);
+
+    // FORMAT
     const fmt = p => p.toFixed(2).replace('.', ',') + ' €';
 
-    document.addEventListener('DOMContentLoaded', () => {
-      try { Telegram.WebApp.ready(); Telegram.WebApp.expand(); } catch(e){}
-      attachHandlers(); updateCart();
-    });
-
-    function findCart(name) { return cart.find(i => i.name === name); }
-
-    function updateCart() {
-      const totalItems = cart.reduce((s,i)=>s+i.qty,0);
-      const totalPrice = cart.reduce((s,i)=>s + i.qty * i.price,0);
-      document.getElementById('cartBadge').textContent = totalItems + (totalItems===1? ' articolo':' articoli');
-      document.getElementById('cartTotal').textContent = fmt(totalPrice);
-      document.getElementById('orderBtn').disabled = totalItems === 0;
-    }
-
-    function attachHandlers() {
-      document.querySelectorAll('.menu-card').forEach(card => {
-        const addBtn = card.querySelector('.btn.add');
-        const previewBtn = card.querySelector('.btn.preview');
-        addBtn.addEventListener('click', (e) => { e.stopPropagation(); addToCart(card); });
-        previewBtn.addEventListener('click', (e) => { e.stopPropagation(); openProductPreview(card); });
-        card.addEventListener('click', () => openProductPreview(card));
-      });
-      document.getElementById('orderBtn').addEventListener('click', openOrderPreview);
-      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-    }
-
-    function addToCart(card) {
+    // ADD TO CART
+    function addToCart(btn) {{
+      const card = btn.closest('.menu-card');
       const name = card.dataset.name;
       const price = parseFloat(card.dataset.price);
-      const found = findCart(name);
-      if(found) found.qty += 1; else cart.push({name,price,qty:1});
-      card.animate([{transform:'translateY(0)'},{transform:'translateY(-6px)'}],{duration:160,fill:'forwards'});
+
+      const existing = cart.find(i => i.name === name);
+      if (existing) {{
+        existing.qty++;
+      }} else {{
+        cart.push({{ name, price, qty: 1 }});
+      }}
+
+      btn.classList.add('added');
+      createRipple(btn);
+      createConfetti(btn.getBoundingClientRect());
+      Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+
+      setTimeout(() => btn.classList.remove('added'), 800);
       updateCart();
-      flash(card);
-    }
+    }}
 
-    function flash(el) {
-      el.style.transition = 'box-shadow 220ms';
-      el.style.boxShadow = '0 18px 50px rgba(124,58,237,0.12)';
-      setTimeout(()=>el.style.boxShadow='',220);
-    }
+    // UPDATE CART
+    function updateCart() {{
+      const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+      const totalPrice = cart.reduce((s, i) => s + i.price * i.qty, 0);
 
-    function openProductPreview(card) {
-      const img = card.querySelector('.product-obj').dataset.img || '';
-      const emoji = card.querySelector('.product-obj .emoji')?.textContent || '';
-      const name = card.dataset.name;
-      const price = parseFloat(card.dataset.price);
-      const desc = card.querySelector('.desc').textContent;
+      $('#cartBadge').textContent = totalItems + (totalItems === 1 ? ' articolo' : ' articoli');
+      $('#cartTotal').textContent = fmt(totalPrice);
+      $('#orderBtn').disabled = totalItems === 0;
+    }}
 
-      const panel = document.getElementById('panel');
-      panel.innerHTML = `
-        <h2>Anteprima: ${name} — ${price.toFixed(2).replace('.',',')} €</h2>
-        <div class="preview-3d">
-          <div class="stage" id="stage">
-            ${img ? `<img src="${img}" alt="${name}"/>` : `<div class="emoji">${emoji}</div>`}
-          </div>
-        </div>
-        <p class="hint">Trascina per ruotare • Tocca Aggiungi per metterlo nel carrello</p>
-        <div style="display:flex;gap:10px;margin-top:14px;justify-content:flex-end;">
-          <button class="btn" id="closePreview">Chiudi</button>
-          <button class="btn add" id="addFromPreview">Aggiungi</button>
-        </div>
-      `;
-      showOverlay();
-      makeStageInteractive();
-      document.getElementById('closePreview').addEventListener('click', hideOverlay);
-      document.getElementById('addFromPreview').addEventListener('click', () => { addToCart(card); hideOverlay(); });
-    }
-
-    function makeStageInteractive() {
-      const stage = document.getElementById('stage');
-      if(!stage) return;
-      let dragging = false; let last = null; let rotation = {x:0,y:0}; let vx = 0, vy = 0;
-      stage.style.transform = `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`;
-      stage.addEventListener('pointerdown', (e) => { dragging = true; last = {x:e.clientX,y:e.clientY}; stage.setPointerCapture(e.pointerId); });
-      stage.addEventListener('pointermove', (e) => {
-        if(!dragging) return;
-        const dx = e.clientX - last.x; const dy = e.clientY - last.y;
-        rotation.y += dx * 0.35; rotation.x -= dy * 0.35;
-        last = {x:e.clientX,y:e.clientY};
-        vx = dx; vy = dy;
-        stage.style.transform = `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`;
-      });
-      stage.addEventListener('pointerup', (e) => {
-        dragging = false; last = null; stage.releasePointerCapture(e.pointerId);
-        const decay = 0.95; let rafId;
-        (function inertia() {
-          vx *= decay; vy *= decay;
-          if(Math.abs(vx) < 0.05 && Math.abs(vy) < 0.05) return cancelAnimationFrame(rafId);
-          rotation.y += vx * 0.5; rotation.x -= vy * 0.5;
-          stage.style.transform = `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`;
-          rafId = requestAnimationFrame(inertia);
-        })();
-      });
-      stage.addEventListener('pointercancel', () => { dragging=false; });
-    }
-
-    function openOrderPreview() {
-      const panel = document.getElementById('panel');
+    // MODAL
+    function openModal() {{
+      const list = $('#orderList');
+      list.innerHTML = '';
       let total = 0;
-      const rows = cart.map(item => { total += item.price * item.qty; return `<div class="order-row"><div>${item.name} × ${item.qty}</div><div>${fmt(item.price*item.qty)}</div></div>` }).join('');
-      panel.innerHTML = `
-        <h2>Anteprima ordine</h2>
-        <div class="order-list">${rows || '<div class="hint">Il carrello è vuoto</div>'}</div>
-        <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center"><strong>Totale</strong><strong>${fmt(total)}</strong></div>
-        <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
-          <button class="btn" id="editCart">Modifica</button>
-          <button class="btn add" id="checkout">Procedi al pagamento</button>
-        </div>
-      `;
-      showOverlay();
-      document.getElementById('editCart').addEventListener('click', () => { hideOverlay(); });
-      document.getElementById('checkout').addEventListener('click', () => { confirmAndSend(); });
-    }
 
-    function confirmAndSend() {
-      const panel = document.getElementById('panel');
-      panel.innerHTML = '<h2>Invio ordine…</h2><p class="hint">Un attimo — prepariamo le pietanze.</p>';
-      setTimeout(() => {
-        try { Telegram.WebApp.sendData(JSON.stringify(cart)); Telegram.WebApp.close(); } catch(e){ console.log('send fallback', cart); hideOverlay(); alert('Ordine simulato: ' + JSON.stringify(cart)); }
-      }, 800);
-    }
+      cart.forEach(item => {{
+        const div = document.createElement('div');
+        div.className = 'order-item';
+        div.innerHTML = `<span>${{item.name}} × ${{item.qty}}</span><span>${{fmt(item.price * item.qty)}}</span>`;
+        list.appendChild(div);
+        total += item.price * item.qty;
+      }});
 
-    function showOverlay() {
-      document.getElementById('overlay').classList.add('active');
-      document.getElementById('overlay').setAttribute('aria-hidden','false');
-    }
-    function hideOverlay() {
-      document.getElementById('overlay').classList.remove('active');
-      document.getElementById('overlay').setAttribute('aria-hidden','true');
-    }
+      $('#modalTotal').textContent = 'Totale: ' + fmt(total);
+      $('#modal').classList.add('active');
+    }}
 
-    let dark = false;
-    function toggleTheme() { dark = !dark; document.documentElement.setAttribute('data-theme', dark? 'dark':'light'); }
+    function closeModal() {{
+      $('#modal').classList.remove('active');
+    }}
 
-    window._menu = menu; window._cart = cart;
+    function sendOrder() {{
+      closeModal();
+      explodeConfetti();
+      createLightning();
+      Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+      setTimeout(() => {{
+        Telegram.WebApp.sendData(JSON.stringify(cart));
+        Telegram.WebApp.close();
+      }}, 1200);
+    }}
+
+    // EFFECTS
+    function createRipple(el) {{
+      const rect = el.getBoundingClientRect();
+      const ripple = document.createElement('div');
+      ripple.className = 'ripple';
+      ripple.style.left = (rect.width / 2) + 'px';
+      ripple.style.top = (rect.height / 2) + 'px';
+      el.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 700);
+    }}
+
+    function createConfetti(rect) {{
+      const colors = ['#6366f1', '#8b5cf6', '#ec4899', '#10b981'];
+      for (let i = 0; i < 30; i++) {{
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = (rect.left + rect.width / 2 + (Math.random() - 0.5) * 100) + 'px';
+        c.style.top = (rect.top + rect.height / 2 + (Math.random() - 0.5) * 100) + 'px';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        c.style.animationDelay = Math.random() * 0.3 + 's';
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 4000);
+      }}
+    }}
+
+    function explodeConfetti() {{
+      for (let i = 0; i < 8; i++) {{
+        setTimeout(() => createConfetti({{ left: innerWidth/2, top: innerHeight/2, width: 0, height: 0 }}), i * 120);
+      }}
+    }}
+
+    function createLightning() {{
+      const l = document.createElement('div');
+      l.style.cssText = 'position:fixed;inset:0;background:rgba(255,255,255,0.9);pointer-events:none;z-index:9999;animation:flash 0.8s ease-out';
+      document.body.appendChild(l);
+      setTimeout(() => l.remove(), 800);
+    }}
+
+    // THEME
+    function toggleTheme() {{
+      isDark = !isDark;
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      $('#themeIcon').textContent = isDark ? '🌙' : '☀️';
+      Telegram.WebApp.HapticFeedback.impactOccurred('light');
+    }}
+
+    // INIT
+    document.addEventListener('DOMContentLoaded', () => {{
+      Telegram.WebApp.ready(); Telegram.WebApp.expand();
+      updateCart();
+
+      // GOD MODE EASTER EGG: 7 tap su header
+      let taps = 0;
+      $('.header').addEventListener('click', () => {{
+        if (++taps === 7) {{
+          document.body.style.filter = 'hue-rotate(360deg) brightness(1.5)';
+          setTimeout(() => document.body.style.filter = '', 3000);
+          Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+          taps = 0;
+        }}
+        setTimeout(() => taps = 0, 1500);
+      }});
+
+      // Add flash style
+      const style = document.createElement('style');
+      style.textContent = `@keyframes flash {{ 0%,100% {{opacity:0}} 10%,30% {{opacity:1}} 20%,40% {{opacity:0}} }}`;
+      document.head.appendChild(style);
+    }});
   </script>
 </body>
 </html>
 """
-
-    # sostituisco il placeholder con l'HTML generato per gli items
-    return html_template.replace('@@ITEMS@@', items_html)
