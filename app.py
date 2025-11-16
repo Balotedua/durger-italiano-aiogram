@@ -88,10 +88,10 @@ HTML_MENU = """
 """
 
 # Route Flask
-@app.route("/")
+@app.route('/')
 def index():
+    print("HIT ROOT!")  # Log per Railway
     return render_template_string(HTML_MENU)
-
 # Comando /start
 @dp.message(Command("start"))
 async def start(message: types.Message):
