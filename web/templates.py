@@ -606,7 +606,7 @@ def generate_menu_html():
         c.style.background = colors[Math.floor(Math.random() * colors.length)];
         c.style.animationDuration = (Math.random() * 3 + 2) + 's';
         c.style.animationDelay = Math.random() * 0.4 + 's';
-        c.style.transform = `rotate(${Math.random() * 360}deg)`;
+        c.style.transform = `rotate({{Math.random() * 360}}deg)`;
         document.body.appendChild(c);
         setTimeout(() => c.remove(), 5000);
       }}
