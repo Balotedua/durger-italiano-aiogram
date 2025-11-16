@@ -3,10 +3,10 @@ import os
 
 # Import configurazione
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-from config import Config
+from .config import Config
 
 
-def generate_durger_king_page():
+def generate_menu_html():
     """DURGER KING ITALIANO – 60 FPS EDITION (Webby 2026)"""
 
     items_html = ""

@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from web.templates.base import get_base_template
+from base import get_base_template
 
 def generate_agent_page():
     """Genera pagina Assistente AI"""
