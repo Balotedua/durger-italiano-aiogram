@@ -8,6 +8,8 @@ from aiogram.types import WebAppInfo, ReplyKeyboardMarkup, KeyboardButton
 from flask import Flask, render_template_string
 from threading import Thread
 from dotenv import load_dotenv
+import os
+
 
 # Carica token da .env
 load_dotenv()
@@ -122,11 +124,19 @@ async def webapp_data(message: types.Message):
         await message.answer("Errore nell'ordine. Riprova!")
 
 # Avvia Flask + Bot
+import os  # ← AGGIUNGI QUESTA RIGA IN ALTO (se non c'è già)
+
 async def main():
-    # Avvia Flask in background
-    Thread(target=lambda: app.run(port=5000, use_reloader=False)).start()
-    # Avvia polling
+    # Avvia Flask in background con PORTA DINAMICA (Railway)
+    port = int(os.environ.get("PORT", 5000))
+    Thread(target=lambda: app.run(
+        host="0.0.0.0",
+        port=port,
+        use_reloader=False
+    )).start()
+    # Avvia polling del bot
     await dp.start_polling(bot)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
