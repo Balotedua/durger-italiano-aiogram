@@ -10,8 +10,12 @@ from flask import Flask, render_template_string
 
 # Carica variabili ambiente
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-WEBHOOK_URL = os.getenv("WEBHOOK_URL", "https://durger-italiano-aiogram.up.railway.app")
+WEBHOOK_URL = os.getenv("WEBHOOK_URL", "https://web-production-670b4.up.railway.app")
 PORT = int(os.environ.get("PORT", 8080))
+
+# Assicura che WEBHOOK_URL abbia https://
+if not WEBHOOK_URL.startswith("http"):
+    WEBHOOK_URL = f"https://{WEBHOOK_URL}"
 
 if not BOT_TOKEN:
     raise ValueError("BOT_TOKEN mancante!")
