@@ -9,12 +9,6 @@ from config import Config
 
 
 def generate_menu_html():
-    """
-    Genera HTML per il menu: minimal, assurdo, estremamente user friendly.
-
-    Nota tecnica: usiamo un placeholder @@ITEMS@@ nel template per evitare
-    errori dovuti a parentesi graffe presenti in CSS/JS quando si usa f-strings.
-    """
 
     items_html = ""
     for idx, item in enumerate(Config.MENU_ITEMS):
