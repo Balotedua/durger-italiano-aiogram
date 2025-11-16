@@ -1,15 +1,14 @@
-# web/server.py - Server web aiohttp
+# web/server.py - Server web aiohttp con routing
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from aiohttp import web
 from aiogram import Bot, Dispatcher
-from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
+from aiogram.webhook.aiohttp_server import SimpleRequestHandler
 from config import Config
-from web.templates import generate_menu_html
-
-
-async def serve_menu(request):
-    """Serve pagina menu HTML"""
-    html = generate_menu_html()
-    return web.Response(text=html, content_type='text/html')
+from web.router import setup_routes
 
 
 async def health_check(request):
@@ -40,8 +39,10 @@ def create_app(bot: Bot, dp: Dispatcher):
     # Salva bot nell'app
     app['bot'] = bot
 
-    # Route pubbliche
-    app.router.add_get('/', serve_menu)
+    # Setup routes multi-page
+    setup_routes(app)
+
+    # Health check
     app.router.add_get('/health', health_check)
 
     # Webhook handler

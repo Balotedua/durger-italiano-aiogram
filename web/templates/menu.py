@@ -1,12 +1,12 @@
 import sys
 import os
-import json
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Import configurazione
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from config import Config
 
 
-def generate_menu_html():
+def generate_durger_king_page():
     """DURGER KING ITALIANO – 60 FPS EDITION (Webby 2026)"""
 
     items_html = ""
@@ -490,7 +490,7 @@ def generate_menu_html():
         c.style.background = colors[Math.floor(Math.random() * colors.length)];
         c.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
         c.style.animationDelay = (i * 0.05) + 's';
-        c.style.transform = `rotate({{Math.random() * 360}}deg)`;
+        c.style.transform = `rotate(${{Math.random() * 360}}deg)`;
         document.body.appendChild(c);
         setTimeout(() => c.remove(), 3000);
       }}
