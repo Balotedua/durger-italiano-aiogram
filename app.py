@@ -1,29 +1,26 @@
-# app.py - Durger King Italiano con Aiogram + Flask
-import asyncio
+# app.py - Durger King Italiano con Webhook (Railway ready)
 import os
 import json
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from aiogram.types import WebAppInfo, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
+from aiohttp import web
 from flask import Flask, render_template_string
-from threading import Thread
-from dotenv import load_dotenv
-import os
 
-
-# Carica token da .env
-load_dotenv()
+# Carica variabili ambiente
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+WEBHOOK_URL = os.getenv("WEBHOOK_URL", "https://durger-italiano-aiogram.up.railway.app")
+PORT = int(os.environ.get("PORT", 8080))
 
 if not BOT_TOKEN:
-    raise ValueError("BOT_TOKEN mancante! Aggiungilo su Railway → Settings → Variables")
+    raise ValueError("BOT_TOKEN mancante!")
 
-# Inizializza bot e Flask
+# Bot
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
-app = Flask(__name__)
 
-# HTML MENU ITALIANO (completo)
+# HTML MENU
 HTML_MENU = """
 <!DOCTYPE html>
 <html>
@@ -38,12 +35,11 @@ HTML_MENU = """
     .item:active { transform: scale(0.98); }
     .item h3 { margin: 0; color: #1b5e20; font-size: 18px; }
     .price { color: #d32f2f; font-weight: bold; font-size: 16px; }
-    .cart { position: fixed; bottom: 0; left: 0; right: 0; background: #ff6f00; color: white; padding: 15px; text-align: center; }
-    button { background: #d32f2f; color: white; border: none; padding: 16px; font-size: 20px; border-radius: 12px; width: 100%; font-weight: bold; }
+    button { background: #d32f2f; color: white; border: none; padding: 16px; font-size: 20px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 20px; }
   </style>
 </head>
 <body>
-  <h1>Durger King Italiano</h1>
+  <h1>🍕 Durger King Italiano 🍔</h1>
   <div class="item" onclick="add('PizzaBurger', 8.50)">
     <h3>PizzaBurger</h3>
     <p>Mozzarella, pomodoro, basilico fresco</p>
@@ -56,7 +52,7 @@ HTML_MENU = """
   </div>
   <div class="item" onclick="add('Tiramisù Shake', 5.50)">
     <h3>Tiramisù Shake</h3>
-    <p>Caffè, mascarpone, cacao in bicchiere</p>
+    <p>Caffè, mascarpone, cacao</p>
     <div class="price">5,50 €</div>
   </div>
   <div class="item" onclick="add('Arancino Durger', 7.00)">
@@ -65,19 +61,21 @@ HTML_MENU = """
     <div class="price">7,00 €</div>
   </div>
 
-  <div class="cart">
-    <button onclick="sendOrder()">ORDINA ORA</button>
-  </div>
+  <button onclick="sendOrder()">🛒 ORDINA ORA</button>
 
   <script>
     let cart = [];
     function add(name, price) {
       cart.push({name, price});
       Telegram.WebApp.HapticFeedback.impactOccurred('light');
+      alert(name + " aggiunto!");
     }
     function sendOrder() {
+      if (cart.length === 0) {
+        alert("Carrello vuoto! Aggiungi almeno un prodotto.");
+        return;
+      }
       Telegram.WebApp.sendData(JSON.stringify(cart));
-      alert("Ordine inviato! Grazie!");
       Telegram.WebApp.close();
     }
     Telegram.WebApp.ready();
@@ -87,68 +85,84 @@ HTML_MENU = """
 </html>
 """
 
-# Route Flask
-@app.route('/')
-def index():
-    print("HIT ROOT!")  # Log per Railway
-    return render_template_string(HTML_MENU)
 
-@app.route('/health')
-def health():
-    return "OK", 200
-
-
-# Comando /start
+# Handler /start
 @dp.message(Command("start"))
 async def start(message: types.Message):
     keyboard = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text="Apri Menu", web_app=WebAppInfo(url="https://durger-italiano-aiogram.up.railway.app"))]],
+        keyboard=[[KeyboardButton(text="🍕 Apri Menu 🍔", web_app=WebAppInfo(url=WEBHOOK_URL))]],
         resize_keyboard=True
     )
     await message.answer(
-        "Benvenuto al *Durger King Italiano*! \n"
-        "Premi il pulsante per ordinare il tuo panino italiano!",
+        "🍕 *Benvenuto al Durger King Italiano!*\n\n"
+        "Premi il pulsante qui sotto per ordinare il tuo panino italiano! 🇮🇹",
         reply_markup=keyboard,
         parse_mode="Markdown"
     )
 
-# Ricevi ordine
+
+# Handler ordine
 @dp.message(lambda m: m.web_app_data)
 async def webapp_data(message: types.Message):
     try:
         data = json.loads(message.web_app_data.data)
         if not data:
-            await message.answer("Carrello vuoto!")
+            await message.answer("❌ Carrello vuoto!")
             return
         total = sum(item["price"] for item in data)
-        items = "\n".join([f"• {i['name']} - {i['price']}€" for i in data])
+        items = "\n".join([f"• {i['name']} - {i['price']:.2f}€" for i in data])
         await message.answer(
-            f"*ORDINE CONFERMATO!*\n\n"
+            f"✅ *ORDINE CONFERMATO!*\n\n"
             f"{items}\n\n"
-            f"*Totale: {total}€*\n"
-            f"Grazie per aver ordinato da Durger King Italiano!",
+            f"💰 *Totale: {total:.2f}€*\n\n"
+            f"Grazie per aver ordinato da Durger King Italiano! 🇮🇹",
             parse_mode="Markdown"
         )
-    except:
-        await message.answer("Errore nell'ordine. Riprova!")
+    except Exception as e:
+        await message.answer(f"❌ Errore: {e}")
 
-# Avvia Flask + Bot
-import os  # ← AGGIUNGI QUESTA RIGA IN ALTO (se non c'è già)
 
-async def main():
-    # Avvia Flask in background con PORTA DINAMICA per Railway
-    import os
-    port = int(os.environ.get("PORT", 8080))
-    from threading import Thread
-    Thread(target=lambda: app.run(
-        host="0.0.0.0",
-        port=port,
-        use_reloader=False,
-        debug=False
-    )).start()
-    # Avvia polling bot
-    await dp.start_polling(bot)
+# Setup webhook con aiohttp
+async def on_startup(app):
+    webhook_url = f"{WEBHOOK_URL}/webhook"
+    await bot.set_webhook(webhook_url)
+    print(f"✅ Webhook impostato: {webhook_url}")
+
+
+async def on_shutdown(app):
+    await bot.delete_webhook()
+    await bot.session.close()
+
+
+# Route HTML menu
+async def serve_menu(request):
+    return web.Response(text=HTML_MENU, content_type='text/html')
+
+
+# Health check
+async def health(request):
+    return web.Response(text="OK")
+
+
+# Main application
+def create_app():
+    app = web.Application()
+
+    # Route HTML
+    app.router.add_get('/', serve_menu)
+    app.router.add_get('/health', health)
+
+    # Webhook handler
+    webhook_handler = SimpleRequestHandler(dispatcher=dp, bot=bot)
+    webhook_handler.register(app, path='/webhook')
+
+    # Startup/shutdown
+    app.on_startup.append(on_startup)
+    app.on_shutdown.append(on_shutdown)
+
+    return app
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    app = create_app()
+    web.run_app(app, host="0.0.0.0", port=PORT)
