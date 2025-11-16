@@ -92,6 +92,12 @@ HTML_MENU = """
 def index():
     print("HIT ROOT!")  # Log per Railway
     return render_template_string(HTML_MENU)
+
+@app.route('/health')
+def health():
+    return "OK", 200
+
+
 # Comando /start
 @dp.message(Command("start"))
 async def start(message: types.Message):
@@ -131,17 +137,18 @@ import os  # ← AGGIUNGI QUESTA RIGA IN ALTO (se non c'è già)
 
 async def main():
     # Avvia Flask in background con PORTA DINAMICA per Railway
-    import os  # (se non in alto)
-    port = int(os.environ.get("PORT", 5000))
+    import os
+    port = int(os.environ.get("PORT", 8080))
     from threading import Thread
     Thread(target=lambda: app.run(
-        host="0.0.0.0",  # Obbligatorio per Railway
+        host="0.0.0.0",
         port=port,
         use_reloader=False,
-        debug=False  # Evita crash in prod
+        debug=False
     )).start()
     # Avvia polling bot
     await dp.start_polling(bot)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
