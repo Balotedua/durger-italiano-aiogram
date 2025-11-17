@@ -169,32 +169,6 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
       left: 0;
     }}
 
-    /* PULSANTE CHIUDI NEL DRAWER */
-    .drawer-close {{
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 44px;
-      height: 44px;
-      background: rgba(212,175,55,0.1);
-      border: 1px solid rgba(212,175,55,0.3);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 24px;
-      color: var(--gold);
-      font-weight: 300;
-    }}
-
-    .drawer-close:hover {{
-      background: rgba(212,175,55,0.2);
-      border-color: var(--gold);
-      transform: scale(1.1);
-    }}
-
     .drawer-item {{
       display: flex;
       align-items: center;
@@ -357,9 +331,6 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
 
   <!-- DRAWER LUSSO -->
   <div class="drawer" id="drawer">
-    <!-- PULSANTE CHIUDI -->
-    <div class="drawer-close" id="drawerClose">×</div>
-
     <a href="/" class="drawer-item {'active' if active_page == 'home' else ''}">
       <span class="drawer-icon">🏠</span>
       <span>Home</span>
@@ -404,7 +375,16 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
     const menuToggle = document.getElementById('menuToggle');
     const drawer = document.getElementById('drawer');
     const overlay = document.getElementById('overlay');
-    const drawerClose = document.getElementById('drawerClose');
+
+    function toggleDrawer() {{
+      const isOpen = drawer.classList.contains('open');
+
+      if (isOpen) {{
+        closeDrawer();
+      }} else {{
+        openDrawer();
+      }}
+    }}
 
     function openDrawer() {{
       drawer.classList.add('open');
@@ -419,9 +399,8 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
       menuToggle.classList.remove('active');
     }}
 
-    menuToggle.addEventListener('click', openDrawer);
+    menuToggle.addEventListener('click', toggleDrawer);
     overlay.addEventListener('click', closeDrawer);
-    drawerClose.addEventListener('click', closeDrawer);
 
     // Navigazione con loading
     document.querySelectorAll('.drawer-item, .sub-nav-item').forEach(item => {{

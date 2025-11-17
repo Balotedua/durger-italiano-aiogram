@@ -1,4 +1,4 @@
-# web/templates/agent.py - AI Assistant PREMIUM
+# web/templates/agent.py - AI Assistant
 import sys
 import os
 
@@ -8,7 +8,7 @@ from web.templates.base import get_base_template
 
 
 def generate_agent_page():
-    """AI Concierge – DURGER KING Premium Style – FINAL FIX (2025)"""
+    """AI Concierge – DURGER KING  Style – FINAL FIX (2025)"""
     content = """
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <style>
@@ -165,13 +165,13 @@ def generate_agent_page():
         <div class="header">
             <div class="logo-icon">AI</div>
             <h1 class="title">AI Concierge</h1>
-            <div class="subtitle">Premium Assistant</div>
+            <div class="subtitle"> Assistant</div>
         </div>
 
         <div id="chat">
             <div class="message bot">
                 Buongiorno.<br>
-                Sono il suo assistente personale premium.<br>
+                Sono il suo assistente personale.<br>
                 Come posso servirla oggi?
             </div>
         </div>
