@@ -1,4 +1,4 @@
-# web/templates/base.py - Template base con navigazione e sub-navigazione
+# web/templates/base.py - Template base con menù a tendina lussuoso
 import sys
 import os
 
@@ -7,12 +7,12 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 def get_base_template(page_title, page_content, active_page="home", sub_nav=None):
     """
-    Template base con sidebar e opzionale sub-navbar
+    Template base con menù a tendina lussuoso nero/oro
 
     Args:
         page_title: Titolo della pagina
         page_content: HTML del contenuto specifico
-        active_page: Pagina attiva nella sidebar
+        active_page: Pagina attiva nel menù
         sub_nav: Lista di dict per sub-navbar es: [{'url': '/finance/add', 'label': 'Aggiungi', 'icon': '➕', 'active': True}]
     """
 
@@ -24,11 +24,10 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
             active_class = "active" if item.get('active', False) else ""
             sub_nav_items += f'''
             <a href="{item['url']}" class="sub-nav-item {active_class}">
-                <span class="sub-nav-icon">{item['icon']}</span>
+                <span class="sub-nav-icon">{item.get('icon', '')}</span>
                 <span class="sub-nav-label">{item['label']}</span>
             </a>
             '''
-
         sub_nav_html = f'''
         <div class="sub-navbar">
             <div class="sub-nav-scroll">
@@ -45,106 +44,188 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>{page_title}</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;900&display=swap" rel="stylesheet">
 
   <style>
     :root {{
-      --primary: #6366f1;
-      --secondary: #8b5cf6;
-      --accent: #ec4899;
-      --success: #10b981;
-      --bg: #0a0a0f;
-      --card: rgba(255,255,255,0.08);
+      --bg: #000000;
+      --surface: #0d0d0d;
+      --gold: #d4af37;
+      --gold-light: #f4e4a0;
+      --gold-glow: rgba(212,175,55,0.3);
       --text: #ffffff;
-      --text-muted: rgba(255,255,255,0.7);
+      --text-dim: rgba(255,255,255,0.65);
     }}
 
-    * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-
-    body {{
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      position: relative;
+    * {{ margin:0; padding:0; box-sizing:border-box; }}
+    body {{ 
+      font-family: 'Inter', sans-serif; 
+      background:var(--bg); 
+      color:var(--text); 
+      min-height:100vh; 
+      overflow-x:hidden;
     }}
 
-    /* BACKGROUND */
+    /* SFONDO LUSSO */
     .bg-gradient {{
+      position:fixed; 
+      inset:0; 
+      z-index:-2;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(212,175,55,0.12) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(212,175,55,0.08) 0%, transparent 50%),
+        linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
+    }}
+
+    /* HAMBURGER ORO FLOTTANTE */
+    .menu-toggle {{
       position: fixed;
-      inset: 0;
-      z-index: -1;
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
-      opacity: 0.3;
-    }}
-
-    @keyframes gradientShift {{
-      0%, 100% {{ background-position: 0% 50%; }}
-      50% {{ background-position: 100% 50%; }}
-    }}
-
-    /* SIDEBAR */
-    .sidebar {{
-      position: fixed;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 80px;
-      background: rgba(10,10,15,0.95);
-      backdrop-filter: blur(20px);
-      border-right: 1px solid rgba(255,255,255,0.1);
-      padding: 20px 0;
+      top: 20px;
+      left: 20px;
+      width: 56px;
+      height: 56px;
+      background: rgba(212,175,55,0.15);
+      border: 1px solid rgba(212,175,55,0.4);
+      border-radius: 16px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      z-index: 1000;
-      box-shadow: 4px 0 20px rgba(0,0,0,0.3);
-    }}
-
-    .nav-item {{
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      padding: 16px 8px;
+      justify-content: center;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
+      z-index: 1002;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }}
+
+    .menu-toggle:hover {{
+      background: rgba(212,175,55,0.25);
+      border-color: var(--gold);
+      transform: scale(1.05);
+    }}
+
+    .menu-toggle span {{
+      width: 24px;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+      position: relative;
+      transition: all 0.3s;
+    }}
+
+    .menu-toggle span::before,
+    .menu-toggle span::after {{
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }}
+
+    .menu-toggle span::before {{
+      top: -8px;
+    }}
+
+    .menu-toggle span::after {{
+      top: 8px;
+    }}
+
+    .menu-toggle.active {{
+      background: rgba(212,175,55,0.25);
+      border-color: var(--gold-light);
+    }}
+
+    .menu-toggle.active span {{
+      background: transparent;
+    }}
+
+    .menu-toggle.active span::before {{
+      transform: rotate(45deg) translate(5px, 5px);
+      background: var(--gold-light);
+    }}
+
+    .menu-toggle.active span::after {{
+      transform: rotate(-45deg) translate(5px, -5px);
+      background: var(--gold-light);
+    }}
+
+    /* DRAWER LUSSO */
+    .drawer {{
+      position: fixed;
+      top: 0;
+      left: -320px;
+      width: 300px;
+      height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid rgba(212,175,55,0.3);
+      padding: 100px 0 40px 0;
+      z-index: 1001;
+      transition: left 0.5s cubic-bezier(0.22,1,0.36,1);
+      box-shadow: 20px 0 60px rgba(0,0,0,0.8);
+    }}
+
+    .drawer.open {{
+      left: 0;
+    }}
+
+    .drawer-item {{
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 32px;
+      color: var(--text-dim);
       text-decoration: none;
-      color: var(--text-muted);
-      border-left: 3px solid transparent;
-    }}
-
-    .nav-item:active {{
-      transform: scale(0.95);
-    }}
-
-    .nav-item.active {{
-      background: rgba(99,102,241,0.2);
-      color: var(--primary);
-      border-left-color: var(--primary);
-    }}
-
-    .nav-icon {{
-      font-size: 24px;
-    }}
-
-    .nav-label {{
-      font-size: 11px;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      position: relative;
+      border-left: 4px solid transparent;
+    }}
+
+    .drawer-item:hover {{
+      background: rgba(212,175,55,0.1);
+      color: var(--gold-light);
+      padding-left: 36px;
+      border-left-color: var(--gold);
+    }}
+
+    .drawer-item.active {{
+      background: rgba(212,175,55,0.15);
+      color: var(--gold);
+      border-left-color: var(--gold);
+      font-weight: 700;
+    }}
+
+    .drawer-icon {{
+      font-size: 22px;
+      width: 24px;
       text-align: center;
     }}
 
-    /* CONTENT */
+    /* OVERLAY */
+    .drawer-overlay {{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }}
+
+    .drawer-overlay.active {{
+      opacity: 1;
+      visibility: visible;
+    }}
+
+    /* CONTENUTO CENTRATO */
     .content {{
-      margin-left: 80px;
-      padding: 20px 16px;
-      animation: fadeIn 0.5s ease;
-      min-height: 100vh;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      animation: fadeIn 0.6s ease;
     }}
 
     @keyframes fadeIn {{
@@ -155,32 +236,36 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
     /* PAGE HEADER */
     .page-header {{
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 40px;
     }}
 
     .page-header h1 {{
-      font-size: 32px;
+      font-size: 36px;
       font-weight: 900;
-      background: linear-gradient(135deg, #fff, var(--accent));
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
     }}
 
     .page-header p {{
-      color: var(--text-muted);
-      font-size: 14px;
+      color: var(--text-dim);
+      font-size: 16px;
+      font-weight: 500;
     }}
 
-    /* SUB NAVBAR */
+    /* SUB-NAVBAR */
     .sub-navbar {{
-      background: rgba(15,15,25,0.95);
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(13,13,13,0.95);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      padding: 12px;
-      margin: 20px 0;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+      border-top: 1px solid rgba(212,175,55,0.2);
+      padding: 12px 16px;
+      z-index: 999;
     }}
 
     .sub-nav-scroll {{
@@ -200,31 +285,34 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 16px;
+      padding: 12px 18px;
       background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px;
+      border: 1px solid rgba(212,175,55,0.2);
+      border-radius: 14px;
       cursor: pointer;
       transition: all 0.3s ease;
       text-decoration: none;
-      color: var(--text-muted);
+      color: var(--text-dim);
       font-size: 14px;
       font-weight: 600;
       white-space: nowrap;
     }}
 
-    .sub-nav-item:active {{
-      transform: scale(0.95);
+    .sub-nav-item:hover {{
+      background: rgba(212,175,55,0.1);
+      border-color: var(--gold);
+      color: var(--gold-light);
     }}
 
     .sub-nav-item.active {{
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      background: linear-gradient(135deg, var(--gold), #b8972e);
       border-color: transparent;
-      color: white;
+      color: black;
+      font-weight: 700;
     }}
 
     .sub-nav-icon {{
-      font-size: 18px;
+      font-size: 16px;
     }}
 
     /* LOADING */
@@ -242,10 +330,10 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
     }}
 
     .spinner {{
-      width: 50px;
-      height: 50px;
-      border: 4px solid rgba(255,255,255,0.1);
-      border-top-color: var(--primary);
+      width: 56px;
+      height: 56px;
+      border: 3px solid rgba(212,175,55,0.2);
+      border-top-color: var(--gold);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }}
@@ -258,31 +346,43 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
 <body>
   <div class="bg-gradient"></div>
 
-  <!-- SIDEBAR -->
-  <nav class="sidebar">
-    <a href="/" class="nav-item {'active' if active_page == 'home' else ''}">
-      <div class="nav-icon">🏠</div>
-      <div class="nav-label">Home</div>
-    </a>
-    <a href="/menu" class="nav-item {'active' if active_page == 'menu' else ''}">
-      <div class="nav-icon">🍕</div>
-      <div class="nav-label">Menu</div>
-    </a>
-    <a href="/agent" class="nav-item {'active' if active_page == 'agent' else ''}">
-      <div class="nav-icon">🤖</div>
-      <div class="nav-label">Agente</div>
-    </a>
-    <a href="/finance" class="nav-item {'active' if active_page == 'finance' else ''}">
-      <div class="nav-icon">💰</div>
-      <div class="nav-label">Finanza</div>
-    </a>
-    <a href="/psychology" class="nav-item {'active' if active_page == 'psychology' else ''}">
-      <div class="nav-icon">🧠</div>
-      <div class="nav-label">Supporto</div>
-    </a>
-  </nav>
+  <!-- MENU TOGGLE -->
+  <div class="menu-toggle" id="menuToggle">
+    <span></span>
+  </div>
 
+  <!-- DRAWER LUSSO -->
+  <div class="drawer" id="drawer">
+    <a href="/" class="drawer-item {'active' if active_page == 'home' else ''}">
+      <span class="drawer-icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="/menu" class="drawer-item {'active' if active_page == 'menu' else ''}">
+      <span class="drawer-icon">🍕</span>
+      <span>Menu</span>
+    </a>
+    <a href="/agent" class="drawer-item {'active' if active_page == 'agent' else ''}">
+      <span class="drawer-icon">🤖</span>
+      <span>Agente</span>
+    </a>
+    <a href="/finance" class="drawer-item {'active' if active_page == 'finance' else ''}">
+      <span class="drawer-icon">💰</span>
+      <span>Finanza</span>
+    </a>
+    <a href="/psychology" class="drawer-item {'active' if active_page == 'psychology' else ''}">
+      <span class="drawer-icon">🧠</span>
+      <span>Supporto</span>
+    </a>
+  </div>
+
+  <!-- OVERLAY -->
+  <div class="drawer-overlay" id="overlay"></div>
+
+  <!-- CONTENUTO PRINCIPALE -->
   <div class="content" id="pageContent">
+    <div class="page-header">
+      <h1>{page_title}</h1>
+    </div>
     {page_content}
   </div>
 
@@ -297,22 +397,46 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
     Telegram.WebApp.ready();
     Telegram.WebApp.expand();
 
-    // Navigation con animazioni
-    document.querySelectorAll('.nav-item, .sub-nav-item').forEach(item => {{
+    const menuToggle = document.getElementById('menuToggle');
+    const drawer = document.getElementById('drawer');
+    const overlay = document.getElementById('overlay');
+
+    function openDrawer() {{
+      drawer.classList.add('open');
+      overlay.classList.add('active');
+      menuToggle.classList.add('active');
+      Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+    }}
+
+    function closeDrawer() {{
+      drawer.classList.remove('open');
+      overlay.classList.remove('active');
+      menuToggle.classList.remove('active');
+    }}
+
+    menuToggle.addEventListener('click', openDrawer);
+    overlay.addEventListener('click', closeDrawer);
+
+    // Navigazione con loading
+    document.querySelectorAll('.drawer-item, .sub-nav-item').forEach(item => {{
       item.addEventListener('click', function(e) {{
         e.preventDefault();
         const href = this.getAttribute('href');
 
         Telegram.WebApp.HapticFeedback.impactOccurred('light');
         document.getElementById('loading').classList.add('active');
+        closeDrawer();
 
         setTimeout(() => {{
           window.location.href = href;
-        }}, 200);
+        }}, 400);
       }});
     }});
 
-    window.scrollTo({{ top: 0, behavior: 'smooth' }});
+    // Chiudi drawer con ESC
+    document.addEventListener('keydown', (e) => {{
+      if (e.key === 'Escape') closeDrawer();
+    }});
   </script>
 </body>
 </html>
