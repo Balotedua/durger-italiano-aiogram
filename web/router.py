@@ -9,8 +9,8 @@ from web.templates.base import get_base_template
 from web.templates.agent import generate_agent_page
 
 # Import moduli finanza
-from templates.finance.home import generate_finance_home
-from templates.finance.add_payment import generate_add_payment
+from web.templates.finance.home import generate_finance_home
+from web.templates.finance.add_payment import generate_add_payment
 
 
 def generate_home_page():
