@@ -306,8 +306,8 @@ def generate_home_page():
         <div class="logo-container">
             <div class="logo-icon">👑</div>
         </div>
-        <h1 class="app-name">DURGER KING</h1>
-        <div class="tagline">Premium Experience</div>
+        <h1 class="app-name">DANISON ASSISTANT</h1>
+        <div class="tagline">UN DANISON CHE TI ASSISTE 24/7</div>
         <div class="divider"></div>
     </div>
 
@@ -378,7 +378,7 @@ def generate_home_page():
     </div>
 
     <div class="footer-info">
-        <div class="footer-text">PREMIUM SERVICES</div>
+        <div class="footer-text">DANISON MENU</div>
     </div>
 
     <script>
