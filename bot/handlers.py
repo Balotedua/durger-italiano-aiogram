@@ -2,7 +2,7 @@
 import json
 from aiogram import Router, types
 from aiogram.filters import Command
-from bot.keyboards import get_menu_keyboard
+from keyboards import get_menu_keyboard
 
 router = Router()
 

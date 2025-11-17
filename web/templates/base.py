@@ -1,19 +1,41 @@
-# web/templates/base.py - Template base con navigazione
+# web/templates/base.py - Template base con navigazione e sub-navigazione
 import sys
 import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 
-def get_base_template(page_title, page_content, active_page="home"):
+def get_base_template(page_title, page_content, active_page="home", sub_nav=None):
     """
-    Template base con navbar per navigazione multi-page
+    Template base con navbar principale e opzionale sub-navbar
 
     Args:
         page_title: Titolo della pagina
         page_content: HTML del contenuto specifico
-        active_page: Pagina attiva (per highlight navbar)
+        active_page: Pagina attiva nella navbar principale
+        sub_nav: Lista di dict per sub-navbar es: [{'url': '/finance/add', 'label': 'Aggiungi', 'icon': '➕', 'active': True}]
     """
+
+    # Sub-navbar HTML (se presente)
+    sub_nav_html = ""
+    if sub_nav:
+        sub_nav_items = ""
+        for item in sub_nav:
+            active_class = "active" if item.get('active', False) else ""
+            sub_nav_items += f'''
+            <a href="{item['url']}" class="sub-nav-item {active_class}">
+                <span class="sub-nav-icon">{item['icon']}</span>
+                <span class="sub-nav-label">{item['label']}</span>
+            </a>
+            '''
+
+        sub_nav_html = f'''
+        <div class="sub-navbar">
+            <div class="sub-nav-scroll">
+                {sub_nav_items}
+            </div>
+        </div>
+        '''
 
     return f"""
 <!DOCTYPE html>
@@ -44,7 +66,7 @@ def get_base_template(page_title, page_content, active_page="home"):
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding-bottom: 80px;
+      padding-bottom: {'140px' if sub_nav else '80px'};
       position: relative;
     }}
 
@@ -64,7 +86,97 @@ def get_base_template(page_title, page_content, active_page="home"):
       50% {{ background-position: 100% 50%; }}
     }}
 
-    /* NAVBAR */
+    /* CONTENT */
+    .content {{
+      padding: 20px 16px;
+      animation: fadeIn 0.5s ease;
+    }}
+
+    @keyframes fadeIn {{
+      from {{ opacity: 0; transform: translateY(20px); }}
+      to {{ opacity: 1; transform: translateY(0); }}
+    }}
+
+    /* PAGE HEADER */
+    .page-header {{
+      text-align: center;
+      margin-bottom: 32px;
+    }}
+
+    .page-header h1 {{
+      font-size: 32px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }}
+
+    .page-header p {{
+      color: var(--text-muted);
+      font-size: 14px;
+    }}
+
+    /* SUB NAVBAR (sopra navbar principale) */
+    .sub-navbar {{
+      position: fixed;
+      bottom: 70px;
+      left: 0;
+      right: 0;
+      background: rgba(15,15,25,0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 8px 0;
+      z-index: 999;
+      box-shadow: 0 -2px 20px rgba(0,0,0,0.2);
+    }}
+
+    .sub-nav-scroll {{
+      display: flex;
+      gap: 8px;
+      padding: 0 12px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }}
+
+    .sub-nav-scroll::-webkit-scrollbar {{
+      display: none;
+    }}
+
+    .sub-nav-item {{
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+    }}
+
+    .sub-nav-item:active {{
+      transform: scale(0.95);
+    }}
+
+    .sub-nav-item.active {{
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-color: transparent;
+      color: white;
+    }}
+
+    .sub-nav-icon {{
+      font-size: 18px;
+    }}
+
+    /* MAIN NAVBAR */
     .navbar {{
       position: fixed;
       bottom: 0;
@@ -114,44 +226,14 @@ def get_base_template(page_title, page_content, active_page="home"):
       letter-spacing: 0.5px;
     }}
 
-    /* CONTENT AREA */
-    .content {{
-      padding: 20px 16px;
-      animation: fadeIn 0.5s ease;
-    }}
-
-    @keyframes fadeIn {{
-      from {{ opacity: 0; transform: translateY(20px); }}
-      to {{ opacity: 1; transform: translateY(0); }}
-    }}
-
-    /* PAGE HEADER */
-    .page-header {{
-      text-align: center;
-      margin-bottom: 32px;
-    }}
-
-    .page-header h1 {{
-      font-size: 32px;
-      font-weight: 900;
-      background: linear-gradient(135deg, #fff, var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
-    }}
-
-    .page-header p {{
-      color: var(--text-muted);
-      font-size: 14px;
-    }}
-
-    /* LOADING INDICATOR */
+    /* LOADING */
     .loading {{
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       display: none;
+      z-index: 10000;
     }}
 
     .loading.active {{
@@ -179,7 +261,9 @@ def get_base_template(page_title, page_content, active_page="home"):
     {page_content}
   </div>
 
-  <!-- NAVBAR -->
+  {sub_nav_html}
+
+  <!-- MAIN NAVBAR -->
   <nav class="navbar">
     <a href="/" class="nav-item {'active' if active_page == 'home' else ''}">
       <div class="nav-icon">🏠</div>
@@ -209,30 +293,24 @@ def get_base_template(page_title, page_content, active_page="home"):
   </div>
 
   <script>
-    // Init Telegram WebApp
     Telegram.WebApp.ready();
     Telegram.WebApp.expand();
 
-    // Navigation handling con animazioni
-    document.querySelectorAll('.nav-item').forEach(item => {{
+    // Navigation con animazioni
+    document.querySelectorAll('.nav-item, .sub-nav-item').forEach(item => {{
       item.addEventListener('click', function(e) {{
         e.preventDefault();
         const href = this.getAttribute('href');
 
-        // Haptic feedback
         Telegram.WebApp.HapticFeedback.impactOccurred('light');
-
-        // Mostra loading
         document.getElementById('loading').classList.add('active');
 
-        // Naviga dopo animazione
         setTimeout(() => {{
           window.location.href = href;
         }}, 200);
       }});
     }});
 
-    // Smooth scroll to top on page load
     window.scrollTo({{ top: 0, behavior: 'smooth' }});
   </script>
 </body>

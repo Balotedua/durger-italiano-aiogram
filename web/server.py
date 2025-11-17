@@ -8,7 +8,7 @@ from aiohttp import web
 from aiogram import Bot, Dispatcher
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler
 from config import Config
-from web.router import setup_routes
+from router import setup_routes
 
 
 async def health_check(request):
