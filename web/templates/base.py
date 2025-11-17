@@ -1,4 +1,4 @@
-# web/templates/base.py - Versione DEFINITIVA: LUSSO MINIMAL NERO/ORО, tutto centrato e pulito
+# web/templates/base.py - Template base con navigazione e sub-navigazione
 import sys
 import os
 
@@ -6,6 +6,17 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 
 def get_base_template(page_title, page_content, active_page="home", sub_nav=None):
+    """
+    Template base con sidebar e opzionale sub-navbar
+
+    Args:
+        page_title: Titolo della pagina
+        page_content: HTML del contenuto specifico
+        active_page: Pagina attiva nella sidebar
+        sub_nav: Lista di dict per sub-navbar es: [{'url': '/finance/add', 'label': 'Aggiungi', 'icon': '➕', 'active': True}]
+    """
+
+    # Sub-navbar HTML (se presente)
     sub_nav_html = ""
     if sub_nav:
         sub_nav_items = ""
@@ -13,10 +24,11 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
             active_class = "active" if item.get('active', False) else ""
             sub_nav_items += f'''
             <a href="{item['url']}" class="sub-nav-item {active_class}">
-                <span class="sub-nav-icon">{item.get('icon', '')}</span>
+                <span class="sub-nav-icon">{item['icon']}</span>
                 <span class="sub-nav-label">{item['label']}</span>
             </a>
             '''
+
         sub_nav_html = f'''
         <div class="sub-navbar">
             <div class="sub-nav-scroll">
@@ -33,160 +45,242 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>{page_title}</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 
   <style>
     :root {{
-      --bg: #000000;
-      --surface: #0d0d0d;
-      --gold: #d4af37;
-      --gold-glow: rgba(212,175,55,0.3);
+      --primary: #6366f1;
+      --secondary: #8b5cf6;
+      --accent: #ec4899;
+      --success: #10b981;
+      --bg: #0a0a0f;
+      --card: rgba(255,255,255,0.08);
       --text: #ffffff;
-      --text-dim: rgba(255,255,255,0.65);
+      --text-muted: rgba(255,255,255,0.7);
     }}
 
-    * {{ margin:0; padding:0; box-sizing:border-box; }}
-    body {{ font-family: 'Inter', sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }}
+    * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 
-    /* SFONDO LUSSO */
+    body {{
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      position: relative;
+    }}
+
+    /* BACKGROUND */
     .bg-gradient {{
-      position:fixed; inset:0; z-index:-2;
-      background: radial-gradient(circle at 20% 80%, rgba(212,175,55,0.12) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 20%, rgba(212,175,55,0.08) 0%, transparent 50%);
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      opacity: 0.3;
     }}
 
-    /* HEADER FISSO CON TITOLO CENTRATO + HAMBURGER E CHIUSURA */
-    .header {{
-      position:fixed; top:0; left:0; right:0; height:70px;
-      background: rgba(0,0,0,0.7); backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(212,175,55,0.15);
-      display:flex; align-items:center; justify-content:space-between;
-      padding:0 20px; z-index:1002;
-    }}
-    .header-title {{
-      position:absolute; left:50%; transform:translateX(-50%);
-      font-size:18px; font-weight:700; letter-spacing:0.5px;
-      background: linear-gradient(90deg, #d4af37, #fff);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    @keyframes gradientShift {{
+      0%, 100% {{ background-position: 0% 50%; }}
+      50% {{ background-position: 100% 50%; }}
     }}
 
-    /* HAMBURGER ORO */
-    .hamburger {{
-      width:48px; height:48px; background:rgba(212,175,55,0.12);
-      border:1px solid rgba(212,175,55,0.3); border-radius:16px;
-      display:flex; align-items:center; justify-content:center;
-      cursor:pointer; transition:all 0.3s;
-    }}
-    .hamburger:hover {{ background:rgba(212,175,55,0.2); }}
-    .hamburger span,.hamburger span::before,.hamburger span::after {{
-      width:20px; height:2px; background:var(--gold); border-radius:2px; transition:all 0.3s;
-    }}
-    .hamburger span::before{{content:'';position:absolute;top:-6px;}}
-    .hamburger span::after{{content:'';position:absolute;top:6px;}}
-    .hamburger.active span{{background:transparent;}}
-    .hamburger.active span::before{{transform:rotate(45deg) translate(5px,5px);}}
-    .hamburger.active span::after{{transform:rotate(-45deg) translate(5px,-5px);}}
-
-    /* CHIUSURA X CENTRATA */
-    .close-btn {{
-      width:48px; height:48px; background:rgba(212,175,55,0.12);
-      border:1px solid rgba(212,175,55,0.3); border-radius:16px;
-      display:none; align-items:center; justify-content:center;
-      cursor:pointer; transition:all 0.3s;
-    }}
-    .close-btn.active {{ display:flex; }}
-    .close-btn:hover {{ background:rgba(212,175,55,0.2); }}
-
-    /* DRAWER MINIMAL PREMIUM */
-    .drawer {{
-      position:fixed; top:0; left:-320px; width:320px; height:100vh;
-      background: var(--surface);
-      border-right:1px solid rgba(212,175,55,0.2);
-      padding-top:90px; z-index:1001;
-      transition:left 0.45s cubic-bezier(0.22,1,0.36,1);
-      box-shadow: 15px 0 50px rgba(0,0,0,0.9);
-    }}
-    .drawer.open {{ left:0; }}
-
-    .drawer-item {{
-      display:flex; align-items:center; gap:20px;
-      padding:20px 32px; color:var(--text-dim);
-      text-decoration:none; font-weight:500; font-size:17px;
-      transition:all 0.3s; position:relative;
-    }}
-    .drawer-item:hover {{
-      background:rgba(212,175,55,0.08); color:white;
-      padding-left:40px;
-    }}
-    .drawer-item.active {{
-      color:var(--gold); font-weight:700;
-      background:rgba(212,175,55,0.12);
-    }}
-    .drawer-item.active::before {{
-      content:''; position:absolute; left:0; top:0; bottom:0;
-      width:4px; background:var(--gold);
+    /* SIDEBAR */
+    .sidebar {{
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 80px;
+      background: rgba(10,10,15,0.95);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid rgba(255,255,255,0.1);
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.3);
     }}
 
-    /* OVERLAY */
-    .drawer-overlay {{
-      position:fixed; inset:0; background:rgba(0,0,0,0.85);
-      opacity:0; visibility:hidden; transition:all 0.4s; z-index:1000;
+    .nav-item {{
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 16px 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: var(--text-muted);
+      border-left: 3px solid transparent;
     }}
-    .drawer-overlay.active {{ opacity:1; visibility:visible; }}
 
-    /* CONTENUTO CENTRATO */
+    .nav-item:active {{
+      transform: scale(0.95);
+    }}
+
+    .nav-item.active {{
+      background: rgba(99,102,241,0.2);
+      color: var(--primary);
+      border-left-color: var(--primary);
+    }}
+
+    .nav-icon {{
+      font-size: 24px;
+    }}
+
+    .nav-label {{
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }}
+
+    /* CONTENT */
     .content {{
-      max-width:480px; margin:90px auto 40px; padding:0 24px;
+      margin-left: 80px;
+      padding: 20px 16px;
+      animation: fadeIn 0.5s ease;
+      min-height: 100vh;
     }}
 
-    /* SUB-NAVBAR (se serve) */
-    .sub-navbar {{ position:fixed; bottom:70px; left:0; right:0; background:rgba(13,13,13,0.95); backdrop-filter:blur(20px);
-      border-top:1px solid rgba(212,175,55,0.15); padding:10px 0; z-index:999; }}
-    .sub-nav-item.active {{ background:linear-gradient(135deg,var(--gold),#b8972e); color:black; }}
+    @keyframes fadeIn {{
+      from {{ opacity: 0; transform: translateY(20px); }}
+      to {{ opacity: 1; transform: translateY(0); }}
+    }}
+
+    /* PAGE HEADER */
+    .page-header {{
+      text-align: center;
+      margin-bottom: 32px;
+    }}
+
+    .page-header h1 {{
+      font-size: 32px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }}
+
+    .page-header p {{
+      color: var(--text-muted);
+      font-size: 14px;
+    }}
+
+    /* SUB NAVBAR */
+    .sub-navbar {{
+      background: rgba(15,15,25,0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 12px;
+      margin: 20px 0;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+    }}
+
+    .sub-nav-scroll {{
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }}
+
+    .sub-nav-scroll::-webkit-scrollbar {{
+      display: none;
+    }}
+
+    .sub-nav-item {{
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+    }}
+
+    .sub-nav-item:active {{
+      transform: scale(0.95);
+    }}
+
+    .sub-nav-item.active {{
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-color: transparent;
+      color: white;
+    }}
+
+    .sub-nav-icon {{
+      font-size: 18px;
+    }}
 
     /* LOADING */
-    .loading {{ position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-      display:none; z-index:10000; }}
-    .loading.active {{ display:block; }}
-    .spinner {{ width:56px; height:56px; border:3px solid rgba(212,175,55,0.2);
-      border-top-color:var(--gold); border-radius:50%; animation:spin 1s linear infinite; }}
-    @keyframes spin {{ to {{ transform:rotate(360deg); }} }}
+    .loading {{
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      z-index: 10000;
+    }}
+
+    .loading.active {{
+      display: block;
+    }}
+
+    .spinner {{
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255,255,255,0.1);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }}
+
+    @keyframes spin {{
+      to {{ transform: rotate(360deg); }}
+    }}
   </style>
 </head>
 <body>
   <div class="bg-gradient"></div>
 
-  <!-- HEADER CON TITOLO CENTRATO -->
-  <div class="header">
-    <div class="hamburger" id="hamburger"><span></span></div>
-    <div class="header-title">{page_title}</div>
-    <div class="close-btn" id="closeBtn"><span style="font-size:24px;color:var(--gold);">×</span></div>
-  </div>
-
-  <!-- DRAWER LUSSO MINIMAL -->
-  <div class="drawer" id="drawer">
-    <a href="/" class="drawer-item {'active' if active_page == 'home' else ''}">
-      <span>Home</span>
-      <span>Home</span>
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <a href="/" class="nav-item {'active' if active_page == 'home' else ''}">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">Home</div>
     </a>
-    <a href="/menu" class="drawer-item {'active' if active_page == 'menu' else ''}">
-      <span>Menu</span>
-      <span>Menu</span>
+    <a href="/menu" class="nav-item {'active' if active_page == 'menu' else ''}">
+      <div class="nav-icon">🍕</div>
+      <div class="nav-label">Menu</div>
     </a>
-    <a href="/agent" class="drawer-item {'active' if active_page == 'agent' else ''}">
-      <span>Agente</span>
-      <span>Agente</span>
+    <a href="/agent" class="nav-item {'active' if active_page == 'agent' else ''}">
+      <div class="nav-icon">🤖</div>
+      <div class="nav-label">Agente</div>
     </a>
-    <a href="/finance" class="drawer-item {'active' if active_page == 'finance' else ''}">
-      <span>Finanza</span>
-      <span>Finanza</span>
+    <a href="/finance" class="nav-item {'active' if active_page == 'finance' else ''}">
+      <div class="nav-icon">💰</div>
+      <div class="nav-label">Finanza</div>
     </a>
-    <a href="/psychology" class="drawer-item {'active' if active_page == 'psychology' else ''}">
-      <span>Supporto</span>
-      <span>Supporto</span>
+    <a href="/psychology" class="nav-item {'active' if active_page == 'psychology' else ''}">
+      <div class="nav-icon">🧠</div>
+      <div class="nav-label">Supporto</div>
     </a>
-  </div>
-  <div class="drawer-overlay" id="overlay"></div>
+  </nav>
 
   <div class="content" id="pageContent">
     {page_content}
@@ -194,38 +288,31 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
 
   {sub_nav_html}
 
-  <div class="loading" id="loading"><div class="spinner"></div></div>
+  <!-- LOADING -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+  </div>
 
   <script>
-    Telegram.WebApp.ready(); Telegram.WebApp.expand();
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
 
-    const h = document.getElementById('hamburger');
-    const c = document.getElementById('closeBtn');
-    const d = document.getElementById('drawer');
-    const o = document.getElementById('overlay');
-
-    function openDrawer() {{
-      d.classList.add('open'); o.classList.add('active');
-      h.style.display='none'; c.classList.add('active');
-      Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-    }}
-    function closeDrawer() {{
-      d.classList.remove('open'); o.classList.remove('active');
-      h.style.display='flex'; c.classList.remove('active');
-    }}
-
-    h.addEventListener('click', openDrawer);
-    c.addEventListener('click', closeDrawer);
-    o.addEventListener('click', closeDrawer);
-
-    document.querySelectorAll('.drawer-item, .sub-nav-item').forEach(el => {{
-      el.addEventListener('click', function(e) {{
+    // Navigation con animazioni
+    document.querySelectorAll('.nav-item, .sub-nav-item').forEach(item => {{
+      item.addEventListener('click', function(e) {{
         e.preventDefault();
+        const href = this.getAttribute('href');
+
         Telegram.WebApp.HapticFeedback.impactOccurred('light');
         document.getElementById('loading').classList.add('active');
-        setTimeout(() => location.href = this.href, 300);
+
+        setTimeout(() => {{
+          window.location.href = href;
+        }}, 200);
       }});
     }});
+
+    window.scrollTo({{ top: 0, behavior: 'smooth' }});
   </script>
 </body>
 </html>
