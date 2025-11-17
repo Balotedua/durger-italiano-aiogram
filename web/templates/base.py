@@ -169,6 +169,32 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
       left: 0;
     }}
 
+    /* PULSANTE CHIUDI NEL DRAWER */
+    .drawer-close {{
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      background: rgba(212,175,55,0.1);
+      border: 1px solid rgba(212,175,55,0.3);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 24px;
+      color: var(--gold);
+      font-weight: 300;
+    }}
+
+    .drawer-close:hover {{
+      background: rgba(212,175,55,0.2);
+      border-color: var(--gold);
+      transform: scale(1.1);
+    }}
+
     .drawer-item {{
       display: flex;
       align-items: center;
@@ -231,28 +257,6 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
     @keyframes fadeIn {{
       from {{ opacity: 0; transform: translateY(20px); }}
       to {{ opacity: 1; transform: translateY(0); }}
-    }}
-
-    /* PAGE HEADER */
-    .page-header {{
-      text-align: center;
-      margin-bottom: 40px;
-    }}
-
-    .page-header h1 {{
-      font-size: 36px;
-      font-weight: 900;
-      background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 12px;
-      letter-spacing: -0.5px;
-    }}
-
-    .page-header p {{
-      color: var(--text-dim);
-      font-size: 16px;
-      font-weight: 500;
     }}
 
     /* SUB-NAVBAR */
@@ -353,6 +357,9 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
 
   <!-- DRAWER LUSSO -->
   <div class="drawer" id="drawer">
+    <!-- PULSANTE CHIUDI -->
+    <div class="drawer-close" id="drawerClose">×</div>
+
     <a href="/" class="drawer-item {'active' if active_page == 'home' else ''}">
       <span class="drawer-icon">🏠</span>
       <span>Home</span>
@@ -380,9 +387,6 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
 
   <!-- CONTENUTO PRINCIPALE -->
   <div class="content" id="pageContent">
-    <div class="page-header">
-      <h1>{page_title}</h1>
-    </div>
     {page_content}
   </div>
 
@@ -400,6 +404,7 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
     const menuToggle = document.getElementById('menuToggle');
     const drawer = document.getElementById('drawer');
     const overlay = document.getElementById('overlay');
+    const drawerClose = document.getElementById('drawerClose');
 
     function openDrawer() {{
       drawer.classList.add('open');
@@ -416,6 +421,7 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
 
     menuToggle.addEventListener('click', openDrawer);
     overlay.addEventListener('click', closeDrawer);
+    drawerClose.addEventListener('click', closeDrawer);
 
     // Navigazione con loading
     document.querySelectorAll('.drawer-item, .sub-nav-item').forEach(item => {{
@@ -439,5 +445,4 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
     }});
   </script>
 </body>
-</html>
-"""
+</html>"""
