@@ -1,7 +1,4 @@
 # web/templates/__init__.py
 """
-Templates per WebApp multi-page
+Templates psicologia
 """
-
-from menu import generate_menu_html
-__all__ = ['generate_menu_html']
