@@ -8,269 +8,221 @@ from web.templates.base import get_base_template
 
 
 def generate_agent_page():
-    """Concierge AI • Ultra Minimal Premium • Black & 18K Gold"""
+    """Concierge AI • Black & Gold • 2025 Premium Chat"""
     content = """
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         :root {
             --gold: #D4AF37;
             --gold-light: #E8C867;
             --black: #000000;
-            --dark: #0A0A0A;
+            --dark: #0D0D0D;
+            --gray: #1A1A1A;
         }
 
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { 
-            background: var(--black); 
-            color: white; 
+        body {
+            margin: 0;
+            background: var(--black);
+            color: white;
             font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            min-height: calc(var(--vh, 1vh) * 100);
+            height: 100vh;
+            height: calc(var(--vh, 1vh) * 100);
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Header minimal ma potente */
-        .header {
+        /* Header sottile ma elegante */
+        header {
             text-align: center;
-            padding: 60px 20px 40px;
+            padding: 40px 20px 20px;
+            flex-shrink: 0;
         }
 
         .logo {
-            width: 86px; height: 86px;
-            margin: 0 auto 20px;
-            background: radial-gradient(circle at 30% 30%, var(--gold) 0%, transparent 60%);
+            width: 72px; height: 72px;
+            margin: 0 auto 16px;
+            background: radial-gradient(circle, var(--gold) 10%, transparent 60%);
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 36px;
-            position: relative;
-        }
-
-        .logo::before {
-            content: '';
-            position: absolute;
-            inset: -12px;
-            border: 1px solid rgba(212,175,55,0.25);
-            border-radius: 50%;
-            animation: pulseRing 4s infinite;
-        }
-
-        @keyframes pulseRing {
-            0%,100% { transform: scale(1); opacity: 0.4; }
-            50% { transform: scale(1.15); opacity: 0.2; }
-        }
-
-        .title {
-            font-family: 'Cinzel', serif;
             font-size: 32px;
-            font-weight: 600;
-            background: linear-gradient(90deg, #F4E5B2, var(--gold), #B8973A);
+            box-shadow: 0 0 40px rgba(212,175,55,0.3);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #F4E5B2, var(--gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
+            margin: 0;
         }
 
-        .subtitle {
-            margin-top: 8px;
-            font-size: 13px;
-            color: rgba(212,175,55,0.7);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-weight: 500;
+        .tagline {
+            font-size: 14px;
+            color: rgba(212,175,55,0.8);
+            margin-top: 6px;
+            letter-spacing: 1px;
         }
 
-        /* Chat container */
-        .chat {
-            max-width: 680px;
-            margin: 0 auto;
-            padding: 0 20px 100px;
-        }
-
-        .messages {
+        /* Area messaggi - come ChatGPT */
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 20px;
-            padding-top: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .message {
-            max-width: 86%;
-            padding: 16px 20px;
-            border-radius: 22px;
-            font-size: 15.8px;
-            line-height: 1.56;
-            animation: fadeUp 0.5s ease backwards;
-            word-wrap: break-word;
+            max-width: 80%;
+            padding: 14px 20px;
+            border-radius: 18px;
+            font-size: 16px;
+            line-height: 1.55;
+            animation: fadeIn 0.4s ease;
+            position: relative;
         }
 
         .message.user {
             align-self: flex-end;
             background: linear-gradient(135deg, var(--gold), #B8973A);
-            color: #000;
+            color: black;
             font-weight: 500;
-            border-bottom-right-radius: 6px;
-            box-shadow: 0 8px 25px rgba(212,175,55,0.3);
+            border-bottom-right-radius: 4px;
         }
 
         .message.bot {
             align-self: flex-start;
-            background: rgba(28,28,28,0.95);
+            background: var(--gray);
             color: #eee;
             border: 1px solid rgba(212,175,55,0.15);
-            border-bottom-left-radius: 6px;
-            backdrop-filter: blur(10px);
+            border-bottom-left-radius: 4px;
         }
 
         .message.bot::before {
-            content: '◇';
+            content: '◆';
             position: absolute;
-            top: -8px; left: 16px;
-            font-size: 18px;
+            top: -8px;
+            left: 14px;
             color: var(--gold);
-            filter: drop-shadow(0 2px 6px rgba(212,175,55,0.5));
+            font-size: 16px;
         }
 
-        /* Input bar fissa in basso - la parte più premium */
-        .input-bar {
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
+        /* Input fisso in basso - PERFETTO su Telegram */
+        .input-container {
             padding: 16px 20px 28px;
-            background: linear-gradient(to top, var(--black) 60%, transparent);
-            backdrop-filter: blur(12px);
+            background: var(--black);
+            border-top: 1px solid rgba(212,175,55,0.1);
+            flex-shrink: 0;
         }
 
         .input-wrapper {
-            max-width: 680px;
+            max-width: 800px;
             margin: 0 auto;
             position: relative;
         }
 
         #messageInput {
             width: 100%;
-            padding: 18px 68px 18px 24px;
-            background: rgba(20,20,20,0.95);
+            padding: 16px 60px 16px 20px;
+            background: rgba(30,30,30,0.95);
             border: 1.5px solid rgba(212,175,55,0.25);
-            border-radius: 30px;
+            border-radius: 24px;
             color: white;
             font-size: 16.5px;
-            font-family: inherit;
             outline: none;
-            transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
         }
 
         #messageInput:focus {
             border-color: var(--gold);
-            box-shadow: 0 0 40px rgba(212,175,55,0.25);
+            box-shadow: 0 0 30px rgba(212,175,55,0.25);
         }
 
         #messageInput::placeholder {
-            color: rgba(212,175,55,0.4);
+            color: rgba(212,175,55,0.5);
         }
 
         .send-btn {
             position: absolute;
-            right: 8px; top: 8px;
-            width: 50px; height: 50px;
+            right: 8px;
+            top: 8px;
+            width: 44px; height: 44px;
             border-radius: 50%;
             background: var(--gold);
             border: none;
-            color: #000;
-            font-size: 20px;
+            color: black;
+            font-size: 18px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 6px 20px rgba(212,175,55,0.4);
-            transition: all 0.3s;
+            transition: 0.2s;
         }
 
         .send-btn:active {
-            transform: scale(0.88);
+            transform: scale(0.9);
         }
 
-        /* Typing indicator minimal */
-        .typing {
+        /* Typing */
+        #typing {
             display: none;
             align-self: flex-start;
-            padding: 16px 20px;
-            background: rgba(28,28,28,0.95);
-            border: 1px solid rgba(212,175,55,0.15);
-            border-radius: 22px;
-            border-bottom-left-radius: 6px;
-            gap: 8px;
-            margin-bottom: 12px;
         }
-        .typing.active { display: flex; }
-        .typing span {
-            width: 9px; height: 9px;
-            background: var(--gold);
-            border-radius: 50%;
-            animation: typing 1.4s infinite;
-        }
-        .typing span:nth-child(2) { animation-delay: 0.2s; }
-        .typing span:nth-child(3) { animation-delay: 0.4s; }
+        #typing.active { display: block; }
 
-        @keyframes typing {
-            0%,100% { transform: translateY(0); opacity: 0.6; }
-            50% { transform: translateY(-10px); opacity: 1; }
-        }
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(15px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: none; }
         }
     </style>
 
-    <div class="header">
-        <div class="logo">◇</div>
-        <h1 class="title">Concierge</h1>
-        <div class="subtitle">Il tuo assistente privato</div>
-    </div>
+    <header>
+        <div class="logo">◆</div>
+        <h1>Concierge AI</h1>
+        <div class="tagline">Il tuo assistente privato premium</div>
+    </header>
 
-    <div class="chat">
-        <div class="messages" id="messages">
-            <div class="message bot">
-                Buongiorno.<br>
-                Sono il tuo Concierge privato. Come posso esserti utile oggi?
-            </div>
-        </div>
-
-        <div class="typing" id="typing">
-            <span></span><span></span><span></span>
+    <div id="messages">
+        <div class="message bot">
+            Buongiorno.<br>Sono il tuo Concierge AI. Come posso aiutarti oggi?
         </div>
     </div>
 
-    <div class="input-bar">
+    <div id="typing" class="message bot">
+        <span style="display:inline-flex;gap:6px;">
+            <span style="width:8px;height:8px;background:var(--gold);border-radius:50%;animation:bounce 1.4s infinite;"></span>
+            <span style="width:8px;height:8px;background:var(--gold);border-radius:50%;animation:bounce 1.4s infinite 0.2s;"></span>
+            <span style="width:8px;height:8px;background:var(--gold);border-radius:50%;animation:bounce 1.4s infinite 0.4s;"></span>
+        </span>
+    </div>
+
+    <div class="input-container">
         <div class="input-wrapper">
             <input 
                 type="text" 
                 id="messageInput" 
-                placeholder="Scrivi qui..." 
+                placeholder="Scrivi un messaggio..." 
                 autocomplete="off"
-                onkeypress="if(event.key==='Enter') sendMessage()"
+                onkeypress="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();sendMessage();}"
             >
-            <button class="send-btn" onclick="sendMessage()">➤</button>
+            <button class="send-btn" onclick="sendMessage()">→</button>
         </div>
     </div>
 
     <script>
-        const responses = {
-            default: "Un attimo, sto preparando la risposta perfetta per lei..."
-        };
-
         function addMessage(text, isUser = false) {
-            const container = document.getElementById('messages');
             const div = document.createElement('div');
             div.className = 'message ' + (isUser ? 'user' : 'bot');
             div.innerHTML = text.replace(/\\n/g, '<br>');
-            container.appendChild(div);
-            container.parentElement.scrollTop = container.parentElement.scrollHeight;
-        }
-
-        function showTyping() {
-            document.getElementById('typing').classList.add('active');
-        }
-        function hideTyping() {
-            document.getElementById('typing').classList.remove('active');
+            document.getElementById('messages').appendChild(div);
+            window.scrollTo(0, document.body.scrollHeight);
         }
 
         function sendMessage() {
@@ -278,21 +230,32 @@ def generate_agent_page():
             const text = input.value.trim();
             if (!text) return;
 
-            Telegram.WebApp.HapticFeedback.impactOccurred('medium');
             addMessage(text, true);
             input.value = '';
+            document.getElementById('typing').classList.add('active');
 
-            showTyping();
+            Telegram.WebApp.HapticFeedback.impactOccurred('light');
+
             setTimeout(() => {
-                hideTyping();
-                addMessage(responses.default || "Perfetto. Sto elaborando la sua richiesta con la massima cura.");
-            }, 1200 + Math.random() * 1500);
+                document.getElementById('typing').classList.remove('active');
+                addMessage("Perfetto. Sto preparando una risposta personalizzata per te...");
+            }, 1000 + Math.random() * 1500);
         }
 
-        // Fix 100vh su mobile
-        const setVh = () => document.documentElement.style.setProperty('--vh', window.innerHeight + 'px');
-        window.addEventListener('resize', setVh);
-        setVh();
+        // Fix altezza mobile
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+        window.addEventListener('resize', () => {
+            vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        });
     </script>
+
+    <style>
+        @keyframes bounce {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
     """
-    return get_base_template("Concierge", content, "agent")
+    return get_base_template("Concierge AI", content, "agent")
