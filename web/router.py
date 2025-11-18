@@ -1,4 +1,3 @@
-# web/router.py - Router con sub-routes modulari
 import sys
 import os
 
@@ -12,6 +11,9 @@ from web.templates.agent import generate_agent_page
 from web.templates.modules.finance.home import generate_finance_home
 from web.templates.modules.finance.add_payment import generate_add_payment
 
+# Import moduli fitness
+from web.templates.modules.fitness.home import generate_fitness_home
+from web.templates.modules.fitness.workouts import generate_workouts_page
 
 # ==== FUNZIONI DI GENERAZIONE PAGINE ====
 
@@ -449,10 +451,6 @@ def generate_detox_page():
     content = "<div class='page-header'><h1>🌿 Detox Social</h1><p>Stacca dai social...</p></div>"
     return get_base_template("Detox", content, "detox")
 
-def generate_fitness_page():
-    content = "<div class='page-header'><h1>💪 Allenamenti</h1><p>Salute fisica...</p></div>"
-    return get_base_template("Fitness", content, "fitness")
-
 def generate_time_management_page():
     content = "<div class='page-header'><h1>⏰ Gestione Tempo</h1><p>Organizza il tempo...</p></div>"
     return get_base_template("Gestione Tempo", content, "time-management")
@@ -504,7 +502,23 @@ async def finance_patrimonio_handler(request):
     ]
     return web.Response(text=get_base_template("Patrimonio", content, "finance", sub_nav), content_type='text/html')
 
-# Nuovi handlers
+# Fitness handlers
+async def fitness_home_handler(request):
+    return web.Response(text=generate_fitness_home(), content_type='text/html')
+
+async def fitness_workouts_handler(request):
+    return web.Response(text=generate_workouts_page(), content_type='text/html')
+
+async def fitness_progress_handler(request):
+    content = "<div class='page-header'><h1>📈 Progressi</h1><p>Statistiche e progressi...</p></div>"
+    sub_nav = [
+        {'url': '/fitness', 'label': 'Home', 'icon': '🏠', 'active': False},
+        {'url': '/fitness/workouts', 'label': 'Allenamenti', 'icon': '💪', 'active': False},
+        {'url': '/fitness/progress', 'label': 'Progressi', 'icon': '📈', 'active': True},
+    ]
+    return web.Response(text=get_base_template("Progressi", content, "fitness", sub_nav), content_type='text/html')
+
+# Altri handlers
 async def dashboard_handler(request):
     return web.Response(text=generate_dashboard_page(), content_type='text/html')
 
@@ -522,9 +536,6 @@ async def mental_health_handler(request):
 
 async def detox_handler(request):
     return web.Response(text=generate_detox_page(), content_type='text/html')
-
-async def fitness_handler(request):
-    return web.Response(text=generate_fitness_page(), content_type='text/html')
 
 async def time_management_handler(request):
     return web.Response(text=generate_time_management_page(), content_type='text/html')
@@ -549,14 +560,18 @@ def setup_routes(app):
     app.router.add_get('/finance/dashboard', finance_dashboard_handler)
     app.router.add_get('/finance/patrimonio', finance_patrimonio_handler)
 
-    # Nuove routes
+    # Fitness routes
+    app.router.add_get('/fitness', fitness_home_handler)
+    app.router.add_get('/fitness/workouts', fitness_workouts_handler)
+    app.router.add_get('/fitness/progress', fitness_progress_handler)
+
+    # Altre routes
     app.router.add_get('/dashboard', dashboard_handler)
     app.router.add_get('/badge', badge_handler)
     app.router.add_get('/career', career_handler)
     app.router.add_get('/jolly', jolly_handler)
     app.router.add_get('/mental-health', mental_health_handler)
     app.router.add_get('/detox', detox_handler)
-    app.router.add_get('/fitness', fitness_handler)
     app.router.add_get('/time-management', time_management_handler)
     app.router.add_get('/news', news_handler)
     app.router.add_get('/notes', notes_handler)
