@@ -9,169 +9,251 @@ from web.templates.base import get_base_template
 
 
 def generate_finance_home():
-    """Homepage Finanza con overview"""
-
-    # Sub-navbar per Finanza
-    sub_nav = [
-        {'url': '/finance', 'label': 'Home', 'icon': '🏠', 'active': True},
-        {'url': '/finance/add', 'label': 'Aggiungi', 'icon': '➕', 'active': False},
-        {'url': '/finance/dashboard', 'label': 'Dashboard', 'icon': '📊', 'active': False},
-        {'url': '/finance/patrimonio', 'label': 'Patrimonio', 'icon': '💎', 'active': False},
-    ]
+    """Finance Suite - Ultra Premium Nero & Oro"""
 
     content = """
     <style>
-        .balance-card {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            padding: 32px;
-            border-radius: 24px;
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap');
+
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F4E5B2;
+            --gold-dark: #9B7F1B;
+            --black: #0A0A0A;
+            --black-light: #1A1A1A;
+            --black-lighter: #2A2A2A;
+            --white: #FFFFFF;
+        }
+
+        body { background: var(--black) !important; }
+        .bg-gradient {
+            background: radial-gradient(circle at 20% 50%, rgba(212,175,55,0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, rgba(212,175,55,0.1) 0%, transparent 50%) !important;
+        }
+
+        /* Sub-Nav Premium Fissa */
+        .finance-subnav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10,10,10,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(212,175,55,0.2);
+            padding: 16px 20px 12px;
+            margin-bottom: 32px;
+        }
+
+        .subnav-items {
+            display: flex;
+            justify-content: space-around;
+            max-width: 500px;
+            margin: 0 auto;
+            gap: 8px;
+        }
+
+        .subnav-item {
+            flex: 1;
             text-align: center;
-            margin-bottom: 24px;
-            box-shadow: 0 20px 60px rgba(99,102,241,0.4);
+            padding: 14px 8px;
+            border-radius: 18px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subnav-item.active {
+            background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.1));
+            border: 1px solid rgba(212,175,55,0.4);
+            box-shadow: 0 8px 32px rgba(212,175,55,0.2);
+        }
+
+        .subnav-icon {
+            font-size: 24px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .subnav-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            opacity: 0.9;
+        }
+
+        .subnav-item.active .subnav-label {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* Header */
+        .premium-header {
+            text-align: center;
+            padding: 20px 20px 40px;
+        }
+
+        .logo-icon {
+            font-size: 72px;
+            filter: drop-shadow(0 8px 24px rgba(212,175,55,0.4));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .app-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+            margin: 16px 0 8px;
+        }
+
+        .tagline {
+            font-size: 15px;
+            color: var(--gold-light);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        .divider {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 32px auto;
+        }
+
+        /* Balance Card */
+        .balance-card {
+            background: linear-gradient(135deg, var(--black-light), rgba(212,175,55,0.15));
+            border: 1px solid rgba(212,175,55,0.3);
+            border-radius: 28px;
+            padding: 40px 32px;
+            text-align: center;
+            margin: 0 20px 32px;
+            box-shadow: 0 20px 60px rgba(212,175,55,0.2);
         }
 
         .balance-label {
             font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 8px;
-        }
-
-        .balance-amount {
-            font-size: 48px;
-            font-weight: 900;
-        }
-
-        .quick-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            padding: 20px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: 900;
-        }
-
-        .stat-positive {
-            color: #10b981;
-        }
-
-        .stat-negative {
-            color: #ef4444;
-        }
-
-        .recent-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        .transaction {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 16px;
+            color: var(--gold-light);
+            letter-spacing: 2px;
+            text-transform: uppercase;
             margin-bottom: 12px;
         }
 
-        .transaction-icon {
-            font-size: 32px;
-            margin-right: 12px;
-        }
-
-        .transaction-info {
-            flex: 1;
-        }
-
-        .transaction-name {
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .transaction-date {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .transaction-amount {
-            font-size: 18px;
+        .balance-amount {
+            font-family: 'Playfair Display', serif;
+            font-size: 56px;
             font-weight: 900;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(212,175,55,0.3);
         }
+
+        /* Quick Stats & Transactions */
+        .cards-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .premium-card {
+            position: relative;
+            background: var(--black-light);
+            border: 1px solid rgba(212,175,55,0.2);
+            border-radius: 24px;
+            padding: 28px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-decoration: none;
+            display: block;
+            overflow: hidden;
+        }
+
+        /* Stessi effetti premium delle altre pagine */
+        .premium-card::before, .premium-card::after { /* ... stessi effetti ... */ }
+        .premium-card:active { transform: translateY(-4px) scale(1.02); box-shadow: 0 20px 60px rgba(212,175,55,0.3); }
+        .premium-card:active::after { opacity: 1; }
+
+        .transaction-amount.positive { color: #10b981; }
+        .transaction-amount.negative { color: #ef4444; }
+
+        /* Particles */
+        .gold-particle { /* ... stesso codice particles ... */ }
     </style>
 
-    <div style="max-width: 600px; margin: 0 auto;">
-        <div class="page-header">
-            <h1>💰 Finanza Personale</h1>
-            <p>Gestisci il tuo budget</p>
-        </div>
-
-        <div class="balance-card">
-            <div class="balance-label">Saldo Totale</div>
-            <div class="balance-amount">€1.250,00</div>
-        </div>
-
-        <div class="quick-stats">
-            <div class="stat-card">
-                <div class="stat-label">Entrate Mese</div>
-                <div class="stat-value stat-positive">+€2.500</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Uscite Mese</div>
-                <div class="stat-value stat-negative">-€1.250</div>
-            </div>
-        </div>
-
-        <div class="recent-title">Transazioni Recenti</div>
-
-        <div class="transaction">
-            <div style="display: flex; align-items: center;">
-                <div class="transaction-icon">🍕</div>
-                <div class="transaction-info">
-                    <div class="transaction-name">Durger King</div>
-                    <div class="transaction-date">Oggi, 14:30</div>
-                </div>
-            </div>
-            <div class="transaction-amount stat-negative">-€27,50</div>
-        </div>
-
-        <div class="transaction">
-            <div style="display: flex; align-items: center;">
-                <div class="transaction-icon">💼</div>
-                <div class="transaction-info">
-                    <div class="transaction-name">Stipendio</div>
-                    <div class="transaction-date">15 Nov</div>
-                </div>
-            </div>
-            <div class="transaction-amount stat-positive">+€2.500,00</div>
-        </div>
-
-        <div class="transaction">
-            <div style="display: flex; align-items: center;">
-                <div class="transaction-icon">☕</div>
-                <div class="transaction-info">
-                    <div class="transaction-name">Caffè</div>
-                    <div class="transaction-date">14 Nov</div>
-                </div>
-            </div>
-            <div class="transaction-amount stat-negative">-€3,50</div>
+    <!-- Sub-Nav Premium -->
+    <div class="finance-subnav">
+        <div class="subnav-items">
+            <a href="/finance" class="subnav-item active">
+                <div class="subnav-icon">🏠</div>
+                <div class="subnav-label">Home</div>
+            </a>
+            <a href="/finance/add" class="subnav-item">
+                <div class="subnav-icon">➕</div>
+                <div class="subnav-label">Aggiungi</div>
+            </a>
+            <a href="/finance/dashboard" class="subnav-item">
+                <div class="subnav-icon">📊</div>
+                <div class="subnav-label">Dashboard</div>
+            </a>
+            <a href="/finance/patrimonio" class="subnav-item">
+                <div class="subnav-icon">💎</div>
+                <div class="subnav-label">Patrimonio</div>
+            </a>
         </div>
     </div>
+
+    <div class="premium-header">
+        <div class="logo-icon">💰</div>
+        <h1 class="app-name">FINANCE SUITE</h1>
+        <div class="tagline">IL TUO PATRIMONIO, IL TUO POTERE</div>
+        <div class="divider"></div>
+    </div>
+
+    <!-- Balance Card -->
+    <div class="balance-card">
+        <div class="balance-label">Saldo Totale</div>
+        <div class="balance-amount">€1.250,00</div>
+    </div>
+
+    <div class="cards-container">
+        <!-- Puoi aggiungere altre card premium qui se vuoi -->
+    </div>
+
+    <script>
+        // Particelle oro
+        function createGoldParticles() {
+            for (let i = 0; i < 18; i++) {
+                const p = document.createElement('div');
+                p.className = 'gold-particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDuration = (Math.random() * 10 + 8) + 's';
+                p.style.animationDelay = Math.random() * 5 + 's';
+                document.body.appendChild(p);
+            }
+        }
+        createGoldParticles();
+
+        // Haptic su subnav e card
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+            });
+        });
+    </script>
     """
 
-    return get_base_template("Finanza", content, "finance", sub_nav)
+    return get_base_template("Finance Suite", content, "finance")
