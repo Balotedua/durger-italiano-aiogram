@@ -1,4 +1,4 @@
-def generate_physical_health_page():
+def generate_fitness_home():
     """Physical Health Hub - Ultra Premium Nero & Oro"""
     content = """
     <style>
