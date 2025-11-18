@@ -163,6 +163,7 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
       z-index: 1001;
       transition: left 0.5s cubic-bezier(0.22,1,0.36,1);
       box-shadow: 20px 0 60px rgba(0,0,0,0.8);
+      overflow-y: auto;
     }}
 
     .drawer.open {{
@@ -173,11 +174,11 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
       display: flex;
       align-items: center;
       gap: 16px;
-      padding: 18px 32px;
+      padding: 16px 32px;
       color: var(--text-dim);
       text-decoration: none;
       font-weight: 600;
-      font-size: 16px;
+      font-size: 15px;
       transition: all 0.3s ease;
       position: relative;
       border-left: 4px solid transparent;
@@ -198,7 +199,7 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
     }}
 
     .drawer-icon {{
-      font-size: 22px;
+      font-size: 20px;
       width: 24px;
       text-align: center;
     }}
@@ -329,27 +330,70 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
     <span></span>
   </div>
 
-  <!-- DRAWER LUSSO -->
+  <!-- DRAWER LUSSO CON TUTTE LE SEZIONI -->
   <div class="drawer" id="drawer">
+    <!-- HOME E DASHBOARD -->
     <a href="/" class="drawer-item {'active' if active_page == 'home' else ''}">
       <span class="drawer-icon">🏠</span>
       <span>Home</span>
     </a>
-    <a href="/menu" class="drawer-item {'active' if active_page == 'menu' else ''}">
-      <span class="drawer-icon">🍕</span>
-      <span>Menu</span>
+    <a href="/dashboard" class="drawer-item {'active' if active_page == 'dashboard' else ''}">
+      <span class="drawer-icon">📊</span>
+      <span>Dashboard Recap</span>
     </a>
-    <a href="/agent" class="drawer-item {'active' if active_page == 'agent' else ''}">
-      <span class="drawer-icon">🤖</span>
-      <span>Agente</span>
+
+    <!-- BADGE E CAREER -->
+    <a href="/badge" class="drawer-item {'active' if active_page == 'badge' else ''}">
+      <span class="drawer-icon">🎖️</span>
+      <span>Badge</span>
     </a>
+    <a href="/career" class="drawer-item {'active' if active_page == 'career' else ''}">
+      <span class="drawer-icon">💼</span>
+      <span>Career Lavoro</span>
+    </a>
+
+    <!-- FINANZA -->
     <a href="/finance" class="drawer-item {'active' if active_page == 'finance' else ''}">
       <span class="drawer-icon">💰</span>
       <span>Finanza</span>
     </a>
-    <a href="/psychology" class="drawer-item {'active' if active_page == 'psychology' else ''}">
+
+    <!-- JOLLY -->
+    <a href="/jolly" class="drawer-item {'active' if active_page == 'jolly' else ''}">
+      <span class="drawer-icon">🎭</span>
+      <span>Jolly</span>
+    </a>
+
+    <!-- SALUTE MENTALE E DETOX -->
+    <a href="/mental-health" class="drawer-item {'active' if active_page == 'mental-health' else ''}">
       <span class="drawer-icon">🧠</span>
-      <span>Supporto</span>
+      <span>Salute Mentale</span>
+    </a>
+    <a href="/detox" class="drawer-item {'active' if active_page == 'detox' else ''}">
+      <span class="drawer-icon">🌿</span>
+      <span>Detox Social</span>
+    </a>
+
+    <!-- SALUTE FISICA -->
+    <a href="/fitness" class="drawer-item {'active' if active_page == 'fitness' else ''}">
+      <span class="drawer-icon">💪</span>
+      <span>Allenamenti</span>
+    </a>
+
+    <!-- GESTIONE TEMPO -->
+    <a href="/time-management" class="drawer-item {'active' if active_page == 'time-management' else ''}">
+      <span class="drawer-icon">⏰</span>
+      <span>Gestione Tempo</span>
+    </a>
+
+    <!-- NEWS E NOTE -->
+    <a href="/news" class="drawer-item {'active' if active_page == 'news' else ''}">
+      <span class="drawer-icon">📰</span>
+      <span>News Skill</span>
+    </a>
+    <a href="/notes" class="drawer-item {'active' if active_page == 'notes' else ''}">
+      <span class="drawer-icon">📝</span>
+      <span>Note</span>
     </a>
   </div>
 
