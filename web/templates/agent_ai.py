@@ -1,283 +1,238 @@
+# web/templates/agent.py
 from web.templates.base import get_base_template
 
 
 def generate_agent_page():
-    """Pagina Agente AI - Ultra Premium - Nero & Oro"""
+    """Danison Assistant — Ultra Premium Black & Gold"""
     content = """
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&display=swap');
 
         :root {
             --gold: #D4AF37;
-            --gold-light: #F4E5B2;
-            --gold-dark: #9B7F1B;
+            --gold-subtle: rgba(212,175,55,0.4);
             --black: #0A0A0A;
-            --black-light: #1A1A1A;
-            --black-lighter: #2A2A2A;
-            --white: #FFFFFF;
+            --black-light: #111111;
+            --black-lighter: #1A1A1A;
+            --text: #EAEAEA;
+            --text-muted: #999999;
         }
 
-        body {
-            background: var(--black);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+        body { background: var(--black); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* Header Premium */
-        .agent-header {
+        /* Header minimal & elegante */
+        .header {
             text-align: center;
-            padding: 50px 20px 30px;
-            position: relative;
-            flex-shrink: 0;
+            padding: 60px 20px 40px;
         }
-        .agent-title {
+        .logo {
+            font-size: 68px;
+            animation: float 7s ease-in-out infinite;
+            filter: drop-shadow(0 8px 30px rgba(212,175,55,0.25));
+        }
+        @keyframes float {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .title {
             font-family: 'Playfair Display', serif;
-            font-size: 38px;
+            font-size: 40px;
             font-weight: 900;
-            background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+            letter-spacing: -1.2px;
+            margin: 20px 0 8px;
+            background: linear-gradient(135deg, #F4E5B2, var(--gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            letter-spacing: -1px;
-            margin: 16px 0 8px;
-            animation: fadeInUp 0.9s ease;
         }
-        .agent-subtitle {
+        .subtitle {
             font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            color: var(--gold-light);
-            letter-spacing: 3px;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: var(--text-muted);
             text-transform: uppercase;
-            opacity: 0.9;
-            animation: fadeInUp 0.9s ease 0.2s backwards;
         }
 
-        /* Chat Container */
-        .chat-container {
+        /* Chat */
+        .chat {
             flex: 1;
-            max-width: 800px;
-            width: 100%;
+            max-width: 820px;
             margin: 0 auto;
-            padding: 0 20px 20px;
+            padding: 0 24px 24px;
             display: flex;
             flex-direction: column;
-            position: relative;
         }
-
         .messages {
             flex: 1;
             overflow-y: auto;
-            padding: 20px 0;
+            padding: 10px 0 20px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 18px;
             scrollbar-width: none;
-            -ms-overflow-style: none;
         }
-        .messages::-webkit-scrollbar {
-            display: none;
-        }
+        .messages::-webkit-scrollbar { display: none; }
 
         .message {
-            max-width: 85%;
+            max-width: 78%;
             padding: 16px 20px;
-            border-radius: 24px;
-            animation: messageAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            word-wrap: break-word;
+            border-radius: 22px;
+            line-height: 1.65;
+            font-family: 'Inter', sans-serif;
+            font-size: 15.5px;
+            animation: appear 0.5s ease outwards;
         }
-        @keyframes messageAppear {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: none; }
         }
 
-        .message.user {
+        .user {
             align-self: flex-end;
-            background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.1));
-            border: 1px solid rgba(212,175,55,0.3);
-            color: var(--gold-light);
-            border-bottom-right-radius: 6px;
+            background: rgba(212,175,55,0.12);
+            color: #F4E5B2;
+            border-bottom-right-radius: 4px;
         }
-        .message.assistant {
+        .assistant {
             align-self: flex-start;
-            background: var(--black-light);
-            border: 1px solid rgba(212,175,55,0.15);
-            color: var(--white);
-            border-bottom-left-radius: 6px;
-        }
-        .message.assistant::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            left: -1px;
-            right: -1px;
-            bottom: -1px;
-            border-radius: 24px;
-            background: linear-gradient(135deg, transparent 30%, var(--gold) 50%, transparent 70%);
-            opacity: 0.1;
-            pointer-events: none;
+            background: var(--black-lighter);
+            color: var(--text);
+            border-bottom-left-radius: 4px;
         }
 
-        /* Input Area Premium */
-        .input-area {
-            background: var(--black-light);
-            border: 1px solid rgba(212,175,55,0.25);
-            border-radius: 30px;
-            padding: 12px 20px;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-            transition: all 0.4s;
+        /* Input pulitissimo */
+        .input-wrapper {
+            margin-top: 8px;
+            position: relative;
         }
-        .input-area:focus-within {
-            border-color: var(--gold);
-            box-shadow: 0 0 0 1px var(--gold), 0 12px 40px rgba(212,175,55,0.3);
-        }
-
         #message-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--white);
+            width: 100%;
+            background: var(--black-light);
+            border: 1px solid rgba(212,175,55,0.2);
+            border-radius: 30px;
+            padding: 16px 56px 16px 24px;
+            color: white;
             font-family: 'Inter', sans-serif;
             font-size: 16px;
-            padding: 8px 0;
+            outline: none;
+            transition: all 0.4s ease;
         }
         #message-input::placeholder {
-            color: rgba(212,175,55,0.5);
+            color: rgba(212,175,55,0.4);
+        }
+        #message-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 1px var(--gold), 0 12px 40px rgba(212,175,55,0.15);
         }
 
-        .send-button {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+        .send-btn {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            width: 44px;
+            height: 44px;
+            background: var(--gold);
             border: none;
             border-radius: 50%;
+            color: black;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 4px 16px rgba(212,175,55,0.4);
         }
-        .send-button:active {
-            transform: scale(0.9);
-        }
-        .send-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .send-icon {
-            font-size: 20px;
-            color: var(--black);
-        }
+        .send-btn:hover { transform: scale(1.08); }
+        .send-btn:active { transform: scale(0.94); }
 
-        /* Particelle oro (stesse della home) */
-        .gold-particle {
+        /* Particelle dorate sottilissime */
+        .particle {
             position: fixed;
-            width: 3px;
-            height: 3px;
+            width: 2px;
+            height: 2px;
             background: var(--gold);
             border-radius: 50%;
             pointer-events: none;
-            z-index: 0;
             opacity: 0;
-            animation: particle-float linear infinite;
+            animation: rise linear infinite;
         }
-        @keyframes particle-float {
-            0% { opacity: 0; transform: translateY(100vh) scale(0); }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% { opacity: 0; transform: translateY(-20vh) scale(1); }
+        @keyframes rise {
+            0%   { opacity: 0; transform: translateY(100vh) scale(0); }
+            8%   { opacity: 0.6; }
+            92%  { opacity: 0.6; }
+            100% { opacity: 0; transform: translateY(-50px) scale(1); }
         }
     </style>
 
-    <div class="agent-header">
-        <div class="logo-icon" style="font-size: 64px; animation: float 6s ease-in-out infinite;">🤖</div>
-        <h1 class="agent-title">Danison Assistant</h1>
-        <div class="agent-subtitle">Il tuo assistente AI privato • Sempre attivo</div>
+    <div class="header">
+        <div class="logo">🤖</div>
+        <h1 class="title">Danison</h1>
+        <div class="subtitle">Il tuo assistente personale</div>
     </div>
 
-    <div class="chat-container">
+    <div class="chat">
         <div class="messages" id="messages">
-            <!-- I messaggi verranno inseriti qui via JS -->
             <div class="message assistant">
-                Buongiorno. Sono Danison, il tuo assistente personale premium.<br><br>
-                Posso aiutarti con qualsiasi cosa: strategia finanziaria, benessere mentale, consigli gourmet, programmazione, o semplicemente una conversazione profonda.<br><br>
-                Dimmi pure, sono tutto orecchie.
+                Buongiorno.<br><br>
+                Sono Danison, sempre a tua disposizione.<br><br>
+                In cosa posso esserti utile oggi?
             </div>
         </div>
 
-        <div class="input-area">
-            <input type="text" id="message-input" placeholder="Scrivi il tuo messaggio..." autocomplete="off">
-            <button class="send-button" id="send-button">
-                <span class="send-icon">↑</span>
-            </button>
+        <div class="input-wrapper">
+            <input type="text" id="message-input" placeholder="Messaggio..." autocomplete="off">
+            <button class="send-btn" id="send-btn">↑</button>
         </div>
     </div>
 
     <script>
-        // Particelle dorate
-        function createGoldParticles();
-        function createGoldParticles() {
-            for (let i = 0; i < 12; i++) {
-                const p = document.createElement('div');
-                p.className = 'gold-particle';
-                p.style.left = Math.random() * 100 + '%';
-                p.style.animationDuration = (Math.random() * 10 + 8) + 's';
-                p.style.animationDelay = Math.random() * 6 + 's';
-                document.body.appendChild(p);
-            }
+        // Particelle sottili
+        for(let i=0; i<11; i++){
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random()*100 + '%';
+            p.style.animationDuration = (Math.random()*12 + 12) + 's';
+            p.style.animationDelay = Math.random()*8 + 's';
+            document.body.appendChild(p);
         }
 
-        const messagesDiv = document.getElementById('messages');
+        const messages = document.getElementById('messages');
         const input = document.getElementById('message-input');
-        const sendBtn = document.getElementById('send-button');
+        const btn = document.getElementById('send-btn');
 
-        function addMessage(text, isUser = false) {
-            const msg = document.createElement('div');
-            msg.className = `message ${isUser ? 'user' : 'assistant'}`;
-            msg.innerHTML = text;
-            messagesDiv.appendChild(msg);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            // Haptic leggero quando arriva risposta
-            if (!isUser) {
-                Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-            }
+        function add(text, isUser=false){
+            const div = document.createElement('div');
+            div.className = `message ${isUser?'user':'assistant'}`;
+            div.innerHTML = text.replace(/\\n/g, '<br>');
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+            if(!isUser) Telegram.WebApp.HapticFeedback.notificationOccurred('success');
         }
 
-        sendBtn.addEventListener('click', sendMessage);
-        input.addEventListener('keypress', e => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
-
-        function sendMessage() {
+        async function send(){
             const text = input.value.trim();
-            if (!text) return;
-
-            addMessage(text, true);
+            if(!text) return;
+            add(text, true);
             input.value = '';
-
-            // Feedback aptico invio
+            btn.disabled = true;
             Telegram.WebApp.HapticFeedback.impactOccurred('medium');
 
-            // Simulazione risposta (da sostituire con vera chiamata API)
-            setTimeout(() => {
-                addMessage(`Ho capito perfettamente. Ecco una risposta premium a "${text}".<br><br>Se desideri approfondire qualsiasi aspetto (analisi finanziaria, coaching psicologico, ricetta stellata o codice), fammi sapere — sono qui per servirti al massimo livello.`);
-            }, 1200);
+            // Qui la tua vera API
+            const res = await fetch('/api/agent/chat', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({message: text})
+            });
+            const data = await res.json();
+            add(data.reply || "Qualcosa è andato storto. Riprova.");
+            btn.disabled = false;
+            input.focus();
         }
 
-        // Focus automatico sull'input
+        btn.onclick = send;
+        input.onkeydown = e => { if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); send(); }};
         input.focus();
     </script>
     """
-    return get_base_template("Danison Assistant", content, "agent")
+    return get_base_template("Danison", content, "agent")
