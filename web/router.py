@@ -5,9 +5,11 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from aiohttp import web
 from web.templates.base import get_base_template
-from web.templates.agent import generate_agent_page
 # Import modulo home
 from web.templates.modules.home.home import generate_home_page
+
+from web.templates.agent_ai import generate_agent_page
+
 # Import moduli finanza
 from web.templates.modules.finance.home import generate_finance_home
 from web.templates.modules.finance.add_payment import generate_add_payment
@@ -72,11 +74,12 @@ def generate_notes_page():
 async def home_handler(request):
     return web.Response(text=generate_home_page(), content_type='text/html')
 
+async def agent_handler(request):
+    return web.Response(text=generate_home_page(), content_type='text/html')
+
 async def menu_handler(request):
     return web.Response(text=generate_menu_page(), content_type='text/html')
 
-async def agent_handler(request):
-    return web.Response(text=generate_agent_page(), content_type='text/html')
 
 async def psychology_handler(request):
     return web.Response(text=generate_psychology_page(), content_type='text/html')
@@ -154,8 +157,8 @@ def setup_routes(app):
     """Configura tutte le route"""
     # Main routes
     app.router.add_get('/', home_handler)
-    app.router.add_get('/menu', menu_handler)
     app.router.add_get('/agent', agent_handler)
+    app.router.add_get('/menu', menu_handler)
     app.router.add_get('/psychology', psychology_handler)
 
     # Finance routes
