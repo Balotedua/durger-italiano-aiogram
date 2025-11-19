@@ -71,7 +71,7 @@ async def home_handler(request):
     return web.Response(text=generate_home_page(), content_type='text/html')
 
 async def agent_handler(request):
-    return web.Response(text=generate_home_page(), content_type='text/html')
+    return web.Response(text=generate_agent_page(), content_type='text/html')
 
 async def menu_handler(request):
     return web.Response(text=generate_menu_page(), content_type='text/html')
