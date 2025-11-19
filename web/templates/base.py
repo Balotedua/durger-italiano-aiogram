@@ -358,8 +358,8 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
       <span>Finanza</span>
     </a>
 
-    <!-- Agent -->
-    <a href="/agemt" class="drawer-item {'active' if active_page == 'agent' else ''}">
+    <!-- AGENTE -->
+    <a href="/agent" class="drawer-item {'active' if active_page == 'agent' else ''}">
       <span class="drawer-icon">🎭</span>
       <span>Agent</span>
     </a>
