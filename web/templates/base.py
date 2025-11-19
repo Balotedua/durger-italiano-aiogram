@@ -358,10 +358,10 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
       <span>Finanza</span>
     </a>
 
-    <!-- JOLLY -->
-    <a href="/jolly" class="drawer-item {'active' if active_page == 'jolly' else ''}">
+    <!-- Agent -->
+    <a href="/Agemt" class="drawer-item {'active' if active_page == 'agent' else ''}">
       <span class="drawer-icon">🎭</span>
-      <span>Jolly</span>
+      <span>Agent</span>
     </a>
 
     <!-- SALUTE MENTALE E DETOX -->

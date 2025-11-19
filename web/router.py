@@ -46,10 +46,6 @@ def generate_career_page():
     content = "<div class='page-header'><h1>💼 Career</h1><p>Gestione carriera...</p></div>"
     return get_base_template("Career", content, "career")
 
-def generate_jolly_page():
-    content = "<div class='page-header'><h1>🎭 Jolly</h1><p>Attività casuali...</p></div>"
-    return get_base_template("Jolly", content, "jolly")
-
 def generate_mental_health_page():
     content = "<div class='page-header'><h1>🧠 Salute Mentale</h1><p>Benessere mentale...</p></div>"
     return get_base_template("Salute Mentale", content, "mental-health")
@@ -135,9 +131,6 @@ async def badge_handler(request):
 async def career_handler(request):
     return web.Response(text=generate_career_page(), content_type='text/html')
 
-async def jolly_handler(request):
-    return web.Response(text=generate_jolly_page(), content_type='text/html')
-
 async def mental_health_handler(request):
     return web.Response(text=generate_mental_health_page(), content_type='text/html')
 
@@ -176,7 +169,6 @@ def setup_routes(app):
     app.router.add_get('/dashboard', dashboard_handler)
     app.router.add_get('/badge', badge_handler)
     app.router.add_get('/career', career_handler)
-    app.router.add_get('/jolly', jolly_handler)
     app.router.add_get('/mental-health', mental_health_handler)
     app.router.add_get('/detox', detox_handler)
     app.router.add_get('/time-management', time_management_handler)
