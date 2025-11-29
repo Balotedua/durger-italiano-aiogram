@@ -4,6 +4,8 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
+from colors import get_module_color
+
 
 def get_base_template(page_title, page_content, active_page="home", sub_nav=None):
     """
@@ -15,6 +17,9 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
         active_page: Pagina attiva nel menù
         sub_nav: Lista di dict per sub-navbar es: [{'url': '/finance/add', 'label': 'Aggiungi', 'icon': '➕', 'active': True}]
     """
+    
+    # Get active module color
+    active_color = get_module_color(active_page)
 
     # Sub-navbar HTML (se presente)
     sub_nav_html = ""
@@ -55,6 +60,8 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
       --gold-glow: rgba(212,175,55,0.3);
       --text: #ffffff;
       --text-dim: rgba(255,255,255,0.65);
+      --active-color: {active_color};
+      --active-glow: {active_color}30;
     }}
 
     * {{ margin:0; padding:0; box-sizing:border-box; }}
@@ -98,8 +105,8 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
     }}
 
     .menu-toggle:hover {{
-      background: rgba(212,175,55,0.25);
-      border-color: var(--gold);
+      background: var(--active-glow);
+      border-color: var(--active-color);
       transform: scale(1.05);
     }}
 
@@ -132,8 +139,8 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
     }}
 
     .menu-toggle.active {{
-      background: rgba(212,175,55,0.25);
-      border-color: var(--gold-light);
+      background: var(--active-glow);
+      border-color: var(--active-color);
     }}
 
     .menu-toggle.active span {{
@@ -142,12 +149,12 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
 
     .menu-toggle.active span::before {{
       transform: rotate(45deg) translate(5px, 5px);
-      background: var(--gold-light);
+      background: var(--active-color);
     }}
 
     .menu-toggle.active span::after {{
       transform: rotate(-45deg) translate(5px, -5px);
-      background: var(--gold-light);
+      background: var(--active-color);
     }}
 
     /* DRAWER LUSSO */
@@ -185,16 +192,16 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
     }}
 
     .drawer-item:hover {{
-      background: rgba(212,175,55,0.1);
-      color: var(--gold-light);
+      background: var(--active-glow);
+      color: var(--active-color);
       padding-left: 36px;
-      border-left-color: var(--gold);
+      border-left-color: var(--active-color);
     }}
 
     .drawer-item.active {{
-      background: rgba(212,175,55,0.15);
-      color: var(--gold);
-      border-left-color: var(--gold);
+      background: var(--active-glow);
+      color: var(--active-color);
+      border-left-color: var(--active-color);
       font-weight: 700;
     }}
 
@@ -278,15 +285,15 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
     }}
 
     .sub-nav-item:hover {{
-      background: rgba(212,175,55,0.1);
-      border-color: var(--gold);
-      color: var(--gold-light);
+      background: var(--active-glow);
+      border-color: var(--active-color);
+      color: var(--active-color);
     }}
 
     .sub-nav-item.active {{
-      background: linear-gradient(135deg, var(--gold), #b8972e);
+      background: linear-gradient(135deg, var(--active-color), var(--active-color));
       border-color: transparent;
-      color: black;
+      color: white;
       font-weight: 700;
     }}
 
@@ -312,7 +319,7 @@ def get_base_template(page_title, page_content, active_page="home", sub_nav=None
       width: 56px;
       height: 56px;
       border: 3px solid rgba(212,175,55,0.2);
-      border-top-color: var(--gold);
+      border-top-color: var(--active-color);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }}
