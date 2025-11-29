@@ -6,7 +6,7 @@ Centralized color management for the application
 COLOR_PALETTE = {
     'primary': '#dc2626',
     'secondary': '#8b5cf6',
-    'success': '#10b981',
+    'success': '#dc2626',
     'warning': '#f59e0b',
     'danger': '#ef4444',
     'info': '#3b82f6',
