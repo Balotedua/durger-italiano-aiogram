@@ -23,36 +23,38 @@ class Config:
         # ... altri items esistenti
     ]
 
+from colors import get_module_color
+
     # 🆕 NUOVA CONFIGURAZIONE MODULI
     MODULES = {
         'home': {
             'name': 'Assistente AI',
             'icon': '🤖',
-            'color': '#6366f1',
+            'color': get_module_color('home'),
             'path': '/'
         },
         'finance': {
             'name': 'Finanza',
             'icon': '💰',
-            'color': '#10b981',
+            'color': get_module_color('finance'),
             'path': '/finance'
         },
         'psychology': {
             'name': 'Psicologia',
             'icon': '🧠',
-            'color': '#8b5cf6',
+            'color': get_module_color('psychology'),
             'path': '/psychology'
         },
         'fitness': {
             'name': 'Fitness',
             'icon': '💪',
-            'color': '#ec4899',
+            'color': get_module_color('fitness'),
             'path': '/fitness'
         },
         'durger_king': {
             'name': 'Durger King',
             'icon': '🍔',
-            'color': '#f59e0b',
+            'color': get_module_color('durger_king'),
             'path': '/menu'
         }
     }
