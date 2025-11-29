@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from colors import get_module_color
 
 load_dotenv()
 
@@ -22,8 +23,6 @@ class Config:
         },
         # ... altri items esistenti
     ]
-
-from colors import get_module_color
 
     # 🆕 NUOVA CONFIGURAZIONE MODULI
     MODULES = {
