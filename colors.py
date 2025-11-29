@@ -4,7 +4,7 @@ Centralized color management for the application
 
 # Color palette for different sections
 COLOR_PALETTE = {
-    'primary': '#6366f1',
+    'primary': '#dc2626',
     'secondary': '#8b5cf6',
     'success': '#10b981',
     'warning': '#f59e0b',
