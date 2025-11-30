@@ -359,30 +359,30 @@ def generate_home_page():
 
     <script>
         // Crea particelle oro animate
-        function createGoldParticles() {
-            for (let i = 0; i < 15; i++) {
+        function createGoldParticles() {{
+            for (let i = 0; i < 15; i++) {{
                 const particle = document.createElement('div');
                 particle.className = 'gold-particle';
                 particle.style.left = Math.random() * 100 + '%';
                 particle.style.animationDuration = (Math.random() * 8 + 6) + 's';
                 particle.style.animationDelay = Math.random() * 5 + 's';
                 document.body.appendChild(particle);
-            }
-        }
+            }}
+        }}
 
         createGoldParticles();
 
         // Haptic feedback premium
-        document.querySelectorAll('.premium-card').forEach(card => {
-            card.addEventListener('click', function(e) {
+        document.querySelectorAll('.premium-card').forEach(card => {{
+            card.addEventListener('click', function(e) {{
                 e.preventDefault();
                 Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
 
-                setTimeout(() => {
+                setTimeout(() => {{
                     window.location.href = this.getAttribute('href');
-                }, 300);
-            });
-        });
+                }}, 300);
+            }});
+        }});
     </script>
     """
     return get_base_template("Home", content, "home")

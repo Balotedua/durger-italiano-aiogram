@@ -71,12 +71,12 @@ def generate_finance_home():
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: {PREMIUM_THEME['gold_light']};
+            color: {GOLD_LIGHT};
             opacity: 0.9;
         }}
 
         .subnav-item.active .subnav-label {{
-            color: {PREMIUM_THEME['gold']};
+            color: {GOLD};
             font-weight: 700;
         }}
 
@@ -101,7 +101,7 @@ def generate_finance_home():
             font-family: 'Playfair Display', serif;
             font-size: 42px;
             font-weight: 900;
-            background: linear-gradient(135deg, {PREMIUM_THEME['gold_light']}, {PREMIUM_THEME['gold']}, {PREMIUM_THEME['gold_dark']});
+            background: linear-gradient(135deg, {GOLD_LIGHT}, {GOLD}, {GOLD_DARK});
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
@@ -110,7 +110,7 @@ def generate_finance_home():
 
         .tagline {{
             font-size: 15px;
-            color: {PREMIUM_THEME['gold_light']};
+            color: {GOLD_LIGHT};
             letter-spacing: 4px;
             text-transform: uppercase;
             opacity: 0.9;
@@ -119,13 +119,13 @@ def generate_finance_home():
         .divider {{
             width: 100px;
             height: 2px;
-            background: linear-gradient(90deg, transparent, {PREMIUM_THEME['gold']}, transparent);
+            background: linear-gradient(90deg, transparent, {GOLD}, transparent);
             margin: 32px auto;
         }}
 
         /* Balance Card */
         .balance-card {{
-            background: linear-gradient(135deg, {PREMIUM_THEME['black_light']}, rgba(212,175,55,0.15));
+            background: linear-gradient(135deg, {BG_LIGHT}, rgba(212,175,55,0.15));
             border: 1px solid rgba(212,175,55,0.3);
             border-radius: 28px;
             padding: 40px 32px;
@@ -136,7 +136,7 @@ def generate_finance_home():
 
         .balance-label {{
             font-size: 14px;
-            color: {PREMIUM_THEME['gold_light']};
+            color: {GOLD_LIGHT};
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 12px;
@@ -146,7 +146,7 @@ def generate_finance_home():
             font-family: 'Playfair Display', serif;
             font-size: 56px;
             font-weight: 900;
-            background: linear-gradient(135deg, {PREMIUM_THEME['gold_light']}, {PREMIUM_THEME['gold']});
+            background: linear-gradient(135deg, {GOLD_LIGHT}, {GOLD});
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 40px rgba(212,175,55,0.3);
@@ -161,7 +161,7 @@ def generate_finance_home():
 
         .premium-card {{
             position: relative;
-            background: {PREMIUM_THEME['black_light']};
+            background: {BG_LIGHT};
             border: 1px solid rgba(212,175,55,0.2);
             border-radius: 24px;
             padding: 28px;
@@ -226,24 +226,24 @@ def generate_finance_home():
 
     <script>
         // Particelle oro
-        function createGoldParticles() {
-            for (let i = 0; i < 18; i++) {
+        function createGoldParticles() {{
+            for (let i = 0; i < 18; i++) {{
                 const p = document.createElement('div');
                 p.className = 'gold-particle';
                 p.style.left = Math.random() * 100 + '%';
                 p.style.animationDuration = (Math.random() * 10 + 8) + 's';
                 p.style.animationDelay = Math.random() * 5 + 's';
                 document.body.appendChild(p);
-            }
-        }
+            }}
+        }}
         createGoldParticles();
 
         // Haptic su subnav e card
-        document.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', function(e) {
+        document.querySelectorAll('a').forEach(link => {{
+            link.addEventListener('click', function(e) {{
                 Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-            });
-        });
+            }});
+        }});
     </script>
     """
 
