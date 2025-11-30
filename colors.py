@@ -14,26 +14,27 @@ COLOR_PALETTE = {
     'dark': '#1E293B'       # Deep Slate for text
 }
 
-# Premium Emerald & White Theme - Organized by function
+# Minimal Premium Theme - High Contrast & Elegant
 PREMIUM_THEME = {
-    # Primary colors
-    'primary': '#10B981',        # Main emerald
-    'primary_light': '#34D399',  # Light emerald
-    'primary_dark': '#047857',   # Dark emerald
+    # Primary colors - Deep Navy for professionalism
+    'primary': '#1A365D',        # Deep Navy
+    'primary_light': '#2D3748',  # Dark Gray
+    'primary_dark': '#0F1A2A',   # Almost Black
     
-    # Background colors
-    'bg_main': '#F8FAFC',        # Main background
-    'bg_card': '#FFFFFF',        # Card background
-    'bg_light': '#F1F5F9',       # Light background
+    # Background colors - Clean whites
+    'bg_main': '#FFFFFF',        # Pure White
+    'bg_card': '#F7FAFC',        # Very Light Gray
+    'bg_light': '#EDF2F7',       # Light Gray
     
-    # Text colors
-    'text_primary': '#374151',   # Main text
-    'text_secondary': '#6B7280', # Secondary text
-    'text_accent': '#10B981',    # Accent text
+    # Text colors - High contrast
+    'text_primary': '#1A202C',   # Near Black
+    'text_secondary': '#4A5568', # Dark Gray
+    'text_accent': '#2B6CB0',    # Professional Blue
     
-    # Accent colors
-    'accent_gold': '#FBBF24',    # Gold accent
-    'accent_emerald': '#10B981', # Emerald accent
+    # Accent colors - Bold for CTAs
+    'accent_primary': '#2B6CB0', # Professional Blue
+    'accent_secondary': '#1A365D', # Navy
+    'border_light': '#E2E8F0',   # Light border
 }
 
 # Functional aliases for cleaner usage in templates
