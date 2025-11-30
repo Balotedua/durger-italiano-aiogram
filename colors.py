@@ -54,16 +54,19 @@ PRIMARY_LIGHT = PREMIUM_THEME['primary_light']
 PRIMARY_DARK = PREMIUM_THEME['primary_dark']
 
 # Accents
-ACCENT_GOLD = PREMIUM_THEME['accent_gold']
-ACCENT_EMERALD = PREMIUM_THEME['accent_emerald']
+ACCENT_PRIMARY = PREMIUM_THEME['accent_primary']
+ACCENT_SECONDARY = PREMIUM_THEME['accent_secondary']
+BORDER_LIGHT = PREMIUM_THEME['border_light']
 
 # Legacy aliases for backward compatibility
 EMERALD = PREMIUM_THEME['primary']
 EMERALD_LIGHT = PREMIUM_THEME['primary_light']
 EMERALD_DARK = PREMIUM_THEME['primary_dark']
-GOLD = PREMIUM_THEME['accent_gold']
+GOLD = PREMIUM_THEME['accent_primary']
 GOLD_LIGHT = PREMIUM_THEME['primary_light']
 GOLD_DARK = PREMIUM_THEME['primary_dark']
+ACCENT_GOLD = PREMIUM_THEME['accent_primary']
+ACCENT_EMERALD = PREMIUM_THEME['primary']
 
 # Module-specific colors
 MODULE_COLORS = {

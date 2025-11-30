@@ -10,7 +10,7 @@ from colors import (
     BG_DARK, BG_LIGHT, BG_LIGHTER, 
     TEXT, TEXT_ACCENT, TEXT_SECONDARY,
     PRIMARY, PRIMARY_LIGHT, PRIMARY_DARK,
-    ACCENT_GOLD, ACCENT_EMERALD
+    ACCENT_PRIMARY, BORDER_LIGHT
 )
 
 
@@ -58,7 +58,7 @@ def generate_fitness_home():
 
         .module-card {{
             background: """ + BG_LIGHT + """;
-            border: 1px solid """ + PREMIUM_THEME['border_light'] + """;
+            border: 1px solid """ + BORDER_LIGHT + """;
             border-radius: 12px;
             padding: 24px;
             text-decoration: none;
@@ -69,7 +69,7 @@ def generate_fitness_home():
         .module-card:hover {{
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            border-color: """ + PREMIUM_THEME['accent_primary'] + """;
+            border-color: """ + ACCENT_PRIMARY + """;
         }}
 
         .module-icon {{
@@ -104,7 +104,7 @@ def generate_fitness_home():
 
         .stat-card {{
             background: """ + BG_LIGHT + """;
-            border: 1px solid """ + PREMIUM_THEME['border_light'] + """;
+            border: 1px solid """ + BORDER_LIGHT + """;
             border-radius: 8px;
             padding: 20px;
             text-align: center;
@@ -178,27 +178,13 @@ def generate_fitness_home():
     </div>
 
     <script>
-        // Particelle smeraldo
-        function createEmeraldParticles() {
-            for (let i = 0; i < 20; i++) {
-                const p = document.createElement('div');
-                p.className = 'emerald-particle';
-                p.style.left = Math.random() * 100 + '%';
-                p.style.animationDuration = (Math.random() * 10 + 8) + 's';
-                p.style.animationDelay = Math.random() * 5 + 's';
-                document.body.appendChild(p);
-            }
-        }
-        createEmeraldParticles();
-
-        // Haptic feedback su tutto
-        document.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
-                setTimeout(() => {
-                    window.location.href = this.href;
-                }, 300);
+        // Smooth interactions
+        document.querySelectorAll('.module-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Optional: Add haptic feedback if in Telegram WebApp
+                if (window.Telegram && Telegram.WebApp && Telegram.WebApp.HapticFeedback) {
+                    Telegram.WebApp.HapticFeedback.impactOccurred('light');
+                }
             });
         });
     </script>
