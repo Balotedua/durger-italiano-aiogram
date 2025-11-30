@@ -395,5 +395,6 @@ def generate_home_page():
             });
         });
     </script>
-    """.format(css_vars=css_theme_vars)
+    """
+    content = content.replace('{css_vars}', css_theme_vars)
     return get_base_template("Home", content, "home")

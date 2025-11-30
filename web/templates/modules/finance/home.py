@@ -257,6 +257,7 @@ def generate_finance_home():
             });
         });
     </script>
-    """.format(css_vars=css_theme_vars)
+    """
+    content = content.replace('{css_vars}', css_theme_vars)
 
     return get_base_template("Finance Suite", content, "finance")
