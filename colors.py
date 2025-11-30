@@ -14,6 +14,16 @@ COLOR_PALETTE = {
     'dark': '#1E293B'       # Deep Slate for text
 }
 
+# Premium Theme (Black & Gold) for specific pages
+PREMIUM_THEME = {
+    'gold': '#D4AF37',
+    'gold_light': '#F4E5B2',
+    'gold_dark': '#9B7F1B',
+    'black': '#0A0A0A',
+    'black_light': '#1A1A1A',
+    'black_lighter': '#2A2A2A',
+}
+
 # Module-specific colors
 MODULE_COLORS = {
     'home': COLOR_PALETTE['primary'],
