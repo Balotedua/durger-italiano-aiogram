@@ -4,37 +4,37 @@ Centralized color management for the application
 
 # Color palette for different sections
 COLOR_PALETTE = {
-    'primary': '#6366F1',    # A vibrant Indigo
-    'secondary': '#64748B',  # Cool Slate Gray
-    'success': '#22C55E',    # Bright Green
-    'warning': '#F97316',    # Rich Orange
-    'danger': '#EF4444',     # Strong Red
-    'info': '#38BDF8',       # Clear Sky Blue
-    'light': '#F8FAFC',      # Very Light Slate for backgrounds
-    'dark': '#1E293B'       # Deep Slate for text
+    'primary': '#4F46E5',    # A sophisticated Indigo
+    'secondary': '#6B7280',  # A muted Gray
+    'success': '#10B981',    # A soft Emerald Green
+    'warning': '#F59E0B',    # A warm Amber
+    'danger': '#EF4444',     # A classic Red
+    'info': '#3B82F6',       # A vibrant Blue
+    'light': '#F9FAFB',      # Very light neutral for backgrounds
+    'dark': '#111827'        # Deep charcoal for text
 }
 
 # Minimal Premium Theme - High Contrast & Elegant
 PREMIUM_THEME = {
-    # Primary colors - Deep Navy for professionalism
-    'primary': '#1A365D',        # Deep Navy
-    'primary_light': '#2D3748',  # Dark Gray
-    'primary_dark': '#0F1A2A',   # Almost Black
-    
-    # Background colors - Clean whites
+    # Primary colors - Deep and rich for a professional feel
+    'primary': '#1F2937',        # Dark Slate (primary brand color)
+    'primary_light': '#374151',  # Medium Slate
+    'primary_dark': '#111827',   # Deep Charcoal
+
+    # Background colors - Clean and subtle
     'bg_main': '#FFFFFF',        # Pure White
-    'bg_card': '#F7FAFC',        # Very Light Gray
-    'bg_light': '#EDF2F7',       # Light Gray
+    'bg_card': '#F9FAFB',        # Off-White (subtle contrast for cards)
+    'bg_light': '#E5E7EB',       # Light Gray (for subtle sections/dividers)
     
-    # Text colors - High contrast
-    'text_primary': '#1A202C',   # Near Black
-    'text_secondary': '#4A5568', # Dark Gray
-    'text_accent': '#2B6CB0',    # Professional Blue
+    # Text colors - High contrast for readability
+    'text_primary': '#1F2937',   # Dark Slate
+    'text_secondary': '#6B7280', # Muted Gray
+    'text_accent': '#4F46E5',    # Sophisticated Indigo (for links/highlights)
     
-    # Accent colors - Bold for CTAs
-    'accent_primary': '#2B6CB0', # Professional Blue
-    'accent_secondary': '#1A365D', # Navy
-    'border_light': '#E2E8F0',   # Light border
+    # Accent colors - Elegant and purposeful
+    'accent_primary': '#4F46E5', # Sophisticated Indigo (main accent)
+    'accent_secondary': '#1F2937', # Dark Slate (secondary accent, cohesive)
+    'border_light': '#D1D5DB',   # Light Silver (for subtle borders)
 }
 
 # Functional aliases for cleaner usage in templates
