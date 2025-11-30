@@ -17,11 +17,11 @@ COLOR_PALETTE = {
 # Premium Theme (Black & Gold) for specific pages
 PREMIUM_THEME = {
     'gold': '#D4AF37',
-    'gold_light': '#1E293B',
+    'gold_light': '#F4E5B2',
     'gold_dark': '#9B7F1B',
-    'black': '#1E293B',
+    'black': '#0A0A0A',
     'black_light': '#1A1A1A',
-    'black_lighter': '#1E293B',
+    'black_lighter': '#2A2A2A',
 }
 
 # Module-specific colors

@@ -12,30 +12,18 @@ from colors import PREMIUM_THEME
 def generate_finance_home():
     """Finance Suite - Ultra Premium Nero & Oro"""
 
-    css_theme_vars = f""":root {{
-            --gold: {PREMIUM_THEME['gold']};
-            --gold-light: {PREMIUM_THEME['gold_light']};
-            --gold-dark: {PREMIUM_THEME['gold_dark']};
-            --black: {PREMIUM_THEME['black']};
-            --black-light: {PREMIUM_THEME['black_light']};
-            --black-lighter: {PREMIUM_THEME['black_lighter']};
-            --white: #FFFFFF;
-    }}"""
-
-    content = """
+    content = f"""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap');
 
-        {css_vars}
-
-        body { background: var(--black) !important; }
-        .bg-gradient {
+        body {{ background: {PREMIUM_THEME['black']} !important; }}
+        .bg-gradient {{
             background: radial-gradient(circle at 20% 50%, rgba(212,175,55,0.15) 0%, transparent 50%),
                         radial-gradient(circle at 80% 50%, rgba(212,175,55,0.1) 0%, transparent 50%) !important;
-        }
+        }}
 
         /* Sub-Nav Premium Fissa */
-        .finance-subnav {
+        .finance-subnav {{
             position: sticky;
             top: 0;
             z-index: 100;
@@ -44,17 +32,17 @@ def generate_finance_home():
             border-bottom: 1px solid rgba(212,175,55,0.2);
             padding: 16px 20px 12px;
             margin-bottom: 32px;
-        }
+        }}
 
-        .subnav-items {
+        .subnav-items {{
             display: flex;
             justify-content: space-around;
             max-width: 500px;
             margin: 0 auto;
             gap: 8px;
-        }
+        }}
 
-        .subnav-item {
+        .subnav-item {{
             flex: 1;
             text-align: center;
             padding: 14px 8px;
@@ -63,117 +51,117 @@ def generate_finance_home():
             text-decoration: none;
             position: relative;
             overflow: hidden;
-        }
+        }}
 
-        .subnav-item.active {
+        .subnav-item.active {{
             background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.1));
             border: 1px solid rgba(212,175,55,0.4);
             box-shadow: 0 8px 32px rgba(212,175,55,0.2);
-        }
+        }}
 
-        .subnav-icon {
+        .subnav-icon {{
             font-size: 24px;
             margin-bottom: 6px;
             display: block;
-        }
+        }}
 
-        .subnav-label {
+        .subnav-label {{
             font-family: 'Inter', sans-serif;
             font-size: 11px;
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: var(--gold-light);
+            color: {PREMIUM_THEME['gold_light']};
             opacity: 0.9;
-        }
+        }}
 
-        .subnav-item.active .subnav-label {
-            color: var(--gold);
+        .subnav-item.active .subnav-label {{
+            color: {PREMIUM_THEME['gold']};
             font-weight: 700;
-        }
+        }}
 
         /* Header */
-        .premium-header {
+        .premium-header {{
             text-align: center;
             padding: 20px 20px 40px;
-        }
+        }}
 
-        .logo-icon {
+        .logo-icon {{
             font-size: 72px;
             filter: drop-shadow(0 8px 24px rgba(212,175,55,0.4));
             animation: float 6s ease-in-out infinite;
-        }
+        }}
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
+        @keyframes float {{
+            0%, 100% {{ transform: translateY(0); }}
+            50% {{ transform: translateY(-12px); }}
+        }}
 
-        .app-name {
+        .app-name {{
             font-family: 'Playfair Display', serif;
             font-size: 42px;
             font-weight: 900;
-            background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+            background: linear-gradient(135deg, {PREMIUM_THEME['gold_light']}, {PREMIUM_THEME['gold']}, {PREMIUM_THEME['gold_dark']});
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
             margin: 16px 0 8px;
-        }
+        }}
 
-        .tagline {
+        .tagline {{
             font-size: 15px;
-            color: var(--gold-light);
+            color: {PREMIUM_THEME['gold_light']};
             letter-spacing: 4px;
             text-transform: uppercase;
             opacity: 0.9;
-        }
+        }}
 
-        .divider {
+        .divider {{
             width: 100px;
             height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            background: linear-gradient(90deg, transparent, {PREMIUM_THEME['gold']}, transparent);
             margin: 32px auto;
-        }
+        }}
 
         /* Balance Card */
-        .balance-card {
-            background: linear-gradient(135deg, var(--black-light), rgba(212,175,55,0.15));
+        .balance-card {{
+            background: linear-gradient(135deg, {PREMIUM_THEME['black_light']}, rgba(212,175,55,0.15));
             border: 1px solid rgba(212,175,55,0.3);
             border-radius: 28px;
             padding: 40px 32px;
             text-align: center;
             margin: 0 20px 32px;
             box-shadow: 0 20px 60px rgba(212,175,55,0.2);
-        }
+        }}
 
-        .balance-label {
+        .balance-label {{
             font-size: 14px;
-            color: var(--gold-light);
+            color: {PREMIUM_THEME['gold_light']};
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 12px;
-        }
+        }}
 
-        .balance-amount {
+        .balance-amount {{
             font-family: 'Playfair Display', serif;
             font-size: 56px;
             font-weight: 900;
-            background: linear-gradient(135deg, var(--gold-light), var(--gold));
+            background: linear-gradient(135deg, {PREMIUM_THEME['gold_light']}, {PREMIUM_THEME['gold']});
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 40px rgba(212,175,55,0.3);
-        }
+        }}
 
         /* Quick Stats & Transactions */
-        .cards-container {
+        .cards-container {{
             max-width: 500px;
             margin: 0 auto;
             padding: 0 20px 40px;
-        }
+        }}
 
-        .premium-card {
+        .premium-card {{
             position: relative;
-            background: var(--black-light);
+            background: {PREMIUM_THEME['black_light']};
             border: 1px solid rgba(212,175,55,0.2);
             border-radius: 24px;
             padding: 28px;
@@ -183,18 +171,18 @@ def generate_finance_home():
             text-decoration: none;
             display: block;
             overflow: hidden;
-        }
+        }}
 
         /* Stessi effetti premium delle altre pagine */
-        .premium-card::before, .premium-card::after { /* ... stessi effetti ... */ }
-        .premium-card:active { transform: translateY(-4px) scale(1.02); box-shadow: 0 20px 60px rgba(212,175,55,0.3); }
-        .premium-card:active::after { opacity: 1; }
+        .premium-card::before, .premium-card::after {{ /* ... stessi effetti ... */ }}
+        .premium-card:active {{ transform: translateY(-4px) scale(1.02); box-shadow: 0 20px 60px rgba(212,175,55,0.3); }}
+        .premium-card:active::after {{ opacity: 1; }}
 
-        .transaction-amount.positive { color: #10b981; }
-        .transaction-amount.negative { color: #ef4444; }
+        .transaction-amount.positive {{ color: #10b981; }}
+        .transaction-amount.negative {{ color: #ef4444; }}
 
         /* Particles */
-        .gold-particle { /* ... stesso codice particles ... */ }
+        .gold-particle {{ /* ... stesso codice particles ... */ }}
     </style>
 
     <!-- Sub-Nav Premium -->
@@ -258,6 +246,5 @@ def generate_finance_home():
         });
     </script>
     """
-    content = content.replace('{css_vars}', css_theme_vars)
 
     return get_base_template("Finance Suite", content, "finance")
