@@ -1,20 +1,24 @@
 from web.templates.base import get_base_template
-from colors import BG_DARK, GOLD, GOLD_LIGHT, GOLD_DARK, BG_LIGHT, TEXT
+from colors import BG_MAIN, PRIMARY_ACCENT, PRIMARY_ACCENT_LIGHT, PRIMARY_ACCENT_DARK, BG_CARD, TEXT_PRIMARY
+from colors import get_css_variables # Importa questa funzione per ottenere le variabili CSS
 
 def generate_home_page():
     """Homepage ULTRA PREMIUM - Nero & Oro"""
+    css_variables = get_css_variables()
+
     content = f"""
     <style>
+        {css_variables} /* Inietta qui le variabili CSS */
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap');
 
-        /* Override base styles */
+        /* Override base styles e usa le nuove variabili */
         body {{
-            background: {BG_DARK} !important;
+            background: var(--color-bg-dark-900) !important; /* BG_MAIN */
         }}
 
         .bg-gradient {{
-            background: radial-gradient(circle at 20% 50%, rgba(212,175,55,0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 50%, rgba(212,175,55,0.1) 0%, transparent 50%) !important;
+            background: radial-gradient(circle at 20% 50%, rgba(187,38,73,0.15) 0%, transparent 50%), /* PRIMARY_ACCENT */
+                        radial-gradient(circle at 80% 50%, rgba(187,38,73,0.1) 0%, transparent 50%) !important; /* PRIMARY_ACCENT */
             opacity: 1 !important;
         }}
 
@@ -37,7 +41,7 @@ def generate_home_page():
 
         .logo-icon {{
             font-size: 72px;
-            filter: drop-shadow(0 8px 24px rgba(212,175,55,0.4));
+            filter: drop-shadow(0 8px 24px rgba(187,38,73,0.4)); /* PRIMARY_ACCENT */
             animation: float 6s ease-in-out infinite;
         }}
 
@@ -50,13 +54,13 @@ def generate_home_page():
             font-family: 'Playfair Display', serif;
             font-size: 42px;
             font-weight: 900;
-            background: linear-gradient(135deg, {GOLD_LIGHT}, {GOLD}, {GOLD_DARK});
+            background: linear-gradient(135deg, var(--color-accent-primary-400), var(--color-accent-primary-500), var(--color-accent-primary-600)); /* GOLD_LIGHT, GOLD, GOLD_DARK */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             letter-spacing: -1px;
             margin-bottom: 12px;
-            text-shadow: 0 0 40px rgba(212,175,55,0.3);
+            text-shadow: 0 0 40px rgba(187,38,73,0.3); /* PRIMARY_ACCENT */
             animation: fadeInUp 0.8s ease 0.2s backwards;
         }}
 
@@ -69,7 +73,7 @@ def generate_home_page():
             font-family: 'Inter', sans-serif;
             font-size: 15px;
             font-weight: 500;
-            color: {TEXT};
+            color: var(--color-text-light-100); /* TEXT_PRIMARY */
             letter-spacing: 4px;
             text-transform: uppercase;
             opacity: 0.9;
@@ -79,7 +83,7 @@ def generate_home_page():
         .divider {{
             width: 60px;
             height: 2px;
-            background: linear-gradient(90deg, transparent, {GOLD}, transparent);
+            background: linear-gradient(90deg, transparent, var(--color-accent-primary-500), transparent); /* GOLD */
             margin: 32px auto;
             animation: fadeInUp 0.8s ease 0.6s backwards;
         }}
@@ -93,8 +97,8 @@ def generate_home_page():
 
         .premium-card {{
             position: relative;
-            background: {BG_LIGHT};
-            border: 1px solid rgba(212,175,55,0.2);
+            background: var(--color-bg-dark-800); /* BG_CARD */
+            border: 1px solid rgba(187,38,73,0.2); /* PRIMARY_ACCENT */
             border-radius: 24px;
             padding: 32px 28px;
             margin-bottom: 20px;
@@ -118,7 +122,7 @@ def generate_home_page():
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(187,38,73,0.1), transparent); /* PRIMARY_ACCENT */
             transition: left 0.6s ease;
         }}
 
@@ -132,7 +136,7 @@ def generate_home_page():
             inset: 0;
             border-radius: 24px;
             padding: 1px;
-            background: linear-gradient(135deg, {GOLD}, transparent, {GOLD});
+            background: linear-gradient(135deg, var(--color-accent-primary-500), transparent, var(--color-accent-primary-500)); /* GOLD */
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
@@ -142,8 +146,8 @@ def generate_home_page():
 
         .premium-card:active {{
             transform: translateY(-4px) scale(1.02);
-            border-color: rgba(212,175,55,0.5);
-            box-shadow: 0 20px 60px rgba(212,175,55,0.3);
+            border-color: rgba(187,38,73,0.5); /* PRIMARY_ACCENT */
+            box-shadow: 0 20px 60px rgba(187,38,73,0.3); /* PRIMARY_ACCENT */
         }}
 
         .premium-card:active::after {{
@@ -160,8 +164,8 @@ def generate_home_page():
         .card-icon-container {{
             width: 64px;
             height: 64px;
-            background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
-            border: 1px solid rgba(212,175,55,0.3);
+            background: linear-gradient(135deg, rgba(187,38,73,0.15), rgba(187,38,73,0.05)); /* PRIMARY_ACCENT */
+            border: 1px solid rgba(187,38,73,0.3); /* PRIMARY_ACCENT */
             border-radius: 18px;
             display: flex;
             align-items: center;
@@ -172,13 +176,13 @@ def generate_home_page():
 
         .premium-card:active .card-icon-container {{
             transform: scale(1.1) rotate(5deg);
-            background: linear-gradient(135deg, rgba(212,175,55,0.25), rgba(212,175,55,0.15));
-            border-color: rgba(212,175,55,0.6);
+            background: linear-gradient(135deg, rgba(187,38,73,0.25), rgba(187,38,73,0.15)); /* PRIMARY_ACCENT */
+            border-color: rgba(187,38,73,0.6); /* PRIMARY_ACCENT */
         }}
 
         .card-icon {{
             font-size: 36px;
-            filter: drop-shadow(0 4px 12px rgba(212,175,55,0.3));
+            filter: drop-shadow(0 4px 12px rgba(187,38,73,0.3)); /* PRIMARY_ACCENT */
         }}
 
         .card-content {{
@@ -189,7 +193,7 @@ def generate_home_page():
             font-family: 'Playfair Display', serif;
             font-size: 24px;
             font-weight: 700;
-            color: {GOLD_LIGHT};
+            color: var(--color-accent-primary-400); /* PRIMARY_ACCENT_LIGHT */
             margin-bottom: 4px;
             letter-spacing: -0.5px;
         }}
@@ -198,7 +202,7 @@ def generate_home_page():
             font-family: 'Inter', sans-serif;
             font-size: 12px;
             font-weight: 500;
-            color: rgba(212,175,55,0.7);
+            color: rgba(255,255,255,0.7);
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }}
@@ -207,7 +211,7 @@ def generate_home_page():
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 400;
-            color: rgba(255,255,255,0.7);
+            color: var(--color-text-light-200); /* TEXT_SECONDARY */
             line-height: 1.6;
             margin-top: 12px;
         }}
@@ -218,7 +222,7 @@ def generate_home_page():
             top: 50%;
             transform: translateY(-50%);
             font-size: 24px;
-            color: {GOLD};
+            color: var(--color-accent-primary-500); /* PRIMARY_ACCENT */
             opacity: 0.5;
             transition: all 0.4s ease;
         }}
@@ -243,8 +247,9 @@ def generate_home_page():
         .footer-text {{
             font-family: 'Inter', sans-serif;
             font-size: 12px;
-            color: rgba(212,175,55,0.5);
+            color: var(--color-accent-primary-500); /* PRIMARY_ACCENT, con opacità ridotta per il footer */
             letter-spacing: 1px;
+            opacity: 0.5;
         }}
 
         /* Particles oro */
@@ -252,7 +257,7 @@ def generate_home_page():
             position: fixed;
             width: 3px;
             height: 3px;
-            background: {GOLD};
+            background: var(--color-accent-primary-500); /* PRIMARY_ACCENT */
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
@@ -294,7 +299,7 @@ def generate_home_page():
                     <div class="card-icon">🍕</div>
                 </div>
                 <div class="card-content">
-                    <div class="card-title">Gourmet Menu</div>
+                    <div class="card-title">Durger King</div>
                     <div class="card-subtitle">Italian Cuisine</div>
                 </div>
             </div>
