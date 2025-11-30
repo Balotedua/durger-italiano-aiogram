@@ -6,23 +6,26 @@ sys.path.insert(0, os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
 
 from web.templates.base import get_base_template
+from colors import PREMIUM_THEME
 
 
 def generate_fitness_home():
     """Physical Wellness Hub - Ultra Premium Nero & Oro con SubNav"""
 
+    css_theme_vars = f""":root {{
+            --gold: {PREMIUM_THEME['gold']};
+            --gold-light: {PREMIUM_THEME['gold_light']};
+            --gold-dark: {PREMIUM_THEME['gold_dark']};
+            --black: {PREMIUM_THEME['black']};
+            --black-light: {PREMIUM_THEME['black_light']};
+            --black-lighter: {PREMIUM_THEME['black_lighter']};
+    }}"""
+
     content = """
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap');
 
-        :root {
-            --gold: #D4AF37;
-            --gold-light: #F4E5B2;
-            --gold-dark: #9B7F1B;
-            --black: #0A0A0A;
-            --black-light: #1A1A1A;
-            --black-lighter: #2A2A2A;
-        }
+        {css_vars}
 
         body { background: var(--black) !important; }
         .bg-gradient {
@@ -325,6 +328,6 @@ def generate_fitness_home():
             });
         });
     </script>
-    """
+    """.format(css_vars=css_theme_vars)
 
     return get_base_template("Physical Wellness", content, "fitness")
