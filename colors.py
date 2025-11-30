@@ -16,10 +16,10 @@ COLOR_PALETTE = {
 
 # Premium Theme (Black & Gold) for specific pages
 PREMIUM_THEME = {
-    'gold': '#D4AF37',
-    'gold_light': '#F4E5B2',
-    'gold_dark': '#9B7F1B',
-    'black': '#0A0A0A',
+    'gold': '#FFD700',  # Oro più brillante
+    'gold_light': '#FFF8DC',
+    'gold_dark': '#B8860B',
+    'black': '#000000',  # Nero puro
     'black_light': '#1A1A1A',
     'black_lighter': '#2A2A2A',
 }
