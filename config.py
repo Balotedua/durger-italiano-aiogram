@@ -6,11 +6,11 @@ load_dotenv()
 
 class Config:
     # Bot (esistente)
-    BOT_TOKEN = os.getenv("BOT_TOKEN")
-    WEBHOOK_URL = os.getenv("WEBHOOK_URL", "https://web-production-670b4.up.railway.app")
-    WEBHOOK_PATH = "/webhook"
-    HOST = "0.0.0.0"
-    PORT = int(os.getenv("PORT", 8080))
+    BOT_TOKEN: str = os.getenv("BOT_TOKEN")  # type: ignore
+    WEBHOOK_URL: str = os.getenv("WEBHOOK_URL", "https://web-production-670b4.up.railway.app")
+    WEBHOOK_PATH: str = "/webhook"
+    HOST: str = "0.0.0.0"
+    PORT: int = int(os.getenv("PORT", 8080))
 
     # Menu Durger King (esistente)
     MENU_ITEMS = [
@@ -25,6 +25,11 @@ class Config:
     ]
 
     # 🆕 NUOVA CONFIGURAZIONE MODULI
+    # Descrizione della struttura di ogni modulo:
+    # - 'name': Nome visualizzato del modulo.
+    # - 'icon': Emoji o carattere unicode che rappresenta il modulo.
+    # - 'color': Colore associato al modulo, ottenuto da `get_module_color`.
+    # - 'path': Percorso URL associato al modulo.
     MODULES = {
         'home': {
             'name': 'Assistente AI',

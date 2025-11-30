@@ -8,7 +8,7 @@ from web.templates.base import get_base_template
 # Import modulo home
 from web.templates.modules.home.home import generate_home_page
 
-from web.templates.agent_ai import generate_agent_page
+from web.templates.modules.home.agent_ai import generate_agent_page
 
 # Import moduli finanza
 from web.templates.modules.finance.home import generate_finance_home
@@ -23,7 +23,7 @@ from web.templates.modules.fitness.workouts import generate_workouts_page
 def generate_menu_page():
     """Menu page"""
     try:
-        from web.templates.menu import generate_menu_html
+        from web.templates.modules.durger_king.menu import generate_menu_html
         return generate_menu_html()
     except ImportError:
         return get_base_template("Menu", "<p>Menu non disponibile</p>", "menu")

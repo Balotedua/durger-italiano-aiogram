@@ -1,105 +1,98 @@
 """
-Centralized color management for the application
+Centralized color management for the application with a premium, modern palette.
 """
 
-# Color palette for different sections
-COLOR_PALETTE = {
-    'primary': '#4F46E5',    # A sophisticated Indigo
-    'secondary': '#6B7280',  # A muted Gray
-    'success': '#10B981',    # A soft Emerald Green
-    'warning': '#F59E0B',    # A warm Amber
-    'danger': '#EF4444',     # A classic Red
-    'info': '#3B82F6',       # A vibrant Blue
-    'light': '#F9FAFB',      # Very light neutral for backgrounds
-    'dark': '#111827'        # Deep charcoal for text
+# Premium & Modern Color Palette
+# Designed for elegance, high contrast, and a contemporary feel.
+# Primarily optimized for a dark theme, but easily adaptable for light mode.
+THEME_COLORS = {
+    # --- Backgrounds (Dark Shades for Depth) ---
+    'bg_dark_900': '#1A1A2E',  # Deep Indigo/Navy - Primary background
+    'bg_dark_800': '#232946',  # Dark Blue-Gray - Secondary background (cards, sections)
+    'bg_dark_700': '#2E3250',  # Medium Blue-Gray - Tertiary background (input fields, hover states)
+    'bg_dark_600': '#41476B', # Slightly lighter for subtle variations
+
+    # --- Text Colors (High Readability) ---
+    'text_light_100': '#E0E0E0',  # Off-White - Primary text
+    'text_light_200': '#A0A0B0',  # Light Gray - Secondary text, muted info
+    'text_light_300': '#7D7D9A',  # Muted Gray - Tertiary text, placeholders
+
+    # --- Primary Accent (Vibrant & Distinct) ---
+    'accent_primary_500': '#BB2649', # Rich Rose/Berry - Main interactive element color
+    'accent_primary_400': '#D43C60', # Lighter accent for hover/active states
+    'accent_primary_600': '#A51F3D', # Darker accent for pressed/stronger emphasis
+
+    # --- Secondary & Status Accents ---
+    'accent_secondary_500': '#6B5B95', # Muted Violet - Secondary interactive element, subtle emphasis
+    'accent_success': '#28B463', # Emerald Green - Success messages, positive indicators
+    'accent_danger': '#E74C3C',  # Vibrant Red - Error messages, warnings
+    'accent_warning': '#F4D03F', # Golden Yellow - Warnings, important alerts
+    'accent_info': '#3498DB',    # Bright Blue - Informational messages, highlights
+
+    # --- Borders & Dividers ---
+    'border_dark': '#3A3F5B',    # Dark Gray-Blue - Subtle separators
+    'border_light': '#555A7B',   # Lighter Gray-Blue - Stronger separators
 }
 
-# Minimal Premium Theme - High Contrast & Elegant
-PREMIUM_THEME = {
-    # Primary colors - Deep and rich for a professional feel
-    'primary': '#1F2937',        # Dark Slate (primary brand color)
-    'primary_light': '#374151',  # Medium Slate
-    'primary_dark': '#111827',   # Deep Charcoal
-
-    # Background colors - Clean and subtle
-    'bg_main': '#FFFFFF',        # Pure White
-    'bg_card': '#F9FAFB',        # Off-White (subtle contrast for cards)
-    'bg_light': '#E5E7EB',       # Light Gray (for subtle sections/dividers)
-    
-    # Text colors - High contrast for readability
-    'text_primary': '#1F2937',   # Dark Slate
-    'text_secondary': '#6B7280', # Muted Gray
-    'text_accent': '#4F46E5',    # Sophisticated Indigo (for links/highlights)
-    
-    # Accent colors - Elegant and purposeful
-    'accent_primary': '#4F46E5', # Sophisticated Indigo (main accent)
-    'accent_secondary': '#1F2937', # Dark Slate (secondary accent, cohesive)
-    'border_light': '#D1D5DB',   # Light Silver (for subtle borders)
-}
-
-# Functional aliases for cleaner usage in templates
+# Aliases for easier access and common usage across the application
 # Backgrounds
-BG_DARK = PREMIUM_THEME['bg_main']
-BG_LIGHT = PREMIUM_THEME['bg_card']
-BG_LIGHTER = PREMIUM_THEME['bg_light']
+BG_MAIN = THEME_COLORS['bg_dark_900']
+BG_CARD = THEME_COLORS['bg_dark_800']
+BG_SECONDARY = THEME_COLORS['bg_dark_700']
+BG_INPUT = THEME_COLORS['bg_dark_700'] # Often same as secondary
 
 # Text
-TEXT = PREMIUM_THEME['text_primary']
-TEXT_SECONDARY = PREMIUM_THEME['text_secondary']
-TEXT_ACCENT = PREMIUM_THEME['text_accent']
-
-# Primary colors
-PRIMARY = PREMIUM_THEME['primary']
-PRIMARY_LIGHT = PREMIUM_THEME['primary_light']
-PRIMARY_DARK = PREMIUM_THEME['primary_dark']
+TEXT_PRIMARY = THEME_COLORS['text_light_100']
+TEXT_SECONDARY = THEME_COLORS['text_light_200']
+TEXT_MUTED = THEME_COLORS['text_light_300']
 
 # Accents
-ACCENT_PRIMARY = PREMIUM_THEME['accent_primary']
-ACCENT_SECONDARY = PREMIUM_THEME['accent_secondary']
-BORDER_LIGHT = PREMIUM_THEME['border_light']
+PRIMARY_ACCENT = THEME_COLORS['accent_primary_500']
+PRIMARY_ACCENT_LIGHT = THEME_COLORS['accent_primary_400']
+PRIMARY_ACCENT_DARK = THEME_COLORS['accent_primary_600']
 
-# Legacy aliases for backward compatibility
-EMERALD = PREMIUM_THEME['primary']
-EMERALD_LIGHT = PREMIUM_THEME['primary_light']
-EMERALD_DARK = PREMIUM_THEME['primary_dark']
-GOLD = PREMIUM_THEME['accent_primary']
-GOLD_LIGHT = PREMIUM_THEME['primary_light']
-GOLD_DARK = PREMIUM_THEME['primary_dark']
-ACCENT_GOLD = PREMIUM_THEME['accent_primary']
-ACCENT_EMERALD = PREMIUM_THEME['primary']
+SECONDARY_ACCENT = THEME_COLORS['accent_secondary_500']
 
-# Module-specific colors
+SUCCESS = THEME_COLORS['accent_success']
+DANGER = THEME_COLORS['accent_danger']
+WARNING = THEME_COLORS['accent_warning']
+INFO = THEME_COLORS['accent_info']
+
+BORDER_DEFAULT = THEME_COLORS['border_dark']
+
+# Module-specific colors (using new palette)
 MODULE_COLORS = {
-    'home': COLOR_PALETTE['primary'],
-    'finance': COLOR_PALETTE['success'],
-    'psychology': COLOR_PALETTE['secondary'],
-    'fitness': COLOR_PALETTE['danger'],
-    'durger_king': COLOR_PALETTE['warning'],
-    'dashboard': COLOR_PALETTE['info'],
-    'badge': COLOR_PALETTE['warning'],
-    'career': COLOR_PALETTE['primary'],
-    'mental_health': COLOR_PALETTE['secondary'],
-    'detox': COLOR_PALETTE['success'],
-    'time_management': COLOR_PALETTE['info'],
-    'news': COLOR_PALETTE['warning'],
-    'notes': COLOR_PALETTE['dark']
+    'home': PRIMARY_ACCENT,
+    'finance': SUCCESS,
+    'psychology': SECONDARY_ACCENT,
+    'fitness': DANGER,
+    'durger_king': WARNING,
+    'dashboard': INFO,
+    'badge': WARNING,
+    'career': PRIMARY_ACCENT,
+    'mental_health': SECONDARY_ACCENT,
+    'detox': SUCCESS,
+    'time_management': INFO,
+    'news': WARNING,
+    'notes': BG_DARK_700 # Example: using a background color for a module accent
 }
 
-def get_module_color(module_name):
-    """Get color for a specific module"""
-    return MODULE_COLORS.get(module_name, COLOR_PALETTE['primary'])
+def get_module_color(module_name: str) -> str:
+    """Get color for a specific module."""
+    return MODULE_COLORS.get(module_name, PRIMARY_ACCENT)
 
-def get_color_palette():
-    """Get the complete color palette"""
-    return COLOR_PALETTE
+def get_theme_colors() -> dict:
+    """Get the complete theme color palette."""
+    return THEME_COLORS
 
-def update_module_color(module_name, color):
-    """Update color for a specific module"""
+def update_module_color(module_name: str, color: str):
+    """Update color for a specific module."""
     MODULE_COLORS[module_name] = color
 
-def get_css_variables():
-    """Generate CSS variables for the color palette"""
+def get_css_variables() -> str:
+    """Generate CSS variables for the theme color palette."""
     css_vars = []
-    for name, color in COLOR_PALETTE.items():
-        css_vars.append(f'--color-{name}: {color};')
+    for name, color in THEME_COLORS.items():
+        css_vars.append(f'--color-{name.replace("_", "-")}: {color};')
     return '\n'.join(css_vars)
+

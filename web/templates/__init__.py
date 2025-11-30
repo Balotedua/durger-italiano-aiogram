@@ -3,5 +3,5 @@
 Templates per WebApp multi-page
 """
 
-from web.templates.menu import generate_menu_html
+from web.templates.modules.durger_king.menu import generate_menu_html
 __all__ = ['generate_menu_html']
