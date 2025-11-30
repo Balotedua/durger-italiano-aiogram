@@ -191,7 +191,7 @@ def generate_fitness_home():
 
         /* Particles */
         .emerald-particle {{
-            position: fixed; width: 3px; height: 3px; background: """ + EMERALD + """; border-radius: 50%;
+            position: fixed; width: 3px; height: 3px; background: """ + PRIMARY + """; border-radius: 50%;
             pointer-events: none; z-index: 0; opacity: 0;
             animation: particle-float linear infinite;
         }}
