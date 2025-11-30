@@ -14,24 +14,29 @@ COLOR_PALETTE = {
     'dark': '#1E293B'       # Deep Slate for text
 }
 
-# Premium Theme (Black & Gold) for specific pages
+# Premium Emerald & White Theme
 PREMIUM_THEME = {
-    'gold': '#FFD700',  # Oro più brillante
-    'gold_light': '#FFF8DC',  # Cornsilk - oro chiaro
-    'gold_dark': '#B8860B',   # DarkGoldenrod
-    'black': '#000000',       # Nero puro
-    'black_light': '#1A1A1A', # Nero leggermente più chiaro
-    'black_lighter': '#2A2A2A', # Nero ancora più chiaro
+    'emerald': '#10B981',        # Smeraldo vibrante
+    'emerald_light': '#34D399',  # Smeraldo chiaro
+    'emerald_dark': '#047857',   # Smeraldo scuro
+    'white': '#FFFFFF',          # Bianco puro
+    'white_light': '#F8FAFC',    # Bianco leggermente caldo
+    'white_lighter': '#F1F5F9',  # Bianco ancora più chiaro
+    'gold': '#FBBF24',           # Oro più caldo e moderno
+    'charcoal': '#374151',       # Grigio antracite per il testo
 }
 
 # Aliases for cleaner usage in templates
-BG_DARK = PREMIUM_THEME['black']
+BG_DARK = PREMIUM_THEME['white_light']
 GOLD = PREMIUM_THEME['gold']
-GOLD_LIGHT = PREMIUM_THEME['gold_light']
-GOLD_DARK = PREMIUM_THEME['gold_dark']
-BG_LIGHT = PREMIUM_THEME['black_light']
-BG_LIGHTER = PREMIUM_THEME['black_lighter']
-TEXT = PREMIUM_THEME['gold_light']
+GOLD_LIGHT = PREMIUM_THEME['emerald_light']
+GOLD_DARK = PREMIUM_THEME['emerald_dark']
+BG_LIGHT = PREMIUM_THEME['white']
+BG_LIGHTER = PREMIUM_THEME['white_lighter']
+TEXT = PREMIUM_THEME['charcoal']
+EMERALD = PREMIUM_THEME['emerald']
+EMERALD_LIGHT = PREMIUM_THEME['emerald_light']
+EMERALD_DARK = PREMIUM_THEME['emerald_dark']
 
 # Module-specific colors
 MODULE_COLORS = {

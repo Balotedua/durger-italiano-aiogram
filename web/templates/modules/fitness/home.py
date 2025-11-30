@@ -16,10 +16,10 @@ def generate_fitness_home():
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap');
 
-        body {{ background: """ + BG_DARK + """ !important; }}
+        body {{ background: """ + BG_DARK + """ !important; color: """ + TEXT + """ !important; }}
         .bg-gradient {{
-            background: radial-gradient(circle at 20% 50%, rgba(255,215,0,0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 50%, rgba(255,215,0,0.1) 0%, transparent 50%) !important;
+            background: radial-gradient(circle at 20% 50%, rgba(16,185,129,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, rgba(16,185,129,0.05) 0%, transparent 50%) !important;
         }}
 
         /* SUBNAV FISSA PREMIUM */
@@ -27,9 +27,9 @@ def generate_fitness_home():
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(10,10,10,0.95);
+            background: rgba(248,250,252,0.95);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(212,175,55,0.2);
+            border-bottom: 1px solid rgba(16,185,129,0.2);
             padding: 16px 20px 12px;
             margin-bottom: 32px;
         }}
@@ -54,9 +54,9 @@ def generate_fitness_home():
         }}
 
         .subnav-item.active {{
-            background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.1));
-            border: 1px solid rgba(255,215,0,0.4);
-            box-shadow: 0 8px 32px rgba(255,215,0,0.2);
+            background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.05));
+            border: 1px solid rgba(16,185,129,0.3);
+            box-shadow: 0 8px 32px rgba(16,185,129,0.1);
         }}
 
         .subnav-icon {{
@@ -71,12 +71,12 @@ def generate_fitness_home():
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: """ + GOLD_LIGHT + """;
+            color: """ + EMERALD + """;
             opacity: 0.9;
         }}
 
         .subnav-item.active .subnav-label {{
-            color: """ + GOLD + """;
+            color: """ + EMERALD_DARK + """;
             font-weight: 700;
         }}
 
@@ -88,7 +88,7 @@ def generate_fitness_home():
 
         .logo-icon {{
             font-size: 72px;
-            filter: drop-shadow(0 8px 24px rgba(255,215,0,0.4));
+            filter: drop-shadow(0 8px 24px rgba(16,185,129,0.3));
             animation: float 6s ease-in-out infinite;
         }}
 
@@ -101,17 +101,17 @@ def generate_fitness_home():
             font-family: 'Playfair Display', serif;
             font-size: 42px;
             font-weight: 900;
-            background: linear-gradient(135deg, """ + GOLD_LIGHT + """, """ + GOLD + """, """ + GOLD_DARK + """);
+            background: linear-gradient(135deg, """ + EMERALD + """, """ + EMERALD_DARK + """, """ + EMERALD_LIGHT + """);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
             margin: 16px 0 8px;
-            text-shadow: 0 0 40px rgba(255,215,0,0.3);
+            text-shadow: 0 0 40px rgba(16,185,129,0.2);
         }}
 
         .tagline {{
             font-size: 15px;
-            color: """ + GOLD_LIGHT + """;
+            color: """ + EMERALD + """;
             letter-spacing: 4px;
             text-transform: uppercase;
             opacity: 0.9;
@@ -120,7 +120,7 @@ def generate_fitness_home():
         .divider {{
             width: 100px;
             height: 2px;
-            background: linear-gradient(90deg, transparent, """ + GOLD + """, transparent);
+            background: linear-gradient(90deg, transparent, """ + EMERALD + """, transparent);
             margin: 32px auto;
         }}
 
@@ -131,11 +131,11 @@ def generate_fitness_home():
             padding: 0 20px 60px;
         }}
 
-        /* Premium Cards (identiche alle altre sezioni) */
+        /* Premium Cards */
         .premium-card {{
             position: relative;
             background: """ + BG_LIGHT + """;
-            border: 1px solid rgba(255,215,0,0.2);
+            border: 1px solid rgba(16,185,129,0.15);
             border-radius: 24px;
             padding: 32px 28px;
             margin-bottom: 20px;
@@ -144,55 +144,56 @@ def generate_fitness_home():
             text-decoration: none;
             display: block;
             overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }}
 
         .premium-card::before {{
             content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(16,185,129,0.08), transparent);
             transition: left 0.6s ease;
         }}
         .premium-card:active::before {{ left: 100%; }}
 
         .premium-card::after {{
             content: ''; position: absolute; inset: 0; border-radius: 24px; padding: 1px;
-            background: linear-gradient(135deg, """ + GOLD + """, transparent, """ + GOLD + """);
+            background: linear-gradient(135deg, """ + EMERALD + """, transparent, """ + EMERALD + """);
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor; mask-composite: exclude;
             opacity: 0; transition: opacity 0.4s;
         }}
-        .premium-card:active {{ transform: translateY(-4px) scale(1.02); border-color: rgba(255,215,0,0.5); box-shadow: 0 20px 60px rgba(255,215,0,0.3); }}
+        .premium-card:active {{ transform: translateY(-4px) scale(1.02); border-color: rgba(16,185,129,0.4); box-shadow: 0 20px 60px rgba(16,185,129,0.15); }}
         .premium-card:active::after {{ opacity: 1; }}
 
         .card-header {{ display: flex; align-items: center; gap: 20px; margin-bottom: 16px; }}
         .card-icon-container {{
             width: 64px; height: 64px;
-            background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05));
-            border: 1px solid rgba(255,215,0,0.3);
+            background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.03));
+            border: 1px solid rgba(16,185,129,0.2);
             border-radius: 18px;
             display: flex; align-items: center; justify-content: center;
             transition: all 0.4s ease;
         }}
         .premium-card:active .card-icon-container {{
             transform: scale(1.1) rotate(5deg);
-            background: linear-gradient(135deg, rgba(255,215,0,0.25), rgba(255,215,0,0.15));
+            background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.1));
         }}
-        .card-icon {{ font-size: 36px; filter: drop-shadow(0 4px 12px rgba(255,215,0,0.3)); }}
-        .card-title {{ font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: """ + GOLD_LIGHT + """; margin-bottom: 4px; }}
-        .card-subtitle {{ font-size: 12px; color: rgba(255,215,0,0.7); text-transform: uppercase; letter-spacing: 1.5px; }}
-        .card-description {{ font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.6; margin-top: 12px; }}
-        .card-arrow {{ position: absolute; right: 24px; top: 50%; transform: translateY(-50%); font-size: 24px; color: """ + GOLD + """; opacity: 0.5; transition: all 0.4s ease; }}
+        .card-icon {{ font-size: 36px; filter: drop-shadow(0 4px 12px rgba(16,185,129,0.2)); }}
+        .card-title {{ font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: """ + EMERALD_DARK + """; margin-bottom: 4px; }}
+        .card-subtitle {{ font-size: 12px; color: rgba(16,185,129,0.7); text-transform: uppercase; letter-spacing: 1.5px; }}
+        .card-description {{ font-size: 14px; color: """ + TEXT + """; opacity: 0.8; line-height: 1.6; margin-top: 12px; }}
+        .card-arrow {{ position: absolute; right: 24px; top: 50%; transform: translateY(-50%); font-size: 24px; color: """ + EMERALD + """; opacity: 0.5; transition: all 0.4s ease; }}
         .premium-card:active .card-arrow {{ opacity: 1; transform: translateY(-50%) translateX(8px); }}
 
         /* Particles */
-        .gold-particle {{
-            position: fixed; width: 3px; height: 3px; background: """ + GOLD + """; border-radius: 50%;
+        .emerald-particle {{
+            position: fixed; width: 3px; height: 3px; background: """ + EMERALD + """; border-radius: 50%;
             pointer-events: none; z-index: 0; opacity: 0;
             animation: particle-float linear infinite;
         }}
         @keyframes particle-float {{
             0% {{ opacity: 0; transform: translateY(100vh) scale(0); }}
-            10% {{ opacity: 0.8; }}
-            90% {{ opacity: 0.8; }}
+            10% {{ opacity: 0.6; }}
+            90% {{ opacity: 0.6; }}
             100% {{ opacity: 0; transform: translateY(-20vh) scale(1); }}
         }}
     </style>
@@ -293,18 +294,18 @@ def generate_fitness_home():
     </div>
 
     <script>
-        // Particelle dorate
-        function createGoldParticles() {
+        // Particelle smeraldo
+        function createEmeraldParticles() {
             for (let i = 0; i < 20; i++) {
                 const p = document.createElement('div');
-                p.className = 'gold-particle';
+                p.className = 'emerald-particle';
                 p.style.left = Math.random() * 100 + '%';
                 p.style.animationDuration = (Math.random() * 10 + 8) + 's';
                 p.style.animationDelay = Math.random() * 5 + 's';
                 document.body.appendChild(p);
             }
         }
-        createGoldParticles();
+        createEmeraldParticles();
 
         // Haptic feedback su tutto
         document.querySelectorAll('a').forEach(link => {
