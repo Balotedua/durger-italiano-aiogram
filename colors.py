@@ -4,14 +4,14 @@ Centralized color management for the application
 
 # Color palette for different sections
 COLOR_PALETTE = {
-    'primary': '#dc2626',
-    'secondary': '#dc2626',
-    'success': '#dc2626',
-    'warning': '#dc2626',
-    'danger': '#dc2626',
-    'info': '#dc2626',
-    'light': '#dc2626',
-    'dark': '#dc2626'
+    'primary': '#4F46E5',    # Indigo
+    'secondary': '#6B7280',  # Gray
+    'success': '#10B981',    # Emerald
+    'warning': '#F59E0B',    # Amber
+    'danger': '#EF4444',     # Red
+    'info': '#3B82F6',       # Blue
+    'light': '#F3F4F6',      # Lighter Gray
+    'dark': '#1F2937'       # Dark Gray
 }
 
 # Module-specific colors
