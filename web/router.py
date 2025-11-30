@@ -6,27 +6,22 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from aiohttp import web
 from web.templates.base import get_base_template
 # Import modulo home
-from web.templates.modules.home.home import generate_home_page
-
-from web.templates.modules.home.agent_ai import generate_agent_page
+from web.templates.modules.home import generate_home_page, generate_agent_page
 
 # Import moduli finanza
-from web.templates.modules.finance.home import generate_finance_home
-from web.templates.modules.finance.add_payment import generate_add_payment
+from web.templates.modules.finance import generate_finance_home, generate_add_payment
 
 # Import moduli fitness
-from web.templates.modules.fitness.home import generate_fitness_home
-from web.templates.modules.fitness.workouts import generate_workouts_page
+from web.templates.modules.fitness import generate_fitness_home, generate_workouts_page
 
 # ==== FUNZIONI DI GENERAZIONE PAGINE ====
 
+from web.templates.modules.durger_king import generate_menu_html
+
+
 def generate_menu_page():
     """Menu page"""
-    try:
-        from web.templates.modules.durger_king.menu import generate_menu_html
-        return generate_menu_html()
-    except ImportError:
-        return get_base_template("Menu", "<p>Menu non disponibile</p>", "menu")
+    return generate_menu_html()
 
 def generate_psychology_page():
     """Psychology placeholder"""
