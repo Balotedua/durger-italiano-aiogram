@@ -74,7 +74,7 @@ MODULE_COLORS = {
     'detox': SUCCESS,
     'time_management': INFO,
     'news': WARNING,
-    'notes': BG_DARK_700 # Example: using a background color for a module accent
+    'notes': BG_SECONDARY # Using an existing background alias
 }
 
 def get_module_color(module_name: str) -> str:
