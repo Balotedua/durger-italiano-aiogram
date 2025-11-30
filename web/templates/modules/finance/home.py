@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
 
 from web.templates.base import get_base_template
-from colors import PREMIUM_THEME
+from colors import BG_DARK, GOLD, GOLD_LIGHT, GOLD_DARK, BG_LIGHT, TEXT
 
 
 def generate_finance_home():
@@ -16,7 +16,7 @@ def generate_finance_home():
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap');
 
-        body {{ background: {PREMIUM_THEME['black']} !important; }}
+        body {{ background: {BG_DARK} !important; }}
         .bg-gradient {{
             background: radial-gradient(circle at 20% 50%, rgba(212,175,55,0.15) 0%, transparent 50%),
                         radial-gradient(circle at 80% 50%, rgba(212,175,55,0.1) 0%, transparent 50%) !important;

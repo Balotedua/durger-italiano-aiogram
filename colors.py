@@ -24,6 +24,15 @@ PREMIUM_THEME = {
     'black_lighter': '#2A2A2A',
 }
 
+# Aliases for cleaner usage in templates
+BG_DARK = PREMIUM_THEME['black']
+GOLD = PREMIUM_THEME['gold']
+GOLD_LIGHT = PREMIUM_THEME['gold_light']
+GOLD_DARK = PREMIUM_THEME['gold_dark']
+BG_LIGHT = PREMIUM_THEME['black_light']
+BG_LIGHTER = PREMIUM_THEME['black_lighter']
+TEXT = PREMIUM_THEME['gold_light']
+
 # Module-specific colors
 MODULE_COLORS = {
     'home': COLOR_PALETTE['primary'],

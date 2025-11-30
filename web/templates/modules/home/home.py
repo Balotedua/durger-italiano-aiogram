@@ -1,5 +1,5 @@
 from web.templates.base import get_base_template
-from colors import PREMIUM_THEME
+from colors import BG_DARK, GOLD, GOLD_LIGHT, GOLD_DARK, BG_LIGHT, TEXT
 
 def generate_home_page():
     """Homepage ULTRA PREMIUM - Nero & Oro"""
@@ -9,7 +9,7 @@ def generate_home_page():
 
         /* Override base styles */
         body {{
-            background: {PREMIUM_THEME['black']} !important;
+            background: {BG_DARK} !important;
         }}
 
         .bg-gradient {{
@@ -50,7 +50,7 @@ def generate_home_page():
             font-family: 'Playfair Display', serif;
             font-size: 42px;
             font-weight: 900;
-            background: linear-gradient(135deg, {PREMIUM_THEME['gold_light']}, {PREMIUM_THEME['gold']}, {PREMIUM_THEME['gold_dark']});
+            background: linear-gradient(135deg, {GOLD_LIGHT}, {GOLD}, {GOLD_DARK});
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -69,7 +69,7 @@ def generate_home_page():
             font-family: 'Inter', sans-serif;
             font-size: 15px;
             font-weight: 500;
-            color: {PREMIUM_THEME['gold_light']};
+            color: {TEXT};
             letter-spacing: 4px;
             text-transform: uppercase;
             opacity: 0.9;
@@ -79,7 +79,7 @@ def generate_home_page():
         .divider {{
             width: 60px;
             height: 2px;
-            background: linear-gradient(90deg, transparent, {PREMIUM_THEME['gold']}, transparent);
+            background: linear-gradient(90deg, transparent, {GOLD}, transparent);
             margin: 32px auto;
             animation: fadeInUp 0.8s ease 0.6s backwards;
         }}
@@ -93,7 +93,7 @@ def generate_home_page():
 
         .premium-card {{
             position: relative;
-            background: {PREMIUM_THEME['black_light']};
+            background: {BG_LIGHT};
             border: 1px solid rgba(212,175,55,0.2);
             border-radius: 24px;
             padding: 32px 28px;
@@ -132,7 +132,7 @@ def generate_home_page():
             inset: 0;
             border-radius: 24px;
             padding: 1px;
-            background: linear-gradient(135deg, {PREMIUM_THEME['gold']}, transparent, {PREMIUM_THEME['gold']});
+            background: linear-gradient(135deg, {GOLD}, transparent, {GOLD});
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
@@ -189,7 +189,7 @@ def generate_home_page():
             font-family: 'Playfair Display', serif;
             font-size: 24px;
             font-weight: 700;
-            color: {PREMIUM_THEME['gold_light']};
+            color: {GOLD_LIGHT};
             margin-bottom: 4px;
             letter-spacing: -0.5px;
         }}
@@ -218,7 +218,7 @@ def generate_home_page():
             top: 50%;
             transform: translateY(-50%);
             font-size: 24px;
-            color: {PREMIUM_THEME['gold']};
+            color: {GOLD};
             opacity: 0.5;
             transition: all 0.4s ease;
         }}
@@ -252,7 +252,7 @@ def generate_home_page():
             position: fixed;
             width: 3px;
             height: 3px;
-            background: {PREMIUM_THEME['gold']};
+            background: {GOLD};
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
