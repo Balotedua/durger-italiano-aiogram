@@ -6,7 +6,12 @@ sys.path.insert(0, os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
 
 from web.templates.base import get_base_template
-from colors import BG_DARK, GOLD, GOLD_LIGHT, GOLD_DARK, BG_LIGHT, BG_LIGHTER, TEXT, EMERALD, EMERALD_DARK, EMERALD_LIGHT
+from colors import (
+    BG_DARK, BG_LIGHT, BG_LIGHTER, 
+    TEXT, TEXT_ACCENT, TEXT_SECONDARY,
+    PRIMARY, PRIMARY_LIGHT, PRIMARY_DARK,
+    ACCENT_GOLD, ACCENT_EMERALD
+)
 
 
 def generate_fitness_home():
@@ -71,12 +76,12 @@ def generate_fitness_home():
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: """ + EMERALD + """;
+            color: """ + PRIMARY + """;
             opacity: 0.9;
         }}
 
         .subnav-item.active .subnav-label {{
-            color: """ + EMERALD_DARK + """;
+            color: """ + PRIMARY_DARK + """;
             font-weight: 700;
         }}
 
@@ -101,7 +106,7 @@ def generate_fitness_home():
             font-family: 'Playfair Display', serif;
             font-size: 42px;
             font-weight: 900;
-            background: linear-gradient(135deg, """ + EMERALD + """, """ + EMERALD_DARK + """, """ + EMERALD_LIGHT + """);
+            background: linear-gradient(135deg, """ + PRIMARY + """, """ + PRIMARY_DARK + """, """ + PRIMARY_LIGHT + """);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
@@ -111,7 +116,7 @@ def generate_fitness_home():
 
         .tagline {{
             font-size: 15px;
-            color: """ + EMERALD + """;
+            color: """ + PRIMARY + """;
             letter-spacing: 4px;
             text-transform: uppercase;
             opacity: 0.9;
@@ -120,7 +125,7 @@ def generate_fitness_home():
         .divider {{
             width: 100px;
             height: 2px;
-            background: linear-gradient(90deg, transparent, """ + EMERALD + """, transparent);
+            background: linear-gradient(90deg, transparent, """ + PRIMARY + """, transparent);
             margin: 32px auto;
         }}
 
@@ -156,7 +161,7 @@ def generate_fitness_home():
 
         .premium-card::after {{
             content: ''; position: absolute; inset: 0; border-radius: 24px; padding: 1px;
-            background: linear-gradient(135deg, """ + EMERALD + """, transparent, """ + EMERALD + """);
+            background: linear-gradient(135deg, """ + PRIMARY + """, transparent, """ + PRIMARY + """);
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor; mask-composite: exclude;
             opacity: 0; transition: opacity 0.4s;
@@ -178,10 +183,10 @@ def generate_fitness_home():
             background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.1));
         }}
         .card-icon {{ font-size: 36px; filter: drop-shadow(0 4px 12px rgba(16,185,129,0.2)); }}
-        .card-title {{ font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: """ + EMERALD_DARK + """; margin-bottom: 4px; }}
+        .card-title {{ font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: """ + PRIMARY_DARK + """; margin-bottom: 4px; }}
         .card-subtitle {{ font-size: 12px; color: rgba(16,185,129,0.7); text-transform: uppercase; letter-spacing: 1.5px; }}
         .card-description {{ font-size: 14px; color: """ + TEXT + """; opacity: 0.8; line-height: 1.6; margin-top: 12px; }}
-        .card-arrow {{ position: absolute; right: 24px; top: 50%; transform: translateY(-50%); font-size: 24px; color: """ + EMERALD + """; opacity: 0.5; transition: all 0.4s ease; }}
+        .card-arrow {{ position: absolute; right: 24px; top: 50%; transform: translateY(-50%); font-size: 24px; color: """ + PRIMARY + """; opacity: 0.5; transition: all 0.4s ease; }}
         .premium-card:active .card-arrow {{ opacity: 1; transform: translateY(-50%) translateX(8px); }}
 
         /* Particles */
