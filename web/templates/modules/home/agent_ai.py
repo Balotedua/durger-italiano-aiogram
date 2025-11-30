@@ -5,7 +5,7 @@ def generate_agent_page():
     # Ottieni le variabili CSS dalla nuova palette
     css_variables = get_css_variables()
 
-    content = f"""
+    content = """
     <style>
         {css_variables}
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -300,4 +300,4 @@ def generate_agent_page():
         }});
     </script>
     """
-    return get_base_template("Assistente AI", content, "agent")
+    return get_base_template("Assistente AI", content.format(css_variables=css_variables), "agent")
