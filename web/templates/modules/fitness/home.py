@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
 
 from web.templates.base import get_base_template
-from colors import BG_DARK, GOLD, GOLD_LIGHT, GOLD_DARK, BG_LIGHT, BG_LIGHTER, TEXT
+from colors import BG_DARK, GOLD, GOLD_LIGHT, GOLD_DARK, BG_LIGHT, BG_LIGHTER, TEXT, EMERALD, EMERALD_DARK, EMERALD_LIGHT
 
 
 def generate_fitness_home():
